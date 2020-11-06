@@ -4,7 +4,7 @@ CREATE OR REPLACE TYPE datos_empresa AS OBJECT (
     fecha_registro DATE,
     correo VARCHAR2(200),
     telefono VARCHAR2(16),
-    logo BLOB NOT NULL,
+    logo BLOB,
     STATIC FUNCTION validar_nombre(nombre VARCHAR2) RETURN VARCHAR2,
     STATIC FUNCTION validar_fecha(fecha_registro DATE) RETURN DATE,
     STATIC FUNCTION validar_correo(correo VARCHAR2) RETURN VARCHAR2,
