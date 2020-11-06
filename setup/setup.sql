@@ -109,9 +109,9 @@ CREATE TABLE transportes (
 CREATE TABLE usuarios (
     cedula NUMBER(8) NOT NULL,
     id_proveedor NUMBER NOT NULL,
-    primer_nombre VARCHAR2(50),
-    primer_apellido VARCHAR2(50),
-    segundo_apellido VARCHAR2(50),
+    primer_nombre VARCHAR2(50) NOT NULL,
+    primer_apellido VARCHAR2(50) NOT NULL,
+    segundo_apellido VARCHAR2(50) NOT NULL,
     foto BLOB NOT NULL,
     email VARCHAR2(200) NOT NULL,
     fecha_registro DATE NOT NULL,
@@ -156,7 +156,8 @@ CREATE TABLE pedidos (
     referencia_direccion VARCHAR2(500),
     satisfaccion NUMBER(1),
     CONSTRAINT pedidos_pk PRIMARY KEY (tracking),
-    CONSTRAINT estatus_pedido CHECK (estatus IN ('es', 'et', 'en'))
+    CONSTRAINT estatus_pedido CHECK (estatus IN ('es', 'et', 'en')),
+    CONSTRAINT satisfaccion_pedido CHECK(satisfaccion >= 1 AND satisfaccion <=5)
 );
 
 CREATE TABLE productos_pedidos (
