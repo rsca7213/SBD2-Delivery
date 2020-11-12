@@ -2,6 +2,7 @@ DROP TABLE productos_pedidos;
 DROP TABLE pedidos;
 DROP TABLE productos_productor;
 DROP TABLE productos;
+DROP TABLE zonas_usuarios;
 DROP TABLE usuarios;
 DROP TABLE transportes;
 DROP TABLE estados_contratos;

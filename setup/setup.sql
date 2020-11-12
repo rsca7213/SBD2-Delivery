@@ -11,7 +11,7 @@ CREATE TABLE estados (
 
 CREATE TABLE municipios (
     id NUMBER NOT NULL,
-    id_estado NUMERIC(2) NOT NULL,
+    id_estado NUMBER NOT NULL,
     datos_ubicacion DATOS_UBICACION NOT NULL,
     CONSTRAINT municipios_pk PRIMARY KEY (id, id_estado)
 );
@@ -26,7 +26,7 @@ CREATE TABLE zonas (
 
 CREATE TABLE sectores (
     id NUMBER NOT NULL,
-    nombre VARCHAR(40) NOT NULL,
+    nombre VARCHAR2(40) NOT NULL,
     CONSTRAINT sectores_pk PRIMARY KEY (id)
 );
 
@@ -74,6 +74,7 @@ CREATE TABLE contratos (
     id NUMBER NOT NULL,
     id_productor NUMBER NOT NULL,
     rango_fechas RANGO_FECHAS NOT NULL,
+    descuento NUMBER,
     CONSTRAINT contratos_pk PRIMARY KEY (id, id_productor)
 );
 
@@ -102,8 +103,9 @@ CREATE TABLE transportes (
     estatus CHAR(1) NOT NULL,
     numero_placa VARCHAR2(6),
     CONSTRAINT transportes_pk PRIMARY KEY (id, id_proveedor),
-    CONSTRAINT tipo_transporte CHECK (tipo IN ('CAM', 'CAR', 'MOT', 'BIC')),
-    CONSTRAINT estatus_transporte CHECK (estatus IN ('f', 'd'))
+    CONSTRAINT tipo_transporte CHECK (tipo IN ('cam', 'car', 'mot', 'bic')),
+    CONSTRAINT estatus_transporte CHECK (estatus IN ('f', 'd')),
+    CONSTRAINT placa_transporte_unique UNIQUE (numero_placa)
 );
 
 CREATE TABLE usuarios (
@@ -115,12 +117,18 @@ CREATE TABLE usuarios (
     foto BLOB NOT NULL,
     email VARCHAR2(200) NOT NULL,
     fecha_registro DATE NOT NULL,
-    direccion VARCHAR2(500) NOT NULL,
+    segundo_nombre VARCHAR2(50),
+    CONSTRAINT usuarios_pk PRIMARY KEY (cedula, id_proveedor)
+);
+
+CREATE TABLE zonas_usuarios (
+    cedula_usuario NUMBER(8) NOT NULL,
+    id_proveedor_usuario NUMBER NOT NULL,
     id_estado NUMBER NOT NULL,
     id_municipio NUMBER NOT NULL,
     id_zona NUMBER NOT NULL,
-    segundo_nombre VARCHAR2(50),
-    CONSTRAINT usuarios_pk PRIMARY KEY (cedula, id_proveedor)
+    direccion VARCHAR2(500) NOT NULL,
+    CONSTRAINT zonas_usuarios_pk PRIMARY KEY (cedula_usuario, id_proveedor_usuario, id_estado, id_municipio, id_zona)
 );
 
 CREATE TABLE productos (
@@ -131,7 +139,8 @@ CREATE TABLE productos (
     precio_unitario NUMBER NOT NULL,
     unidad_medida CHAR(2) NOT NULL,
     CONSTRAINT productos_pk PRIMARY KEY (id),
-    CONSTRAINT unidad_medida_producto CHECK (unidad_medida IN ('kg', 'lt', 'g', 'ml'))
+    CONSTRAINT unidad_medida_producto CHECK (unidad_medida IN ('kg', 'lt', 'g', 'ml')),
+    CONSTRAINT nombre_producto_unique UNIQUE (nombre)
 );
 
 CREATE TABLE productos_productor (
@@ -144,17 +153,27 @@ CREATE TABLE pedidos (
     tracking NUMBER NOT NULL,
     rango_fechas RANGO_FECHAS NOT NULL,
     estatus CHAR(2) NOT NULL,
-    id_estado NUMBER NOT NULL,
-    id_municipio NUMBER NOT NULL,
-    id_zona NUMBER NOT NULL,
+    /* lugar de origen */
+    id_estado_origen NUMBER NOT NULL,
+    id_municipio_origen NUMBER NOT NULL,
+    id_zona_origen NUMBER NOT NULL,
+    /* lugar de destino */
     cedula_usuario NUMBER NOT NULL,
     id_proveedor_usuario NUMBER NOT NULL,
-    id_transporte NUMBER NOT NULL,
-    id_proveedor_transporte NUMBER NOT NULL,
+    id_estado_destino NUMBER NOT NULL,
+    id_municipio_destino NUMBER NOT NULL,
+    id_zona_destino NUMBER NOT NULL,
+    /* contrato */
     id_contrato NUMBER NOT NULL,
     id_productor_contrato NUMBER NOT NULL,
+    /* referencia, satisfaccion */
     referencia_direccion VARCHAR2(500),
     satisfaccion NUMBER(1),
+    /* transporte */
+    id_transporte NUMBER,
+    id_proveedor_transporte NUMBER,
+    /* precios */
+    descuento_productos NUMBER(3),
     CONSTRAINT pedidos_pk PRIMARY KEY (tracking),
     CONSTRAINT estatus_pedido CHECK (estatus IN ('es', 'et', 'en')),
     CONSTRAINT satisfaccion_pedido CHECK(satisfaccion >= 1 AND satisfaccion <=5)
@@ -211,8 +230,11 @@ ALTER TABLE transportes ADD CONSTRAINT zona_transporte FOREIGN KEY (id_zona, id_
 ALTER TABLE transportes ADD CONSTRAINT proveedor_transporte FOREIGN KEY (id_proveedor) REFERENCES proveedores (id);
 
 /* TABLA USUARIOS */
-ALTER TABLE usuarios ADD CONSTRAINT zona_usuario FOREIGN KEY (id_zona, id_municipio, id_estado) REFERENCES zonas (id, id_municipio, id_estado);
 ALTER TABLE usuarios ADD CONSTRAINT proveedor_usuario FOREIGN KEY (id_proveedor) REFERENCES proveedores (id);
+
+/* TABLA ZONAS_USUARIOS */
+ALTER TABLE zonas_usuarios ADD CONSTRAINT usuario_zonas_usuarios FOREIGN KEY (cedula_usuario, id_proveedor_usuario) REFERENCES usuarios (cedula, id_proveedor);
+ALTER TABLE zonas_usuarios ADD CONSTRAINT zona_zonas_usuarios FOREIGN KEY (id_zona, id_municipio, id_estado) REFERENCES zonas (id, id_municipio, id_estado);
 
 /* TABLA PRODUCTOS */
 ALTER TABLE productos ADD CONSTRAINT sector_producto FOREIGN KEY (id_sector) REFERENCES sectores (id);
@@ -222,8 +244,9 @@ ALTER TABLE productos_productor ADD CONSTRAINT producto_productos_productor FORE
 ALTER TABLE productos_productor ADD CONSTRAINT productor_productos_productor FOREIGN KEY (id_productor) REFERENCES productores (id);
 
 /* TABLA PEDIDOS */
-ALTER TABLE pedidos ADD CONSTRAINT usuario_pedido FOREIGN KEY (cedula_usuario, id_proveedor_usuario) REFERENCES usuarios (cedula, id_proveedor);
-ALTER TABLE pedidos ADD CONSTRAINT zona_pedido FOREIGN KEY (id_zona, id_municipio, id_estado) REFERENCES zonas (id, id_municipio, id_estado);
+ALTER TABLE pedidos ADD CONSTRAINT zonausuario_pedido FOREIGN KEY (cedula_usuario, id_proveedor_usuario, id_zona_destino, id_municipio_destino, id_estado_destino)
+REFERENCES zonas_usuarios (cedula_usuario, id_proveedor_usuario, id_zona, id_municipio, id_estado);
+ALTER TABLE pedidos ADD CONSTRAINT zona_pedido FOREIGN KEY (id_zona_origen, id_municipio_origen, id_estado_origen) REFERENCES zonas (id, id_municipio, id_estado);
 ALTER TABLE pedidos ADD CONSTRAINT contrato_pedido FOREIGN KEY (id_contrato, id_productor_contrato) REFERENCES contratos (id, id_productor);
 ALTER TABLE pedidos ADD CONSTRAINT transporte_pedido FOREIGN KEY (id_transporte, id_proveedor_transporte) REFERENCES transportes (id, id_proveedor);
 
