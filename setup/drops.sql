@@ -34,3 +34,5 @@ DROP SEQUENCE id_transporte_sec;
 DROP SEQUENCE id_producto_sec;
 DROP SEQUENCE tracking_pedido_sec;
 DROP SEQUENCE cedula_usuario_sec;
+/
+DROP DIRECTORY DIR_LOGOS_EMPRESAS;
