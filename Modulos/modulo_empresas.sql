@@ -340,34 +340,28 @@ BEGIN
             SELECT ROUND(DBMS_RANDOM.VALUE(1, 12)) INTO duracion FROM dual;
             /*se define de manera aleatoria una fecha de inicio del servicio*/
             SELECT TO_DATE('2020-10-13','YYYY-MM-DD')+TRUNC(DBMS_RANDOM.VALUE(1,123)) INTO fecha FROM dual;
+            /*se define de manera aleatoria la cantidad de pedidos del servicio*/
+            SELECT ROUND(DBMS_RANDOM.VALUE(10, 30)) INTO cant_env FROM dual;
             IF aux=1 THEN
                 /*frecuencia del servicio: diaria*/
-                /*se define de manera aleatoria la cantidad de pedidos del servicio*/
-                SELECT ROUND(DBMS_RANDOM.VALUE(10, 30)) INTO cant_env FROM dual;
                 INSERT INTO servicios (id, id_proveedor, rango_fechas, cantidad, frecuencia, precio) VALUES
                 (id_servicio_sec.nextval,prov.id,
                  rango_fechas.VALIDAR_FECHAS(fecha,add_months(fecha,duracion)),
                  cant_env,'d',prec_uni*cant_env);
             ELSIF aux=2 THEN
                 /*frecuencia del servicio: semanal*/
-                /*se define de manera aleatoria la cantidad de pedidos del servicio*/
-                SELECT ROUND(DBMS_RANDOM.VALUE(70, 210)) INTO cant_env FROM dual;
                 INSERT INTO servicios (id, id_proveedor, rango_fechas, cantidad, frecuencia, precio) VALUES
                 (id_servicio_sec.nextval,prov.id,
                  rango_fechas.VALIDAR_FECHAS(fecha,add_months(fecha,duracion)),
                  cant_env,'s',prec_uni*cant_env);
             ELSIF aux=3 THEN
                 /*frecuencia del servicio: mensual*/
-                /*se define de manera aleatoria la cantidad de pedidos del servicio*/
-                SELECT ROUND(DBMS_RANDOM.VALUE(300, 900)) INTO cant_env FROM dual;
                 INSERT INTO servicios (id, id_proveedor, rango_fechas, cantidad, frecuencia, precio) VALUES
                 (id_servicio_sec.nextval,prov.id,
                  rango_fechas.VALIDAR_FECHAS(fecha,add_months(fecha,duracion)),
                  cant_env,'m',prec_uni*cant_env);
             ELSE
                 /*frecuencia del servicio: anual*/
-                /*se define de manera aleatoria la cantidad de pedidos del servicio*/
-                SELECT ROUND(DBMS_RANDOM.VALUE(3600, 10800)) INTO cant_env FROM dual;
                 INSERT INTO servicios (id, id_proveedor, rango_fechas, cantidad, frecuencia, precio) VALUES
                 (id_servicio_sec.nextval,prov.id,
                  rango_fechas.VALIDAR_FECHAS(fecha,add_months(fecha,12)),
