@@ -9,6 +9,54 @@ BEGIN
     DBMS_OUTPUT.PUT_LINE('Sectores de comercio creados exitosamente.');
 END;
 
+CREATE OR REPLACE PROCEDURE asignar_sucursales_proveedores IS
+cantidad_zonas NUMBER;
+zonas_a_insertar NUMBER;
+BEGIN
+    cantidad_zonas := 0;
+    zonas_a_insertar := 0;
+    SELECT COUNT(*) INTO cantidad_zonas FROM zonas;
+
+
+    --Se asignan n zonas a cada proveedor
+    FOR prov IN(SELECT * FROM proveedores)
+    LOOP
+        zonas_a_insertar := CEIL(DBMS_RANDOM.VALUE(1,cantidad_zonas)) ;
+        DBMS_OUTPUT.PUT_LINE('Insertando ' || zonas_a_insertar || ' zonas para el proveedor: ' || prov.datos_empresa.nombre);
+        FOR z IN (SELECT id_estado, id_municipio, id FROM (SELECT id_estado, id_municipio, id FROM zonas ORDER BY DBMS_RANDOM.RANDOM()) WHERE ROWNUM <(zonas_a_insertar+1))
+        LOOP
+            INSERT INTO zonas_proveedores (id_estado, id_municipio, id_zona, id_proveedor)
+            VALUES (z.ID_ESTADO, z.ID_MUNICIPIO, z.ID, prov.ID);
+        END LOOP;
+
+    END LOOP;
+
+END;
+
+
+CREATE OR REPLACE PROCEDURE asignar_sucursales_productores IS
+cantidad_zonas NUMBER;
+zonas_a_insertar NUMBER;
+BEGIN
+    cantidad_zonas := 0;
+    zonas_a_insertar := 0;
+    SELECT COUNT(*) INTO cantidad_zonas FROM zonas;
+
+
+    --Se asignan n zonas a cada productor
+    FOR prod IN(SELECT * FROM productores)
+    LOOP
+        zonas_a_insertar := CEIL(DBMS_RANDOM.VALUE(1,cantidad_zonas)) ;
+        DBMS_OUTPUT.PUT_LINE('Insertando ' || zonas_a_insertar || ' zonas para el productor: ' || prod.datos_empresa.nombre);
+        FOR z IN (SELECT id_estado, id_municipio, id FROM (SELECT id_estado, id_municipio, id FROM zonas ORDER BY DBMS_RANDOM.RANDOM()) WHERE ROWNUM <(zonas_a_insertar+1))
+        LOOP
+            INSERT INTO ZONAS_PRODUCTORES (id_estado, id_municipio, id_zona, id_productor)
+            VALUES (z.ID_ESTADO, z.ID_MUNICIPIO, z.ID, prod.ID);
+        END LOOP;
+
+    END LOOP;
+
+END;
 
 CREATE OR REPLACE PROCEDURE crear_proveedores IS
     datos_emp DATOS_EMPRESA;
@@ -158,7 +206,7 @@ BEGIN
     DBMS_LOB.CLOSE(img_file);
     DBMS_OUTPUT.PUT_LINE('Empresas proveedoras creadas exitosamente.');
     DBMS_OUTPUT.PUT_LINE('Asignando las zonas del territorio venezolano en donde las empresas proveedoras tienen sucursales...');
-    /* TODO */
+    asignar_sucursales_proveedores();
     DBMS_OUTPUT.PUT_LINE('Se asignaron exitosamente las zonas en donde cada empresa proveedora tiene sucursales.');
 END;
 
@@ -312,7 +360,7 @@ BEGIN
     DBMS_LOB.CLOSE(img_file);
     DBMS_OUTPUT.PUT_LINE('Empresas productoras creadas exitosamente.');
     DBMS_OUTPUT.PUT_LINE('Asignando las zonas del territorio venezolano en donde las empresas productoras tienen sucursales...');
-    /* TODO */
+    asignar_sucursales_productores();
     DBMS_OUTPUT.PUT_LINE('Se asignaron exitosamente las zonas en donde cada empresa productora tiene sucursales.');
 END;
 

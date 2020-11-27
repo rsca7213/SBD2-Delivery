@@ -788,7 +788,7 @@ CREATE OR REPLACE PROCEDURE modulo_ubicacion IS
 
     END;
 
-CALL modulo_ubicacion();
+
 
 
 
