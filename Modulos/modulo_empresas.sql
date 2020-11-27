@@ -1,20 +1,22 @@
-/* Directorio de las imagenes */
-CREATE DIRECTORY DIR_LOGOS_EMPRESAS AS 'C:\imagenes\logos_empresas';
+CREATE OR REPLACE PROCEDURE crear_sectores IS
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Insertando sectores de comercio...');
+    INSERT INTO sectores (id, nombre) VALUES (id_sector_sec.nextval, 'Alimenticio');
+    INSERT INTO sectores (id, nombre) VALUES (id_sector_sec.nextval, 'Farmaceutico');
+    INSERT INTO sectores (id, nombre) VALUES (id_sector_sec.nextval, 'Vestimenta');
+    INSERT INTO sectores (id, nombre) VALUES (id_sector_sec.nextval, 'Tecnologico');
+    INSERT INTO sectores (id, nombre) VALUES (id_sector_sec.nextval, 'Botanico');
+    DBMS_OUTPUT.PUT_LINE('Sectores de comercio creados exitosamente.');
+END;
 
-/**************** Sectores ********************/
-INSERT INTO sectores (id, nombre) VALUES (id_sector_sec.nextval, 'Alimenticio');
-INSERT INTO sectores (id, nombre) VALUES (id_sector_sec.nextval, 'Farmaceutico');
-INSERT INTO sectores (id, nombre) VALUES (id_sector_sec.nextval, 'Vestimenta');
-INSERT INTO sectores (id, nombre) VALUES (id_sector_sec.nextval, 'Tecnologico');
-INSERT INTO sectores (id, nombre) VALUES (id_sector_sec.nextval, 'Botanico');
 
-/**************** Empresas proveedoras de delivery *******************/
-
-DECLARE
+CREATE OR REPLACE PROCEDURE crear_proveedores IS
     datos_emp DATOS_EMPRESA;
     img_blob BLOB;
     img_file BFILE;
 BEGIN
+    DBMS_OUTPUT.PUT_LINE('Insertando empresas proveedoras...');
+    /* se realizan inserts de 10 empresas proveedoras de delivery con su logo y datos */
     INSERT INTO proveedores (id, datos_empresa) VALUES
     (id_proveedor_sec.nextval, datos_empresa(
         datos_empresa.VALIDAR_NOMBRE('Yummy'),
@@ -154,16 +156,21 @@ BEGIN
     DBMS_LOB.OPEN(img_file, DBMS_LOB.LOB_READONLY);
     DBMS_LOB.LOADFROMFILE(img_blob, img_file, SYS.DBMS_LOB.GETLENGTH(img_file));
     DBMS_LOB.CLOSE(img_file);
+    DBMS_OUTPUT.PUT_LINE('Empresas proveedoras creadas exitosamente.');
+    DBMS_OUTPUT.PUT_LINE('Asignando las zonas del territorio venezolano en donde las empresas proveedoras tienen sucursales...');
+    /* TODO */
+    DBMS_OUTPUT.PUT_LINE('Se asignaron exitosamente las zonas en donde cada empresa proveedora tiene sucursales.');
 END;
 
 
 
-/********************* Empresas productoras ****************************/
-DECLARE
+CREATE OR REPLACE PROCEDURE crear_productores IS
     datos_emp DATOS_EMPRESA;
     img_blob BLOB;
     img_file BFILE;
 BEGIN
+    DBMS_OUTPUT.PUT_LINE('Insertando empresas productoras...');
+    /* se realizan inserts de 10 empresas productoras con su logo y datos */
     INSERT INTO productores (id, datos_empresa, id_sector) VALUES
     (id_productor_sec.nextval, datos_empresa(
         datos_empresa.VALIDAR_NOMBRE('Mc Donalds'),
@@ -303,5 +310,19 @@ BEGIN
     DBMS_LOB.OPEN(img_file, DBMS_LOB.LOB_READONLY);
     DBMS_LOB.LOADFROMFILE(img_blob, img_file, SYS.DBMS_LOB.GETLENGTH(img_file));
     DBMS_LOB.CLOSE(img_file);
+    DBMS_OUTPUT.PUT_LINE('Empresas productoras creadas exitosamente.');
+    DBMS_OUTPUT.PUT_LINE('Asignando las zonas del territorio venezolano en donde las empresas productoras tienen sucursales...');
+    /* TODO */
+    DBMS_OUTPUT.PUT_LINE('Se asignaron exitosamente las zonas en donde cada empresa productora tiene sucursales.');
 END;
 
+CREATE OR REPLACE PROCEDURE modulo_empresas IS
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Iniciando módulo de empresas, servicios y contratos...');
+    DBMS_OUTPUT.PUT_LINE('---------------------------------------------------------------------------------');
+    crear_sectores();
+    crear_proveedores();
+    crear_productores();
+    DBMS_OUTPUT.PUT_LINE('---------------------------------------------------------------------------------');
+    DBMS_OUTPUT.PUT_LINE('El módulo de empresas, servicios y contratos se ha ejecutado satisfactoriamente.');
+END;
