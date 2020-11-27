@@ -3,8 +3,10 @@
                                 DIRECTORIOS
 *********************************************************************************
 */
-/* Directorio de las imagenes */
+/* Directorios de las imagenes */
 CREATE DIRECTORY DIR_LOGOS_EMPRESAS AS 'C:\imagenes\logos_empresas';
+CREATE DIRECTORY DIR_FOTOS_HOMBRE AS 'C:\imagenes\fotos_carnet_hombre';
+CREATE DIRECTORY DIR_FOTOS_MUJER AS 'C:\imagenes\fotos_carnet_mujer';
 /
 
 /*
