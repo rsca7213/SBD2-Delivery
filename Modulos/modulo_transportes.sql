@@ -11,7 +11,9 @@ CREATE OR REPLACE PROCEDURE crear_transportes IS
     cantidad_zonas_proveedor NUMBER;
     zona_transporte NUMBER;
     indice_zona NUMBER;
+    probabilidad_transporte NUMBER;
     BEGIN
+        probabilidad_transporte := 0;
         transportes_a_insertar := 0;
         letras_placa := 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         numeros_placa := '0123456789';
@@ -26,16 +28,17 @@ CREATE OR REPLACE PROCEDURE crear_transportes IS
         LOOP
 
             transportes_a_insertar := CEIL(DBMS_RANDOM.VALUE(7,12));
-            DBMS_OUTPUT.PUT_LINE('Insertando '||transportes_a_insertar||' para el proveedor: '||proveedor.datos_empresa.nombre);
+            DBMS_OUTPUT.PUT_LINE('Insertando '||transportes_a_insertar||' transportes para el proveedor: '||proveedor.datos_empresa.nombre);
 
             FOR i IN 1..transportes_a_insertar
             LOOP
                 --Condicional para determinar el tipo de transporte
-                IF CEIL(DBMS_RANDOM.VALUE(0,4)) = 1 THEN
+                probabilidad_transporte := CEIL(DBMS_RANDOM.VALUE(0,4));
+                IF probabilidad_transporte = 1 THEN
                     tipo_transporte := 'BIC';
-                ELSIF CEIL(DBMS_RANDOM.VALUE(0,4)) = 2 THEN
+                ELSIF probabilidad_transporte = 2 THEN
                     tipo_transporte := 'MOT';
-                ELSIF CEIL(DBMS_RANDOM.VALUE(0,4)) = 3 THEN
+                ELSIF probabilidad_transporte = 3 THEN
                     tipo_transporte := 'CAM';
                 ELSE
                     tipo_transporte := 'CAR';
@@ -61,7 +64,7 @@ CREATE OR REPLACE PROCEDURE crear_transportes IS
                 END IF;
 
                 --Condicional para determinar estatus del transporte
-                IF CEIL(DBMS_RANDOM.VALUE(0,10)) = 2 THEN
+                IF CEIL(DBMS_RANDOM.VALUE(0,10)) <= 2 THEN
                     estatus := 'd';
                 ELSE
                     estatus := 'f';
