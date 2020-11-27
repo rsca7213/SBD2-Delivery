@@ -372,6 +372,103 @@ BEGIN
     DBMS_OUTPUT.PUT_LINE('Servicios de cada proveedor creados exitosamente.');
 END;
 
+CREATE OR REPLACE PROCEDURE crear_contratos IS
+descu NUMBER;
+fecha TIMESTAMP;
+duracion NUMBER;
+mayor NUMBER;
+menor NUMBER;
+random NUMBER;
+id_prov NUMBER;
+id_prod NUMBER;
+total_servs NUMBER;
+total_ests NUMBER;
+cant_servs NUMBER;
+cant_ests NUMBER;
+cant_conts NUMBER;
+sector NUMBER;
+x NUMBER;
+id_contrato NUMBER;
+TYPE id_servicios_t IS VARRAY(100) OF NUMBER;
+id_servicios id_servicios_t;
+TYPE id_estados_t IS VARRAY(100) OF NUMBER;
+id_estados id_estados_t;
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Insertando contratos...');
+    FOR num_contrato IN 1..20 LOOP
+        /*se define de manera aleatoria la vigencia del contrato*/
+        SELECT ROUND(DBMS_RANDOM.VALUE(1, 12)) INTO duracion FROM dual;
+        /*se define de manera aleatoria una fecha de inicio del contrato*/
+        SELECT TO_DATE('2020-10-13','YYYY-MM-DD')+TRUNC(DBMS_RANDOM.VALUE(1,123)) INTO fecha FROM dual;
+        /*se define de manera aleatoria el productor del contrato*/
+        SELECT MIN(id) INTO menor FROM productores;
+        SELECT MAX(id) INTO mayor FROM productores;
+        SELECT ROUND(DBMS_RANDOM.VALUE(menor,mayor)) INTO random FROM dual;
+        SELECT id INTO id_prod FROM productores WHERE id=random;
+        /*se define de manera aleatoria el proveedor del contrato*/
+        SELECT MIN(id) INTO menor FROM proveedores;
+        SELECT MAX(id) INTO mayor FROM proveedores;
+        SELECT ROUND(DBMS_RANDOM.VALUE(menor,mayor)) INTO random FROM dual;
+        SELECT id INTO id_prov FROM proveedores WHERE id=random;
+        /*se inicia un descuento del 0%*/
+        descu:=0;
+        /*se inserta el contrato*/
+        INSERT INTO contratos (id, id_productor, rango_fechas, descuento) VALUES
+        (id_contrato_sec.nextval,id_prod,
+         rango_fechas.VALIDAR_FECHAS(fecha,add_months(fecha,duracion)),descu);
+        /*se busca el id del contrato (ultimo contrato creado)*/
+        SELECT MAX(id) INTO id_contrato FROM contratos;
+        /*se cuentan todos los servicios del proveedor*/
+        SELECT COUNT(*) INTO total_servs FROM servicios WHERE id_proveedor=id_prov;
+        /*se selecciona una cantidad aleatoria de servicios para el contrato*/
+        SELECT ROUND(DBMS_RANDOM.VALUE(1,total_servs)) INTO cant_servs FROM dual;
+        /*se guarda en un array de manera aleatoria los id de los servicios del proveedor*/
+        SELECT s.id BULK COLLECT INTO id_servicios FROM servicios s WHERE s.id_proveedor=id_prov ORDER BY DBMS_RANDOM.VALUE();
+        /*se insertan n cantidad de servicios para el contrato*/
+        FOR i IN 1..cant_servs LOOP
+            INSERT INTO servicios_contratos (id_contrato, id_productor, id_proveedor, id_servicio) VALUES
+            (id_contrato,id_prod,id_prov,id_servicios(i));
+        END LOOP;
+        /*se cuentan todos los estados donde el proveedor y el productor tienen sucursales*/
+        SELECT COUNT(DISTINCT zpd.id_estado) INTO total_ests FROM zonas_productores zpd, zonas_proveedores zpv
+        WHERE zpd.id_productor=id_prod AND zpv.id_proveedor=id_prov AND zpd.id_estado=zpv.id_estado;
+        /*se selecciona una cantidad aleatoria de estados para el contrato*/
+        SELECT ROUND(DBMS_RANDOM.VALUE(1,total_ests)) INTO cant_ests FROM dual;
+        /*se guarda en un array de manera aleatoria los id de los estados*/
+        SELECT zpd.id_estado BULK COLLECT INTO id_estados FROM zonas_productores zpd, zonas_proveedores zpv
+        WHERE zpd.id_productor=id_prod AND zpv.id_proveedor=id_prov AND zpd.id_estado=zpv.id_estado
+        ORDER BY DBMS_RANDOM.VALUE();
+        /*se insertan n cantidad de estados para el contrato*/
+        FOR j IN 1..cant_ests LOOP
+            INSERT INTO estados_contratos (id_estado, id_contrato, id_productor) VALUES
+            (id_estados(j),id_contrato,id_prod);
+        END LOOP;
+        /*si el productor es farmaceutico*/
+        SELECT p.id_sector INTO sector FROM productores p WHERE p.id=id_prod;
+        IF sector=2 THEN
+            descu:=descu+20;
+        END IF;
+        /*si el productor tiene mas de 3 contratos con el proveedor*/
+        SELECT COUNT(*) INTO cant_conts FROM servicios_contratos sc WHERE sc.id_productor=id_prod AND sc.id_proveedor=id_prov;
+        IF cant_conts>=3 THEN
+            descu:=descu+20;
+        END IF;
+        /*si el contrato es valido para mas de tres estados*/
+        IF cant_ests>=3 THEN
+            descu:=descu+20;
+        END IF;
+        /*se define un numero random del 1 al 100*/
+        SELECT ROUND(DBMS_RANDOM.VALUE(1,100)) INTO x FROM dual;
+        /*si x=1*/
+        IF x=1 THEN
+            descu:=descu+50;
+        END IF;
+        /*se actualiza el descuento*/
+        UPDATE contratos SET descuento=descu WHERE id=id_contrato;
+    END LOOP;
+    DBMS_OUTPUT.PUT_LINE('Contratos creados exitosamente...');
+END;
+
 CREATE OR REPLACE PROCEDURE modulo_empresas IS
 BEGIN
     DBMS_OUTPUT.PUT_LINE('Iniciando módulo de empresas, servicios y contratos...');
@@ -380,6 +477,7 @@ BEGIN
     crear_proveedores();
     crear_productores();
     crear_servicios();
+    crear_contratos();
     DBMS_OUTPUT.PUT_LINE('---------------------------------------------------------------------------------');
     DBMS_OUTPUT.PUT_LINE('El módulo de empresas, servicios y contratos se ha ejecutado satisfactoriamente.');
 END;
