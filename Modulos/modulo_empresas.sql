@@ -316,6 +316,68 @@ BEGIN
     DBMS_OUTPUT.PUT_LINE('Se asignaron exitosamente las zonas en donde cada empresa productora tiene sucursales.');
 END;
 
+CREATE OR REPLACE PROCEDURE crear_servicios IS
+cant_serv NUMBER;
+cant_env NUMBER;
+aux NUMBER;
+prec_uni NUMBER;
+duracion NUMBER;
+fecha TIMESTAMP;
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Insertando servicios de proveedores...');
+    /*se toman todos los proveedores registrados en el sistema*/
+    FOR prov IN (SELECT p.id AS id, p.datos_empresa.nombre AS nombre FROM proveedores p) LOOP
+        /*cantidad aleatoria entre 1 y 5 de servicios a crear*/
+        SELECT ROUND(DBMS_RANDOM.VALUE(1,5)) INTO cant_serv FROM dual;
+        DBMS_OUTPUT.PUT_LINE('Insertando ' || cant_serv || ' servicios para el proveedor ' || prov.nombre);
+        /*se insertan n servicios al proveedor p*/
+        FOR serv IN 1..cant_serv LOOP
+            /*se define de manera aleatoria un precio unitario por envio*/
+            SELECT ROUND(DBMS_RANDOM.VALUE(1, 5)) INTO prec_uni FROM dual;
+            /*se define de manera aleatoria el tipo de frecuencia del envio*/
+            SELECT ROUND(DBMS_RANDOM.VALUE(1, 4)) INTO aux FROM dual;
+            /*se define de manera aleatoria la vigencia del servicio*/
+            SELECT ROUND(DBMS_RANDOM.VALUE(1, 12)) INTO duracion FROM dual;
+            /*se define de manera aleatoria una fecha de inicio del servicio*/
+            SELECT TO_DATE('2020-10-13','YYYY-MM-DD')+TRUNC(DBMS_RANDOM.VALUE(1,123)) INTO fecha FROM dual;
+            IF aux=1 THEN
+                /*frecuencia del servicio: diaria*/
+                /*se define de manera aleatoria la cantidad de pedidos del servicio*/
+                SELECT ROUND(DBMS_RANDOM.VALUE(10, 30)) INTO cant_env FROM dual;
+                INSERT INTO servicios (id, id_proveedor, rango_fechas, cantidad, frecuencia, precio) VALUES
+                (id_servicio_sec.nextval,prov.id,
+                 rango_fechas.VALIDAR_FECHAS(fecha,add_months(fecha,duracion)),
+                 cant_env,'d',prec_uni*cant_env);
+            ELSIF aux=2 THEN
+                /*frecuencia del servicio: semanal*/
+                /*se define de manera aleatoria la cantidad de pedidos del servicio*/
+                SELECT ROUND(DBMS_RANDOM.VALUE(70, 210)) INTO cant_env FROM dual;
+                INSERT INTO servicios (id, id_proveedor, rango_fechas, cantidad, frecuencia, precio) VALUES
+                (id_servicio_sec.nextval,prov.id,
+                 rango_fechas.VALIDAR_FECHAS(fecha,add_months(fecha,duracion)),
+                 cant_env,'s',prec_uni*cant_env);
+            ELSIF aux=3 THEN
+                /*frecuencia del servicio: mensual*/
+                /*se define de manera aleatoria la cantidad de pedidos del servicio*/
+                SELECT ROUND(DBMS_RANDOM.VALUE(300, 900)) INTO cant_env FROM dual;
+                INSERT INTO servicios (id, id_proveedor, rango_fechas, cantidad, frecuencia, precio) VALUES
+                (id_servicio_sec.nextval,prov.id,
+                 rango_fechas.VALIDAR_FECHAS(fecha,add_months(fecha,duracion)),
+                 cant_env,'m',prec_uni*cant_env);
+            ELSE
+                /*frecuencia del servicio: anual*/
+                /*se define de manera aleatoria la cantidad de pedidos del servicio*/
+                SELECT ROUND(DBMS_RANDOM.VALUE(3600, 10800)) INTO cant_env FROM dual;
+                INSERT INTO servicios (id, id_proveedor, rango_fechas, cantidad, frecuencia, precio) VALUES
+                (id_servicio_sec.nextval,prov.id,
+                 rango_fechas.VALIDAR_FECHAS(fecha,add_months(fecha,12)),
+                 cant_env,'a',prec_uni*cant_env);
+            END IF;
+        END LOOP;
+    END LOOP;
+    DBMS_OUTPUT.PUT_LINE('Servicios de cada proveedor creados exitosamente.');
+END;
+
 CREATE OR REPLACE PROCEDURE modulo_empresas IS
 BEGIN
     DBMS_OUTPUT.PUT_LINE('Iniciando módulo de empresas, servicios y contratos...');
@@ -323,6 +385,7 @@ BEGIN
     crear_sectores();
     crear_proveedores();
     crear_productores();
+    crear_servicios();
     DBMS_OUTPUT.PUT_LINE('---------------------------------------------------------------------------------');
     DBMS_OUTPUT.PUT_LINE('El módulo de empresas, servicios y contratos se ha ejecutado satisfactoriamente.');
 END;
