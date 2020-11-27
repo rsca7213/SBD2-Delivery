@@ -110,7 +110,7 @@ CREATE TABLE transportes (
     id_zona NUMBER NOT NULL,
     tipo CHAR(3) NOT NULL,
     estatus CHAR(1) NOT NULL,
-    numero_placa VARCHAR2(6),
+    numero_placa VARCHAR2(7),
     CONSTRAINT transportes_pk PRIMARY KEY (id, id_proveedor),
     CONSTRAINT tipo_transporte CHECK (tipo IN ('cam', 'car', 'mot', 'bic')),
     CONSTRAINT estatus_transporte CHECK (estatus IN ('f', 'd')),
