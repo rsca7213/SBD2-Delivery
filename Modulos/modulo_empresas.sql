@@ -22,6 +22,7 @@ BEGIN
     FOR prov IN(SELECT * FROM proveedores)
     LOOP
         zonas_a_insertar := CEIL(DBMS_RANDOM.VALUE(1,cantidad_zonas)) ;
+        zonas_a_insertar := zonas_a_insertar MOD 45;
         DBMS_OUTPUT.PUT_LINE('Insertando ' || zonas_a_insertar || ' zonas para el proveedor: ' || prov.datos_empresa.nombre);
         FOR z IN (SELECT id_estado, id_municipio, id FROM (SELECT id_estado, id_municipio, id FROM zonas ORDER BY DBMS_RANDOM.RANDOM()) WHERE ROWNUM <(zonas_a_insertar+1))
         LOOP
@@ -47,6 +48,7 @@ BEGIN
     FOR prod IN(SELECT * FROM productores)
     LOOP
         zonas_a_insertar := CEIL(DBMS_RANDOM.VALUE(1,cantidad_zonas)) ;
+        zonas_a_insertar := zonas_a_insertar MOD 45;
         DBMS_OUTPUT.PUT_LINE('Insertando ' || zonas_a_insertar || ' zonas para el productor: ' || prod.datos_empresa.nombre);
         FOR z IN (SELECT id_estado, id_municipio, id FROM (SELECT id_estado, id_municipio, id FROM zonas ORDER BY DBMS_RANDOM.RANDOM()) WHERE ROWNUM <(zonas_a_insertar+1))
         LOOP

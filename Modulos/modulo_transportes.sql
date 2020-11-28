@@ -35,17 +35,17 @@ CREATE OR REPLACE PROCEDURE crear_transportes IS
                 --Condicional para determinar el tipo de transporte
                 probabilidad_transporte := CEIL(DBMS_RANDOM.VALUE(0,4));
                 IF probabilidad_transporte = 1 THEN
-                    tipo_transporte := 'BIC';
+                    tipo_transporte := 'bic';
                 ELSIF probabilidad_transporte = 2 THEN
-                    tipo_transporte := 'MOT';
+                    tipo_transporte := 'mot';
                 ELSIF probabilidad_transporte = 3 THEN
-                    tipo_transporte := 'CAM';
+                    tipo_transporte := 'cam';
                 ELSE
-                    tipo_transporte := 'CAR';
+                    tipo_transporte := 'car';
                 END IF;
 
                 --Creación de la placa del transporte
-                IF tipo_transporte != 'BIC' THEN
+                IF tipo_transporte != 'bic' THEN
 
                     LOOP
                         placa := SUBSTR(letras_placa,DBMS_RANDOM.VALUE(1,26),1)||SUBSTR(letras_placa,DBMS_RANDOM.VALUE(1,26) ,1)
@@ -89,7 +89,7 @@ CREATE OR REPLACE PROCEDURE crear_transportes IS
                     --Creacion del transporte
                     IF indice_zona = zona_transporte THEN
 
-                        IF tipo_transporte = 'BIC' THEN
+                        IF tipo_transporte = 'bic' THEN
                             INSERT INTO transportes (id, id_proveedor, id_estado, id_municipio, id_zona, tipo, estatus)
                             VALUES (id_transporte_sec.nextval, proveedor.ID, crear_zona.ID_ESTADO, crear_zona.ID_MUNICIPIO, crear_zona.ID_ZONA, tipo_transporte, estatus);
                         ELSE
