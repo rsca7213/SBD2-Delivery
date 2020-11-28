@@ -1,5 +1,6 @@
 /* procedimiento que repara transportes dañados, ignora el transporte especificado en los parametros */
 CREATE OR REPLACE PROCEDURE verificar_transportes (ignorar_id_transporte NUMBER, ignorar_id_prov_transporte NUMBER) IS
+    tipo_tranporte VARCHAR2(15); --para hacer DECODE ('car' -> 'carro')
 BEGIN
     -- se itera para cada transporte dañado en la base de datos ignorando el especificado en los parametros
     FOR transporte IN
@@ -9,25 +10,28 @@ BEGIN
         -- probabilidad del 30% de que se repare el transporte (se asigna el estatus a "funcional"
         IF TRUNC(DBMS_RANDOM.VALUE(1,101),0) >= 70 THEN
             UPDATE transportes t SET estatus = 'f' WHERE t.id = transporte.id AND t.id_proveedor = transporte.id_proveedor;
-            DBMS_OUTPUT.PUT_LINE('El transporte de tipo ' ||
-            DECODE(transporte.tipo, 'bic', 'bicicleta', 'mot', 'moto', 'car', 'carro', 'camioneta')
-                   || ' con id #' || transporte.id || ' fue reparado.');
+            SELECT DECODE(t.tipo, 'bic', 'bicicleta', 'mot', 'moto', 'car', 'carro', 'camioneta') INTO tipo_tranporte FROM
+            transportes t WHERE t.id = transporte.id AND t.id_proveedor = transporte.id_proveedor;
+            DBMS_OUTPUT.PUT_LINE('El transporte de tipo ' || tipo_tranporte);
+
         END IF;
     END LOOP;
 END;
 
-/* trigger que se ejecuta cada vez que se crea un pedido y sigue el flujo definido en actualizar_pedidos */
-CREATE OR REPLACE TRIGGER actualizar_pedidos AFTER INSERT ON pedidos
-DECLARE
+/* procedure llamado por el trigger actualizar_pedidos */
+CREATE OR REPLACE PROCEDURE actualizar_pedidos (ignorar_tracking NUMBER) IS
     /* cursor que almacena todos los pedidos no entregados que no sean el que se acaba de crear */
     CURSOR pedidos_por_act IS
-        SELECT * FROM pedidos p WHERE p.estatus != 'en' AND p.tracking != :new.tracking;
+        SELECT * FROM pedidos p WHERE p.estatus != 'en' AND p.tracking != ignorar_tracking;
     /* variables de tipo rowtype utilizadas en el flujo */
     pedido pedidos%ROWTYPE; --almacena cada pedido del cursor
     transporte transportes%ROWTYPE; --almacena el transporte mas cercano a la sucursal origen del pedido
     zona_transporte zonas%ROWTYPE; -- almacena la zona del transporte mas cercano a la sucursal origen del pedido
     zona_t zonas%ROWTYPE; --almacena la zona de un transporte que posiblemente este mas cerca que el transporte anterior
     zona_sucursal zonas%ROWTYPE; --almacena la zona de la sucursal origen del pedido
+    tipo_tranporte VARCHAR2(15); --para hacer DECODE ('car' -> 'carro')
+    valor_tipo_trans NUMBER; --para hacer DECODE ('car' --> 0.7)
+    valor_tipo_t NUMBER; --para hacer DECODE ('car' --> 0.7)
 BEGIN
     OPEN pedidos_por_act; --se abre el cursor
     FETCH pedidos_por_act INTO pedido; --se busca el primer pedido del cursor
@@ -69,24 +73,30 @@ BEGIN
                     IF transporte.id IS NULL THEN
                         -- si el transporte no es bicicleta o es bicicleta en el mismo municipio de la sucursal
                         IF t.tipo != 'bic' OR (t.tipo = 'bic' AND zona_sucursal.id_municipio = zona_t.id_municipio) THEN
-                            transporte := t;
+                            transporte.id := t.id;
+                            transporte.id_proveedor := t.id_proveedor;
                         END IF;
                     -- si ya hay un valor con el que comparar
                     ELSE
+                        SELECT DECODE(tr.tipo, 'bic', 1, 'mot', 0.5, 0.7) INTO valor_tipo_trans FROM transportes tr
+                        WHERE tr.id = transporte.id AND tr.id_proveedor = transporte.id_proveedor;
+                        SELECT DECODE(tr.tipo, 'bic', 1, 'mot', 0.5, 0.7) INTO valor_tipo_t FROM transportes tr
+                        WHERE tr.id = t.id AND tr.id_proveedor = t.id_proveedor;
                         -- si el tiempo de recorrido del transporte minimo posible es menor al del transporte minimo actual
                         IF (
                             (ABS(zona_sucursal.datos_ubicacion.latitud - zona_t.datos_ubicacion.latitud)
                             + ABS(zona_sucursal.datos_ubicacion.longitud - zona_t.datos_ubicacion.longitud))
-                            * DECODE(t.tipo, 'bic', 1, 'mot', 0.5, 0.7) * 300 + 5
+                            * valor_tipo_t * 300 + 5
                         ) <
                         (
                             (ABS(zona_sucursal.datos_ubicacion.latitud - zona_transporte.datos_ubicacion.latitud)
                             + ABS(zona_sucursal.datos_ubicacion.longitud - zona_transporte.datos_ubicacion.longitud))
-                            * DECODE(transporte.tipo, 'bic', 1, 'mot', 0.5, 0.7) * 300 + 5
+                            * valor_tipo_trans * 300 + 5
                         ) THEN
                             -- se cambia el transporte siempre y cuando se cumpla la condicion de las bicicletas
                             IF t.tipo != 'bic' OR (t.tipo = 'bic' AND zona_sucursal.id_municipio = zona_t.id_municipio) THEN
-                                transporte := t;
+                                transporte.id := t.id;
+                                transporte.id_proveedor := t.id_proveedor;
                             END IF;
                         END IF;
                     END IF;
@@ -98,8 +108,9 @@ BEGIN
                 ELSE
                     UPDATE pedidos SET id_transporte = transporte.id, id_proveedor_transporte = transporte.id_proveedor
                     WHERE tracking = pedido.tracking;
-                    DBMS_OUTPUT.PUT_LINE('Se ha asignado el transporte con id #' || transporte.id || ' del tipo '
-                        || DECODE(transporte.tipo, 'bic', 'bicicleta', 'mot', 'moto', 'car', 'carro', 'camioneta') || ' al pedido.');
+                    SELECT DECODE(t.tipo, 'bic', 'bicicleta', 'mot', 'moto', 'car', 'carro', 'camioneta') INTO tipo_tranporte
+                    FROM transportes t WHERE t.id = transporte.id AND t.id_proveedor = transporte.id_proveedor;
+                    DBMS_OUTPUT.PUT_LINE('Se ha asignado el transporte con id #' || transporte.id || ' del tipo ' || tipo_tranporte);
                 END IF;
             END IF;
         -- si el pedido está "en transito"
@@ -133,3 +144,10 @@ BEGIN
         FETCH pedidos_por_act INTO pedido;
     END LOOP;
 END;
+
+/* trigger que se ejecuta cada vez que se crea un pedido y llama al procedimiento que sigue el flujo definido en actualizar_pedidos */
+CREATE OR REPLACE TRIGGER actualizar_pedidos AFTER INSERT ON pedidos FOR EACH ROW
+BEGIN
+    actualizar_pedidos(:new.tracking);
+END;
+
