@@ -439,7 +439,7 @@ x NUMBER;
 id_contrato NUMBER;
 TYPE id_servicios_t IS VARRAY(100) OF NUMBER;
 id_servicios id_servicios_t;
-TYPE id_estados_t IS VARRAY(100) OF NUMBER;
+TYPE id_estados_t IS VARRAY(1000) OF NUMBER;
 id_estados id_estados_t;
 BEGIN
     DBMS_OUTPUT.PUT_LINE('Insertando contratos...');
@@ -483,7 +483,7 @@ BEGIN
         /*se selecciona una cantidad aleatoria de estados para el contrato*/
         SELECT ROUND(DBMS_RANDOM.VALUE(1,total_ests)) INTO cant_ests FROM dual;
         /*se guarda en un array de manera aleatoria los id de los estados*/
-        SELECT zpd.id_estado BULK COLLECT INTO id_estados FROM zonas_productores zpd, zonas_proveedores zpv
+        SELECT DISTINCT zpd.id_estado BULK COLLECT INTO id_estados FROM zonas_productores zpd, zonas_proveedores zpv
         WHERE zpd.id_productor=id_prod AND zpv.id_proveedor=id_prov AND zpd.id_estado=zpv.id_estado
         ORDER BY DBMS_RANDOM.VALUE();
         /*se insertan n cantidad de estados para el contrato*/
@@ -512,6 +512,9 @@ BEGIN
             descu:=descu+50;
         END IF;
         /*se actualiza el descuento*/
+        IF descu>100 THEN
+            descu:=100;
+        END IF;
         UPDATE contratos SET descuento=descu WHERE id=id_contrato;
     END LOOP;
     DBMS_OUTPUT.PUT_LINE('Contratos creados exitosamente...');
