@@ -151,3 +151,12 @@ BEGIN
     actualizar_pedidos(:new.tracking);
 END;
 
+CREATE OR REPLACE PROCEDURE modulo_pedidos IS
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Ejecutando modulo de pedidos...');
+    FOR i IN 1..100 LOOP
+        crear_pedidos();
+    END LOOP;
+    DBMS_OUTPUT.PUT_LINE('Se ha finalizado la ejecucion del modulo de pedidos');
+END;
+
