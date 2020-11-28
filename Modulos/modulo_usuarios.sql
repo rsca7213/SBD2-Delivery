@@ -1,6 +1,58 @@
+/* Cada vez que se registre un usuario en un proveedor, este registra entre 1 a 5 zonas de delivery
+   en el estado del proveedor (aleatoriamente se calcula cuantas)
+ */
 CREATE OR REPLACE TRIGGER asignar_zonas_usuario AFTER INSERT ON usuarios FOR EACH ROW
+DECLARE
+    ctd_direcciones INTEGER;
+    zona_ins INTEGER;
+    municipio_ins INTEGER;
+    estado_ins INTEGER;
+    unique_flag INTEGER;
+    TYPE arreglo_varchar2 IS VARRAY(100) OF VARCHAR2(50);
+    arreglo_tipo_calle arreglo_varchar2;
+    arreglo_nombre_calle arreglo_varchar2;
+    arreglo_tipo_edificacion arreglo_varchar2;
+    tipo_calle_selec VARCHAR2(50);
+    nombre_calle_selec VARCHAR2(50);
+    tipo_edificacion_selec VARCHAR2(50);
 BEGIN
-    /* TODO */
+    /* 7 tipos de calle posibles */
+    arreglo_tipo_calle := arreglo_varchar2('Calle', 'Avenida', 'Carretera', 'Bulevar', 'Callejón', 'Redoma', 'Transversal');
+    /* 50 nombres de calle posibles */
+    arreglo_nombre_calle := arreglo_varchar2('Franciso de Miranda', 'San Marino', 'Blandin', 'Guaicaipuro', 'Blanco', 'Temeraria', 'Ampies',
+    'Manaure', 'Ruiz Pineda', 'Sucre', 'Iturbe', 'Rómulo Gallegos', 'Los Perozos', 'Maparari', 'Las Palmas', 'Los Cocos', 'San Juan',
+    'Las Brisas', 'San Augusto', 'Medina', 'Variante', 'Virgilio', 'La Paz', 'Iturriza', 'España', 'Carabobo', 'Quinquimari', 'Fortunato Gómez',
+    'Lucio', 'Soto', 'Rotaria', 'Colinas del Torbes', 'Camejo', 'xColon', 'La Parada', 'Cumanacoa', 'Las Americas', 'Juncal', 'Santa Teresa',
+    'Cantaura', 'Las Margaritas', 'Acosta', 'Junin', 'Prado', 'Los Leones', 'Circunvalación del Sol', 'Miramonte', 'Porvenir', 'Hierbas', 'Las Bellezas');
+    /* 5 tipos de edificacion posibles */
+    arreglo_tipo_edificacion := arreglo_varchar2('Edificio', 'Casa', 'Oficina', 'Comercio', 'Local');
+    /* se calcula con un random la cantidad de direcciones a insertar */
+    ctd_direcciones := TRUNC(DBMS_RANDOM.VALUE(1,6),0);
+    /* mientras halla direcciones por insertar */
+    WHILE ctd_direcciones > 0 LOOP
+        /* se selecciona una zona aleatoria que se encuentre en un estado de las sucursales del proveedor */
+        SELECT id_estado, id_municipio, id INTO estado_ins, municipio_ins, zona_ins FROM
+            (SELECT z.id_estado, z.id_municipio, z.id FROM zonas z INNER JOIN zonas_proveedores zp
+            ON z.id_estado = zp.id_estado WHERE zp.id_proveedor = :new.id_proveedor ORDER BY DBMS_RANDOM.RANDOM())
+        WHERE ROWNUM=1;
+        /* se revisa si el registro con esa zona y ese usuario ya existe */
+        SELECT COUNT(*) INTO unique_flag FROM zonas_usuarios zu WHERE zu.cedula_usuario = :new.cedula AND
+        zu.id_proveedor_usuario = :new.id_proveedor AND zu.id_zona = zona_ins AND zu.id_municipio = municipio_ins
+        AND zu.id_estado = estado_ins;
+        /* en caso que no exista, se randomiza una direccion y se realiza el insert de la zona con el
+           usuario y se decrementa la cantidad de direcciones por insertar, sino no se hace nada */
+        IF unique_flag = 0 THEN
+            /* se seleccionan los datos de la direccion aleatoriamente */
+            tipo_calle_selec := arreglo_tipo_calle(TRUNC(DBMS_RANDOM.VALUE(1,8), 0));
+            nombre_calle_selec := arreglo_nombre_calle(TRUNC(DBMS_RANDOM.VALUE(1,51), 0));
+            tipo_edificacion_selec := arreglo_tipo_edificacion(TRUNC(DBMS_RANDOM.VALUE(1,6), 0));
+            /* se hace el insert */
+            INSERT INTO zonas_usuarios (cedula_usuario, id_proveedor_usuario, id_estado, id_municipio, id_zona, direccion) VALUES
+            (:new.cedula, :new.id_proveedor, estado_ins, municipio_ins, zona_ins,
+            tipo_calle_selec || ' ' || nombre_calle_selec || ', ' || tipo_edificacion_selec || ' ' || TO_CHAR(TRUNC(DBMS_RANDOM.VALUE(1,1001),0)));
+            ctd_direcciones := ctd_direcciones - 1;
+        END IF;
+    END LOOP;
 END;
 
 CREATE OR REPLACE PROCEDURE crear_usuarios (ctd_crear INTEGER) IS

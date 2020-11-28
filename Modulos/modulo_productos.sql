@@ -7,6 +7,7 @@ DECLARE
     ctd_asignar INTEGER;
     ctd_productores INTEGER;
     id_productor_rand INTEGER;
+    nombre_productor VARCHAR2(100);
     flag_existe INTEGER;
 BEGIN
     /* se cuenta la cantidad de productores en el sistema */
@@ -15,6 +16,7 @@ BEGIN
     /* se genera un numero aleatorio n (ctd_asignar) que determinara a cuantos productores se le asignara el producto,
        este numero va decrementando a medida que se asignan productores de tal forma de asignar la cantidad n randomizada */
     ctd_asignar := TRUNC(DBMS_RANDOM.VALUE(1, ctd_productores + 1), 0);
+    DBMS_OUTPUT.PUT('Productores -->');
     WHILE ctd_asignar > 0 LOOP
         /* se randomiza un productor al cual asignarle el producto */
         id_productor_rand := TRUNC(DBMS_RANDOM.VALUE(1, ctd_productores + 1), 0);
@@ -23,10 +25,13 @@ BEGIN
          */
         SELECT COUNT(*) INTO flag_existe FROM productos_productor WHERE id_producto = :new.id AND id_productor = id_productor_rand;
         IF flag_existe = 0 THEN
+            SELECT p.datos_empresa.nombre INTO nombre_productor FROM productores p WHERE p.id = id_productor_rand;
+            DBMS_OUTPUT.PUT(' | ' || nombre_productor);
             INSERT INTO productos_productor (id_producto, id_productor) VALUES (:new.id, id_productor_rand);
             ctd_asignar := ctd_asignar - 1;
         END IF;
     END LOOP;
+    DBMS_OUTPUT.PUT_LINE('');
 END;
 /
 /* Procedure para crear pedidos, recibe como parametro la cantidad de productos a crear y realiza la creacion de los productos respectivos */
@@ -117,6 +122,7 @@ BEGIN
          */
         SELECT COUNT(*) INTO unique_flag FROM productos WHERE nombre = nombre_selec;
         IF unique_flag = 0 THEN
+            DBMS_OUTPUT.PUT_LINE('Producto creado --> ' || nombre_selec);
             /* si la medida es en kg o lt se randomiza la medida de 1 a 10 */
             IF medida_selec = 'kg' OR medida_selec = 'lt' THEN
                 INSERT INTO productos (id, id_sector, nombre, medida, unidad_medida, precio_unitario) VALUES
