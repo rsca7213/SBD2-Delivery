@@ -193,6 +193,8 @@ CREATE OR REPLACE PROCEDURE crear_pedidos IS
                     INTO latitud_transporte,longitud_transporte
                     FROM zonas z WHERE z.id = t.id_zona;
                     DBMS_OUTPUT.PUT_LINE('TRANSPORTE A USAAAAAAAAAAAAAAAAAAAAAAAAR: ' || transporte_a_usar);
+                    DBMS_OUTPUT.PUT_LINE('TRANSPORTE A iddddd: ' || t.id || ' TIPO TRANSPORTE: ' || t.tipo);
+                    DBMS_OUTPUT.PUT_LINE('DISTANCIAAAAAAAAAAAAAA: ' || (ABS(latitud_origen - latitud_transporte) + ABS(longitud_origen - longitud_transporte)));
 
                     IF id_municipio_origen = municipio_pedido THEN
 
