@@ -430,6 +430,7 @@ BEGIN
     OPEN pedidos_por_act; --se abre el cursor
     FETCH pedidos_por_act INTO pedido; --se busca el primer pedido del cursor
     WHILE pedidos_por_act%FOUND LOOP --mientras haya pedidos por iterar
+        DBMS_OUTPUT.PUT_LINE('↻');
         DBMS_OUTPUT.PUT_LINE('Actualizando pedido con #tracking = ' || pedido.tracking);
         -- si el pedido tiene un estatus "en espera"
         IF pedido.estatus = 'es' THEN
