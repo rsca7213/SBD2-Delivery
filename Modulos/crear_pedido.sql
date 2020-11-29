@@ -30,7 +30,7 @@ CREATE OR REPLACE PROCEDURE crear_pedidos IS
     longitud_origen zonas.datos_ubicacion.longitud%type;
     id_zona_origen zonas.id%type;
     id_municipio_origen municipios.id%type;
-    id_estado_origen estados.id%type;
+    idd_estado_origen estados.id%type;
     nombre_zona_origen zonas.datos_ubicacion.nombre%type;
     nombre_municipio_origen municipios.datos_ubicacion.nombre%type;
     nombre_estado_origen estados.datos_ubicacion.nombre%type;
@@ -42,6 +42,8 @@ CREATE OR REPLACE PROCEDURE crear_pedidos IS
     cantidad_productos_productor NUMBER;
     duracion_pedido NUMBER;
     tipo_transporte CHAR(3);
+    latitud_transporte zonas.datos_ubicacion.latitud%type;
+    longitud_transporte zonas.datos_ubicacion.longitud%type;
     BEGIN
 
         duracion_pedido:= 0;
@@ -162,7 +164,7 @@ CREATE OR REPLACE PROCEDURE crear_pedidos IS
                 /*Se busca toda la información respectiva al origen del pedido*/
 
                 SELECT z.datos_ubicacion.nombre, m.datos_ubicacion.nombre, e.datos_ubicacion.nombre, m.id, e.id
-                INTO nombre_zona_origen, nombre_municipio_origen, nombre_estado_origen, id_municipio_origen, id_estado_origen
+                INTO nombre_zona_origen, nombre_municipio_origen, nombre_estado_origen, id_municipio_origen, idd_estado_origen
                 FROM zonas z, municipios m, estados e
                 WHERE id_zona_origen = z.id AND m.id = z.ID_MUNICIPIO AND e.id = m.ID_ESTADO;
 
@@ -181,23 +183,27 @@ CREATE OR REPLACE PROCEDURE crear_pedidos IS
                 transporte_a_usar := 0;
 
                 /*ciclo para buscar el transporte funcional más cercano a la zona origen del pedido*/
-                FOR t IN (SELECT * FROM transportes t LEFT JOIN pedidos p ON p.id_transporte = t.id
-                            AND p.id_proveedor_transporte = t.id_proveedor AND p.estatus = 'en'
-                            WHERE t.estatus = 'f' AND p.id_estado_origen = t.id_estado AND id_estado_origen = t.ID_ESTADO
+                FOR t IN (SELECT t.id, t.id_proveedor, t.id_estado, t.id_municipio, t.id_zona, t.tipo, t.estatus FROM transportes t LEFT JOIN pedidos p ON p.id_transporte = t.id
+                            AND p.estatus = 'en' AND p.id_estado_origen = t.id_estado
+                            WHERE t.estatus = 'f' AND idd_estado_origen = t.ID_ESTADO
                             AND t.id_proveedor = id_proveedor_contrato)
 
                 LOOP
+                    SELECT z.datos_ubicacion.latitud, z.datos_ubicacion.longitud
+                    INTO latitud_transporte,longitud_transporte
+                    FROM zonas z WHERE z.id = t.id_zona;
                     DBMS_OUTPUT.PUT_LINE('TRANSPORTE A USAAAAAAAAAAAAAAAAAAAAAAAAR: ' || transporte_a_usar);
+
                     IF id_municipio_origen = municipio_pedido THEN
 
                         /*Estado inicial de la distancia entre la sucursal del productor y el transporte*/
                         IF distancia_transporte_destino = -1 THEN
-                            distancia_transporte_destino := ABS(latitud_origen - latitud_destino) + ABS(longitud_origen - longitud_destino);
+                            distancia_transporte_destino := ABS(latitud_origen - latitud_transporte) + ABS(longitud_origen - longitud_transporte);
                             transporte_a_usar := t.id;
                             tipo_transporte := t.tipo;
                         ELSE
-                            IF (ABS(latitud_origen - latitud_destino) + ABS(longitud_origen - longitud_destino)) < distancia_transporte_destino THEN
-                                distancia_transporte_destino := ABS(latitud_origen - latitud_destino) + ABS(longitud_origen - longitud_destino);
+                            IF (ABS(latitud_origen - latitud_transporte) + ABS(longitud_origen - latitud_transporte)) < distancia_transporte_destino THEN
+                                distancia_transporte_destino := ABS(latitud_origen - latitud_transporte) + ABS(longitud_origen - longitud_transporte);
                                 transporte_a_usar := t.id;
                                 tipo_transporte := t.tipo;
                             END IF;
@@ -208,12 +214,12 @@ CREATE OR REPLACE PROCEDURE crear_pedidos IS
                         IF t.tipo != 'bic' THEN
 
                             IF distancia_transporte_destino = -1 THEN
-                                distancia_transporte_destino := ABS(latitud_origen - latitud_destino) + ABS(longitud_origen - longitud_destino);
+                                distancia_transporte_destino := ABS(latitud_origen - latitud_transporte) + ABS(longitud_origen - longitud_transporte);
                                 transporte_a_usar := t.id;
                                 tipo_transporte := t.tipo;
                             ELSE
-                                IF (ABS(latitud_origen - latitud_destino) + ABS(longitud_origen - longitud_destino)) < distancia_transporte_destino THEN
-                                    distancia_transporte_destino := ABS(latitud_origen - latitud_destino) + ABS(longitud_origen - longitud_destino);
+                                IF (ABS(latitud_origen - latitud_transporte) + ABS(longitud_origen - longitud_transporte)) < distancia_transporte_destino THEN
+                                    distancia_transporte_destino := ABS(latitud_origen - latitud_transporte) + ABS(longitud_origen - longitud_transporte);
                                     transporte_a_usar := t.id;
                                     tipo_transporte := t.tipo;
                                 END IF;
@@ -239,7 +245,7 @@ CREATE OR REPLACE PROCEDURE crear_pedidos IS
                     INSERT INTO pedidos (tracking, rango_fechas, estatus, id_estado_origen, id_municipio_origen, id_zona_origen,
                                          cedula_usuario, id_proveedor_usuario, id_estado_destino, id_municipio_destino, id_zona_destino,
                                          id_contrato, id_productor_contrato, referencia_direccion)
-                    VALUES (TRACKING_PEDIDO_SEC.nextval, rango_fechas.VALIDAR_FECHAS(CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + 1), 'es', id_estado_origen, id_municipio_origen,
+                    VALUES (TRACKING_PEDIDO_SEC.nextval, rango_fechas.VALIDAR_FECHAS(CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + 1), 'es', idd_estado_origen, id_municipio_origen,
                             id_zona_origen, cedula_pedido, id_proveedor_contrato, estado_pedido, municipio_pedido, zona_pedido,
                             registro_contrato.ID, registro_contrato.ID_PRODUCTOR, referencia_a_usar);
 
@@ -258,7 +264,7 @@ CREATE OR REPLACE PROCEDURE crear_pedidos IS
                     INSERT INTO pedidos (TRACKING, RANGO_FECHAS, ESTATUS, ID_ESTADO_ORIGEN, ID_MUNICIPIO_ORIGEN, ID_ZONA_ORIGEN,
                                          CEDULA_USUARIO, ID_PROVEEDOR_USUARIO, ID_ESTADO_DESTINO, ID_MUNICIPIO_DESTINO, ID_ZONA_DESTINO,
                                          ID_CONTRATO, ID_PRODUCTOR_CONTRATO, REFERENCIA_DIRECCION, ID_TRANSPORTE, ID_PROVEEDOR_TRANSPORTE)
-                    VALUES (TRACKING_PEDIDO_SEC.nextval, rango_fechas.VALIDAR_FECHAS(CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + (duracion_pedido/1440)), 'es', id_estado_origen, id_municipio_origen,
+                    VALUES (TRACKING_PEDIDO_SEC.nextval, rango_fechas.VALIDAR_FECHAS(CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + (duracion_pedido/1440)), 'es', idd_estado_origen, id_municipio_origen,
                             id_zona_origen, cedula_pedido, id_proveedor_contrato, estado_pedido, municipio_pedido, zona_pedido,
                             registro_contrato.ID, registro_contrato.ID_PRODUCTOR, referencia_a_usar, transporte_a_usar, id_proveedor_contrato);
 
