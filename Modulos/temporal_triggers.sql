@@ -12,7 +12,7 @@ BEGIN
             UPDATE transportes t SET estatus = 'f' WHERE t.id = transporte.id AND t.id_proveedor = transporte.id_proveedor;
             SELECT DECODE(t.tipo, 'bic', 'bicicleta', 'mot', 'moto', 'car', 'carro', 'camioneta') INTO tipo_tranporte FROM
             transportes t WHERE t.id = transporte.id AND t.id_proveedor = transporte.id_proveedor;
-            DBMS_OUTPUT.PUT_LINE('El transporte de tipo ' || tipo_tranporte);
+            DBMS_OUTPUT.PUT_LINE('El transporte de tipo ' || tipo_tranporte || ' con id # ' || transporte.id || ' fue reparado.');
 
         END IF;
     END LOOP;
@@ -59,9 +59,10 @@ BEGIN
                 /* se itera sobre todos los transportes del proveedor disponibles funcionales en el estado del pedido
                  (se realiza un algoritmo de seleccion para determinar el transporte mas cercano a la sucursal origen)*/
                 FOR t IN (
-                    SELECT * FROM transportes t LEFT JOIN pedidos p ON p.id_transporte = t.id
-                    AND p.id_proveedor_transporte = t.id_proveedor AND p.estatus = 'en'
-                    WHERE t.estatus = 'f' AND p.id_estado_origen = t.id_estado
+                    SELECT t.id, t.id_proveedor, t.id_estado, t.id_municipio, t.id_zona, t.tipo,
+                    t.estatus, t.numero_placa FROM transportes t LEFT JOIN pedidos p ON
+                    p.id_transporte = t.id AND p.id_proveedor_transporte = t.id_proveedor
+                    AND p.estatus = 'en' AND p.id_estado_origen = t.id_estado WHERE t.estatus = 'f'
                     AND t.id_proveedor = pedido.id_proveedor_transporte
                 ) LOOP
                     -- al iniciar cada iteración se actualizan las zonas del transporte minimo actual y minimo posible
@@ -145,17 +146,12 @@ BEGIN
     END LOOP;
 END;
 
-/* trigger que se ejecuta cada vez que se crea un pedido y llama al procedimiento que sigue el flujo definido en actualizar_pedidos */
-CREATE OR REPLACE TRIGGER actualizar_pedidos AFTER INSERT ON pedidos FOR EACH ROW
-BEGIN
-    actualizar_pedidos(:new.tracking);
-END;
-
 CREATE OR REPLACE PROCEDURE modulo_pedidos IS
 BEGIN
     DBMS_OUTPUT.PUT_LINE('Ejecutando modulo de pedidos...');
-    FOR i IN 1..100 LOOP
+    FOR i IN 1..1 LOOP
         crear_pedidos();
+        actualizar_pedidos(tracking_pedido_sec.currval);
     END LOOP;
     DBMS_OUTPUT.PUT_LINE('Se ha finalizado la ejecucion del modulo de pedidos');
 END;
