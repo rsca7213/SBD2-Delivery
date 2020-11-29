@@ -74,9 +74,14 @@ CREATE OR REPLACE PROCEDURE crear_pedidos IS
 
         SELECT COUNT(*) INTO cantidad_pedidos_realizados FROM pedidos ped WHERE registro_contrato.id = ped.ID_CONTRATO;
 
+        DBMS_OUTPUT.PUT_LINE('cantidad de envios del contrato realizados: ' || cantidad_pedidos_realizados);
+
         SELECT SUM(cantidad) INTO limite_envios
         FROM servicios serv, servicios_contratos sc
-        WHERE id_proveedor_contrato = serv.ID_PROVEEDOR AND id_proveedor_contrato = sc.ID_PROVEEDOR AND sc.ID_CONTRATO = registro_contrato.ID;
+        WHERE id_proveedor_contrato = serv.ID_PROVEEDOR AND id_proveedor_contrato = sc.ID_PROVEEDOR AND sc.ID_CONTRATO = registro_contrato.ID
+        AND serv.ID_PROVEEDOR = sc.ID_PROVEEDOR;
+
+        DBMS_OUTPUT.PUT_LINE('limite de envios del contrato: ' || limite_envios);
 
         IF cantidad_pedidos_realizados < limite_envios THEN
 
@@ -84,8 +89,8 @@ CREATE OR REPLACE PROCEDURE crear_pedidos IS
               contenga una ubicación en un estado de los que se especifíca en el contrato*/
 
             SELECT COUNT(*) INTO cantidad_usuarios
-            FROM usuarios u, zonas_usuarios zu, estados_contratos ec
-            WHERE id_proveedor_contrato = u.ID_PROVEEDOR AND zu.ID_ESTADO = ec.ID_ESTADO AND registro_contrato.id = ec.ID_CONTRATO;
+            FROM zonas_usuarios zu, estados_contratos ec
+            WHERE id_proveedor_contrato = zu.ID_PROVEEDOR_USUARIO AND zu.ID_ESTADO = ec.ID_ESTADO AND registro_contrato.id = ec.id_contrato;
 
             IF cantidad_usuarios > 0 THEN
 
@@ -94,17 +99,21 @@ CREATE OR REPLACE PROCEDURE crear_pedidos IS
                 INTO primer_nombre_pedido, primer_apellido_pedido, cedula_pedido, email_pedido, estado_pedido
                 FROM (SELECT u.primer_nombre primer_nombre, u.primer_apellido primer_apellido, u.cedula cedula, u.email email, zu.ID_ESTADO estado
                       FROM usuarios u, zonas_usuarios zu, estados_contratos ec
-                      WHERE id_proveedor_contrato = u.ID_PROVEEDOR AND zu.ID_ESTADO = ec.ID_ESTADO AND registro_contrato.id = ec.ID_CONTRATO
+                      WHERE id_proveedor_contrato = zu.ID_PROVEEDOR_USUARIO AND zu.ID_ESTADO = ec.ID_ESTADO AND registro_contrato.id = ec.ID_CONTRATO AND zu.cedula_usuario = u.cedula
                       ORDER BY DBMS_RANDOM.RANDOM())
                 WHERE ROWNUM < 2;
+
+
 
                 /*Query para seleccionar la dirección completa del usuario seleccionado previamente */
                 SELECT zona, mun, dir INTO zona_pedido, municipio_pedido, direccion_pedido
                 FROM (SELECT zu.ID_ZONA zona, zu.ID_MUNICIPIO mun, zu.direccion dir
                       FROM zonas_usuarios zu
-                      WHERE cedula_pedido = zu.cedula_usuario  AND estado_pedido = zu.id_estado
+                      WHERE cedula_pedido = zu.cedula_usuario AND estado_pedido = zu.id_estado AND zu.ID_PROVEEDOR_USUARIO = id_proveedor_contrato
                       ORDER BY DBMS_RANDOM.RANDOM())
                 WHERE ROWNUM < 2;
+
+
 
                 /*Query para seleccionar el nombre de las zona, municipio y estado*/
 
@@ -114,9 +123,9 @@ CREATE OR REPLACE PROCEDURE crear_pedidos IS
                 WHERE zona_pedido = z.id AND m.id = z.ID_MUNICIPIO AND e.id = m.ID_ESTADO;
 
 
-
-                DBMS_OUTPUT.PUT_LINE('Datos del usuario');
-                DBMS_OUTPUT.PUT_LINE('-------------------------------------------------------------------------------------------');
+                DBMS_OUTPUT.PUT_LINE('+---------------------------------------------------------------------+');
+                DBMS_OUTPUT.PUT_LINE('|                          Datos del usuario                          |');
+                DBMS_OUTPUT.PUT_LINE('+---------------------------------------------------------------------+');
                 DBMS_OUTPUT.PUT_LINE('Nombre: ' || primer_nombre_pedido || ' ' || primer_apellido_pedido );
                 DBMS_OUTPUT.PUT_LINE('Cédula: ' || cedula_pedido);
                 DBMS_OUTPUT.PUT_LINE('Email: ' || email_pedido);
@@ -128,7 +137,7 @@ CREATE OR REPLACE PROCEDURE crear_pedidos IS
 
                 distancia_productor_usuario := -1;
 
-                FOR sucursal IN (SELECT z.datos_ubicacion.latitud lat, z.datos_ubicacion.longitud lon, z.id z_id FROM zonas_productores zp, zonas z WHERE registro_contrato.ID_PRODUCTOR = zp.ID_PRODUCTOR AND z.id = zp.ID_ZONA)
+                FOR sucursal IN (SELECT z.datos_ubicacion.latitud lat, z.datos_ubicacion.longitud lon, z.id z_id FROM zonas_productores zp, zonas z WHERE registro_contrato.ID_PRODUCTOR = zp.ID_PRODUCTOR AND z.id = zp.ID_ZONA AND zp.ID_ESTADO = estado_pedido)
                 LOOP
                     /*Estado inicial de la distancia entre la sucursal del productor y el usuario*/
                     IF distancia_productor_usuario = -1 THEN
@@ -158,8 +167,9 @@ CREATE OR REPLACE PROCEDURE crear_pedidos IS
                 WHERE id_zona_origen = z.id AND m.id = z.ID_MUNICIPIO AND e.id = m.ID_ESTADO;
 
                 /*Se muestra en pantalla los datos de la ubicación origen*/
-                DBMS_OUTPUT.PUT_LINE('Datos de la ubicación de la sucursal del productor más cercana a la ubicación del usuario');
-                DBMS_OUTPUT.PUT_LINE('-------------------------------------------------------------------------------------------');
+                DBMS_OUTPUT.PUT_LINE('+-----------------------------------------------------------------------------------------+');
+                DBMS_OUTPUT.PUT_LINE('|Datos de la ubicación de la sucursal del productor más cercana a la ubicación del usuario|');
+                DBMS_OUTPUT.PUT_LINE('+-----------------------------------------------------------------------------------------+');
                 DBMS_OUTPUT.PUT_LINE('Zona: ' || nombre_zona_origen);
                 DBMS_OUTPUT.PUT_LINE('Municipio: ' || nombre_municipio_origen);
                 DBMS_OUTPUT.PUT_LINE('Estado: ' || nombre_estado_origen);
@@ -177,6 +187,7 @@ CREATE OR REPLACE PROCEDURE crear_pedidos IS
                             AND t.id_proveedor = id_proveedor_contrato)
 
                 LOOP
+                    DBMS_OUTPUT.PUT_LINE('TRANSPORTE A USAAAAAAAAAAAAAAAAAAAAAAAAR: ' || transporte_a_usar);
                     IF id_municipio_origen = municipio_pedido THEN
 
                         /*Estado inicial de la distancia entre la sucursal del productor y el transporte*/
@@ -223,6 +234,7 @@ CREATE OR REPLACE PROCEDURE crear_pedidos IS
                     DBMS_OUTPUT.PUT_LINE('No se pudo asignar un transporte al pedido, se creará el pedido sin transporte');
 
                     /*Se crea el pedido sin transporte, con estatus en espera y con fecha de entrega al día siguiente*/
+
 
                     INSERT INTO pedidos (tracking, rango_fechas, estatus, id_estado_origen, id_municipio_origen, id_zona_origen,
                                          cedula_usuario, id_proveedor_usuario, id_estado_destino, id_municipio_destino, id_zona_destino,
@@ -300,6 +312,7 @@ CREATE OR REPLACE PROCEDURE modulo_pedidos IS
 
        FOR i in 1..100
        LOOP
+           DBMS_OUTPUT.PUT_LINE(i);
            crear_pedidos();
        END LOOP;
 
@@ -310,3 +323,6 @@ CREATE OR REPLACE PROCEDURE modulo_pedidos IS
 
 call modulo_pedidos();
 
+select * from pedidos;
+select * from zonas_usuarios;
+select * from usuarios;
