@@ -161,7 +161,7 @@
 				</graphicElement>
 			</rectangle>
 			<textField isStretchWithOverflow="true">
-				<reportElement x="-10" y="10" width="100" height="64" uuid="8df1bed1-72d9-4f09-a7d1-6b0b54f71a30">
+				<reportElement x="-10" y="10" width="100" height="66" uuid="8df1bed1-72d9-4f09-a7d1-6b0b54f71a30">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a9df5fbc-dd0f-4208-8da1-3f6d4290efee"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 				</reportElement>
@@ -172,7 +172,7 @@
 				<textFieldExpression><![CDATA[$F{SECTOR}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement x="180" y="10" width="140" height="64" uuid="74ead9f6-3e4b-4bc9-b3df-98de40f42499">
+				<reportElement x="180" y="10" width="140" height="66" uuid="74ead9f6-3e4b-4bc9-b3df-98de40f42499">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a9df5fbc-dd0f-4208-8da1-3f6d4290efee"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 				</reportElement>
@@ -183,7 +183,7 @@
 				<textFieldExpression><![CDATA[$F{PRODUCTOR}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement x="320" y="10" width="136" height="64" uuid="791b73a9-627d-4dfd-8bfa-ec04c3ee008c">
+				<reportElement x="320" y="10" width="136" height="66" uuid="791b73a9-627d-4dfd-8bfa-ec04c3ee008c">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a9df5fbc-dd0f-4208-8da1-3f6d4290efee"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 				</reportElement>
@@ -203,7 +203,7 @@
 				<textFieldExpression><![CDATA[$F{FECHA_INICIO}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement x="550" y="10" width="90" height="64" uuid="7efbc624-548b-4081-b7db-ea66fcb89d94">
+				<reportElement x="550" y="10" width="90" height="66" uuid="7efbc624-548b-4081-b7db-ea66fcb89d94">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a9df5fbc-dd0f-4208-8da1-3f6d4290efee"/>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -212,7 +212,7 @@
 				<textFieldExpression><![CDATA[$F{FECHA_FIN}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement x="640" y="10" width="90" height="67" uuid="bc1b0b92-1044-4354-8bdc-28530f161f5b">
+				<reportElement x="640" y="10" width="90" height="66" uuid="bc1b0b92-1044-4354-8bdc-28530f161f5b">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a9df5fbc-dd0f-4208-8da1-3f6d4290efee"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 				</reportElement>
@@ -223,7 +223,7 @@
 				<textFieldExpression><![CDATA[$F{ESTADO}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement x="730" y="9" width="78" height="64" uuid="d986d534-c5fa-4093-bd55-e3f35e8b84b6">
+				<reportElement x="730" y="10" width="78" height="66" uuid="d986d534-c5fa-4093-bd55-e3f35e8b84b6">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a9df5fbc-dd0f-4208-8da1-3f6d4290efee"/>
 					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
 				</reportElement>
@@ -234,7 +234,7 @@
 				<textFieldExpression><![CDATA[$F{CTD_ENVIOS}]]></textFieldExpression>
 			</textField>
 			<image hAlign="Center" vAlign="Middle">
-				<reportElement x="93" y="10" width="84" height="64" uuid="9426c24d-6181-4b2c-bb85-f3dd3687bef6">
+				<reportElement x="93" y="10" width="84" height="66" uuid="9426c24d-6181-4b2c-bb85-f3dd3687bef6">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<imageExpression><![CDATA[$F{LOGO}.getBinaryStream()]]></imageExpression>

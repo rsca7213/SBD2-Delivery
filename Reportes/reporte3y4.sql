@@ -19,6 +19,8 @@ BEGIN
         INNER JOIN estados e ON ec.id_estado = e.id
         WHERE ((param_sector IS NULL) OR (s.id = param_sector))
         AND ((param_estado IS NULL) OR (e.id = param_estado))
+        GROUP BY s.id, s.nombre, prod.datos_empresa.nombre, prod.id, prov.datos_empresa.nombre, prov.id,
+        e.datos_ubicacion.nombre, e.id, param_fecha_inicio, param_fecha_fin
         ORDER BY s.nombre, prod.datos_empresa.nombre, prov.datos_empresa.nombre, e.datos_ubicacion.nombre;
 END;
 
