@@ -1,89 +1,38 @@
-DROP TABLE tabla_temp_rep4;
 
-/* tabla temporal con los datos que necesita el reporte 4 */
-CREATE GLOBAL TEMPORARY TABLE tabla_temp_rep4(
-    id_estado NUMBER,
-    id_proveedor NUMBER,
-    tipo CHAR(3),
-    logo BLOB,
-    empresa VARCHAR2(100),
-    estado VARCHAR2(100),
-    tipo_completo VARCHAR2(20),
-    ctd_total INTEGER,
-    ctd_reparacion INTEGER
-) ON COMMIT PRESERVE ROWS;
-
-CREATE OR REPLACE PROCEDURE reporte4 (ORACLE_REF_CURSOR OUT SYS_REFCURSOR, param_id_estado IN INTEGER) IS
-    -- Cursor que toma en cuenta el parametro de estado
-    CURSOR cursor_con_estado IS
-        SELECT e.id AS id_estado, p.id AS id_proveedor, t.tipo AS tipo,
-        EMPTY_BLOB() AS logo, p.datos_empresa.nombre AS empresa,
-        e.datos_ubicacion.nombre AS estado,
-        DECODE(t.tipo, 'bic', 'Bicicleta', 'mot', 'Moto', 'car', 'Carro', 'Camioneta') AS tipo_completo,
-        0 AS ctd_total, 0 AS ctd_reparacion
-        FROM proveedores p
-        INNER JOIN transportes t ON t.id_proveedor = p.id
-        INNER JOIN zonas_proveedores zp ON zp.id_proveedor = p.id
-        INNER JOIN estados e ON t.id_estado = e.id
-        WHERE e.id = param_id_estado
-        GROUP BY e.id, p.id, t.tipo, p.datos_empresa.nombre, e.datos_ubicacion.nombre;
-    -- Cursor que no toma en cuenta el parametro (se usa cuando param es NULL)
-    CURSOR cursor_sin_estado IS
-        SELECT e.id AS id_estado, p.id AS id_proveedor, t.tipo AS tipo,
-        EMPTY_BLOB() AS logo, p.datos_empresa.nombre AS empresa,
-        e.datos_ubicacion.nombre AS estado,
-        DECODE(t.tipo, 'bic', 'Bicicleta', 'mot', 'Moto', 'car', 'Carro', 'Camioneta') AS tipo_completo,
-        0 AS ctd_total, 0 AS ctd_reparacion
-        FROM proveedores p
-        INNER JOIN transportes t ON t.id_proveedor = p.id
-        INNER JOIN zonas_proveedores zp ON zp.id_proveedor = p.id
-        INNER JOIN estados e ON t.id_estado = e.id
-        GROUP BY e.id, p.id, t.tipo, p.datos_empresa.nombre, e.datos_ubicacion.nombre;
-    -- tipo de variable con el tipo de fila de la tabla temporal
-    row_temp tabla_temp_rep4%rowtype;
+CREATE OR REPLACE PROCEDURE reporte3 (ORACLE_REF_CURSOR OUT SYS_REFCURSOR, param_sector IN NUMBER,
+param_fecha_inicio IN DATE, param_fecha_fin IN DATE, param_estado IN NUMBER) IS
 BEGIN
-    -- si el parametro no es nulo se usa el cursor con estado
-    IF param_id_estado IS NOT NULL THEN
-        OPEN cursor_con_estado;
-        FETCH cursor_con_estado INTO row_temp;
-        WHILE cursor_con_estado%FOUND LOOP
-            -- se busca el logo de la empresa
-            SELECT p.datos_empresa.logo INTO row_temp.logo FROM proveedores p WHERE p.id = row_temp.id_proveedor;
-            -- se busca la cantidad de transportes totales
-            SELECT COUNT(*) INTO row_temp.ctd_total FROM transportes t
-            WHERE t.id_estado = row_temp.id_estado AND t.id_proveedor = row_temp.id_proveedor AND t.tipo = row_temp.tipo;
-            -- se busca la cantidad de transportes dañados
-            SELECT COUNT(*) INTO row_temp.ctd_reparacion FROM transportes t WHERE t.estatus = 'd'
-            AND t.id_estado = row_temp.id_estado AND t.id_proveedor = row_temp.id_proveedor AND t.tipo = row_temp.tipo;
-            -- se inserta la fila en la tabla temporal
-            INSERT INTO tabla_temp_rep4 (id_estado, id_proveedor, tipo, logo, empresa, estado, tipo_completo, ctd_total, ctd_reparacion) VALUES
-            (row_temp.id_estado, row_temp.id_proveedor, row_temp.tipo, row_temp.logo, row_temp.empresa, row_temp.estado, row_temp.tipo_completo,
-             row_temp.ctd_total, row_temp.ctd_reparacion);
-            FETCH cursor_con_estado INTO row_temp;
-        END LOOP;
-        CLOSE cursor_con_estado;
-    -- si el parametro es nulo se usa el cursor sin estado
-    ELSE
-        OPEN cursor_sin_estado;
-        FETCH cursor_sin_estado INTO row_temp;
-        WHILE cursor_sin_estado%FOUND LOOP
-            -- se busca el logo de la empresa
-            SELECT p.datos_empresa.logo INTO row_temp.logo FROM proveedores p WHERE p.id = row_temp.id_proveedor;
-            -- se busca la cantidad de transportes totales
-            SELECT COUNT(*) INTO row_temp.ctd_total FROM transportes t
-            WHERE t.id_estado = row_temp.id_estado AND t.id_proveedor = row_temp.id_proveedor AND t.tipo = row_temp.tipo;
-            -- se busca la cantidad de transportes dañados
-            SELECT COUNT(*) INTO row_temp.ctd_reparacion FROM transportes t WHERE t.estatus = 'd'
-            AND t.id_estado = row_temp.id_estado AND t.id_proveedor = row_temp.id_proveedor AND t.tipo = row_temp.tipo;
-            -- se inserta la fila en la tabla temporal
-            INSERT INTO tabla_temp_rep4 (id_estado, id_proveedor, tipo, logo, empresa, estado, tipo_completo, ctd_total, ctd_reparacion) VALUES
-            (row_temp.id_estado, row_temp.id_proveedor, row_temp.tipo, row_temp.logo, row_temp.empresa, row_temp.estado, row_temp.tipo_completo,
-             row_temp.ctd_total, row_temp.ctd_reparacion);
-            FETCH cursor_sin_estado INTO row_temp;
-        END LOOP;
-        CLOSE cursor_sin_estado;
-    END IF;
+    OPEN ORACLE_REF_CURSOR FOR
+        SELECT s.nombre AS sector, prod.datos_empresa.nombre AS productor, prov.datos_empresa.nombre AS proveedor,
+        (SELECT produ.datos_empresa.logo AS logo FROM productores produ WHERE produ.id = prod.id) AS logo,
+        param_fecha_inicio AS fecha_inicio, param_fecha_fin AS fecha_fin, e.datos_ubicacion.nombre AS estado,
+        (SELECT COUNT(*) FROM pedidos ped WHERE ped.estatus = 'en' AND ped.id_proveedor_usuario = prov.id
+        AND ped.id_productor_contrato = prod.id AND ped.id_estado_origen = e.id
+        AND TO_DATE(param_fecha_inicio, 'DD/MM/YYYY') < ped.rango_fechas.fecha_inicio
+        AND TO_DATE(param_fecha_fin, 'DD/MM/YYYY') > ped.rango_fechas.fecha_fin) AS ctd_envios
+        FROM productores prod INNER JOIN sectores s ON s.id = prod.id_sector
+        INNER JOIN contratos cont ON cont.id_productor = prod.id
+        INNER JOIN servicios_contratos sc ON cont.id = sc.id_contrato AND cont.id_productor = sc.id_productor
+        INNER JOIN proveedores prov ON sc.id_proveedor = prov.id
+        INNER JOIN estados_contratos ec ON cont.id = ec.id_contrato AND cont.id_productor = ec.id_productor
+        INNER JOIN estados e ON ec.id_estado = e.id
+        WHERE s.id = param_sector AND e.id = param_estado;
+END;
 
-    -- se agrega al cursor de referencia
-    OPEN ORACLE_REF_CURSOR FOR SELECT * FROM tabla_temp_rep4 ORDER BY empresa, estado, tipo;
+CREATE OR REPLACE PROCEDURE reporte4 (ORACLE_REF_CURSOR OUT SYS_REFCURSOR, param_estado IN INTEGER) IS
+BEGIN
+    OPEN ORACLE_REF_CURSOR FOR
+        SELECT p.id AS id_proveedor, e.id AS id_estado, t.tipo AS tipo_transporte,
+        (SELECT pr.datos_empresa.logo AS logo FROM proveedores pr WHERE pr.id = p.id) AS logo,
+        p.datos_empresa.nombre AS empresa, e.datos_ubicacion.nombre AS estado,
+        DECODE(t.tipo, 'mot', 'Moto', 'car', 'Carro', 'bic', 'Bicicleta', 'Camioneta') AS tipo_completo,
+        (SELECT COUNT(*) AS ctd_total FROM transportes tr WHERE tr.id_estado = e.id AND tr.id_proveedor = p.id
+        AND tr.tipo = t.tipo) AS ctd_total,
+        (SELECT COUNT(*) AS ctd_reparacion FROM transportes tr WHERE tr.id_estado = e.id AND tr.id_proveedor = p.id
+        AND tr.estatus = 'd' AND tr.tipo = t.tipo) AS ctd_reparacion
+        FROM transportes t INNER JOIN proveedores p ON p.id = t.id_proveedor
+        INNER JOIN estados e ON e.id = t.id_estado
+        WHERE (param_estado IS NULL) OR (t.id_estado = param_estado)
+        GROUP BY p.id, e.id, t.tipo, p.datos_empresa.nombre, e.datos_ubicacion.nombre
+        ORDER BY p.datos_empresa.nombre, e.datos_ubicacion.nombre, t.tipo;
 END;
