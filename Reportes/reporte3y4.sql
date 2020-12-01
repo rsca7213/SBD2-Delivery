@@ -5,18 +5,21 @@ BEGIN
     OPEN ORACLE_REF_CURSOR FOR
         SELECT s.nombre AS sector, prod.datos_empresa.nombre AS productor, prov.datos_empresa.nombre AS proveedor,
         (SELECT produ.datos_empresa.logo AS logo FROM productores produ WHERE produ.id = prod.id) AS logo,
-        param_fecha_inicio AS fecha_inicio, param_fecha_fin AS fecha_fin, e.datos_ubicacion.nombre AS estado,
+        NVL(TO_CHAR(param_fecha_inicio, 'DD/MM/YYYY'), 'Sin fecha') AS fecha_inicio, NVL(TO_CHAR(param_fecha_fin, 'DD/MM/YYYY'), 'Sin fecha') AS fecha_fin,
+        e.datos_ubicacion.nombre AS estado,
         (SELECT COUNT(*) FROM pedidos ped WHERE ped.estatus = 'en' AND ped.id_proveedor_usuario = prov.id
         AND ped.id_productor_contrato = prod.id AND ped.id_estado_origen = e.id
-        AND TO_DATE(param_fecha_inicio, 'DD/MM/YYYY') < ped.rango_fechas.fecha_inicio
-        AND TO_DATE(param_fecha_fin, 'DD/MM/YYYY') > ped.rango_fechas.fecha_fin) AS ctd_envios
+        AND ((param_fecha_inicio IS NULL) OR (param_fecha_inicio < ped.rango_fechas.fecha_inicio))
+        AND ((param_fecha_fin IS NULL) OR (param_fecha_fin > ped.rango_fechas.fecha_fin))) AS ctd_envios
         FROM productores prod INNER JOIN sectores s ON s.id = prod.id_sector
         INNER JOIN contratos cont ON cont.id_productor = prod.id
         INNER JOIN servicios_contratos sc ON cont.id = sc.id_contrato AND cont.id_productor = sc.id_productor
         INNER JOIN proveedores prov ON sc.id_proveedor = prov.id
         INNER JOIN estados_contratos ec ON cont.id = ec.id_contrato AND cont.id_productor = ec.id_productor
         INNER JOIN estados e ON ec.id_estado = e.id
-        WHERE s.id = param_sector AND e.id = param_estado;
+        WHERE ((param_sector IS NULL) OR (s.id = param_sector))
+        AND ((param_estado IS NULL) OR (e.id = param_estado))
+        ORDER BY s.nombre, prod.datos_empresa.nombre, prov.datos_empresa.nombre, e.datos_ubicacion.nombre;
 END;
 
 CREATE OR REPLACE PROCEDURE reporte4 (ORACLE_REF_CURSOR OUT SYS_REFCURSOR, param_estado IN INTEGER) IS
