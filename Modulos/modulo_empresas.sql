@@ -393,27 +393,33 @@ BEGIN
                 SELECT MAX(s.rango_fechas.fecha_fin) INTO ult_serv FROM servicios s WHERE s.id_proveedor=prov.id;
                 SELECT ult_serv+TRUNC(DBMS_RANDOM.VALUE(1,123)) INTO fecha FROM dual;
             END IF;
-            /*se define de manera aleatoria la cantidad de pedidos del servicio*/
-            SELECT ROUND(DBMS_RANDOM.VALUE(10, 30)) INTO cant_env FROM dual;
             IF aux=1 THEN
+                /*se define de manera aleatoria la cantidad de pedidos del servicio*/
+                SELECT ROUND(DBMS_RANDOM.VALUE(10, 30)) INTO cant_env FROM dual;
                 /*frecuencia del servicio: diaria*/
                 INSERT INTO servicios (id, id_proveedor, rango_fechas, cantidad, frecuencia, precio) VALUES
                 (id_servicio_sec.nextval,prov.id,
                  rango_fechas.VALIDAR_FECHAS(fecha,add_months(fecha,duracion)),
                  cant_env,'d',prec_uni*cant_env);
             ELSIF aux=2 THEN
+                /*se define de manera aleatoria la cantidad de pedidos del servicio*/
+                SELECT ROUND(DBMS_RANDOM.VALUE(70, 210)) INTO cant_env FROM dual;
                 /*frecuencia del servicio: semanal*/
                 INSERT INTO servicios (id, id_proveedor, rango_fechas, cantidad, frecuencia, precio) VALUES
                 (id_servicio_sec.nextval,prov.id,
                  rango_fechas.VALIDAR_FECHAS(fecha,add_months(fecha,duracion)),
                  cant_env,'s',prec_uni*cant_env);
             ELSIF aux=3 THEN
+                /*se define de manera aleatoria la cantidad de pedidos del servicio*/
+                SELECT ROUND(DBMS_RANDOM.VALUE(300, 900)) INTO cant_env FROM dual;
                 /*frecuencia del servicio: mensual*/
                 INSERT INTO servicios (id, id_proveedor, rango_fechas, cantidad, frecuencia, precio) VALUES
                 (id_servicio_sec.nextval,prov.id,
                  rango_fechas.VALIDAR_FECHAS(fecha,add_months(fecha,duracion)),
                  cant_env,'m',prec_uni*cant_env);
             ELSE
+                /*se define de manera aleatoria la cantidad de pedidos del servicio*/
+                SELECT ROUND(DBMS_RANDOM.VALUE(3650, 10950)) INTO cant_env FROM dual;
                 /*frecuencia del servicio: anual*/
                 INSERT INTO servicios (id, id_proveedor, rango_fechas, cantidad, frecuencia, precio) VALUES
                 (id_servicio_sec.nextval,prov.id,
@@ -469,7 +475,7 @@ BEGIN
         descu:=0;
         /*se cuentan todos los servicios del proveedor*/
         SELECT COUNT(*) INTO total_servs FROM servicios s
-        WHERE s.id_proveedor=id_prov AND s.rango_fechas.fecha_fin>fecha AND s.rango_fechas.fecha_inicio<fecha;
+        WHERE s.id_proveedor=id_prov AND s.rango_fechas.fecha_fin>fecha AND s.rango_fechas.fecha_inicio<fecha AND s.rango_fechas.fecha_fin>=add_months(fecha,duracion);
         /*se cuentan todos los estados donde el proveedor y el productor tienen sucursales en comun*/
         SELECT COUNT(DISTINCT zpd.id_estado) INTO total_ests FROM zonas_productores zpd, zonas_proveedores zpv
         WHERE zpd.id_productor=id_prod AND zpv.id_proveedor=id_prov AND zpd.id_estado=zpv.id_estado;
@@ -484,7 +490,7 @@ BEGIN
             /*se selecciona una cantidad aleatoria de servicios para el contrato*/
             SELECT ROUND(DBMS_RANDOM.VALUE(1,total_servs)) INTO cant_servs FROM dual;
             /*se guarda en un array de manera aleatoria los id de los servicios del proveedor*/
-            SELECT s.id BULK COLLECT INTO id_servicios FROM servicios s WHERE s.id_proveedor=id_prov AND s.rango_fechas.fecha_fin>fecha AND s.rango_fechas.fecha_inicio<fecha ORDER BY DBMS_RANDOM.VALUE();
+            SELECT s.id BULK COLLECT INTO id_servicios FROM servicios s WHERE s.id_proveedor=id_prov AND s.rango_fechas.fecha_fin>fecha AND s.rango_fechas.fecha_inicio<fecha AND s.rango_fechas.fecha_fin>=add_months(fecha,duracion) ORDER BY DBMS_RANDOM.VALUE();
             /*se insertan n cantidad de servicios para el contrato*/
             FOR i IN 1..cant_servs LOOP
                 INSERT INTO servicios_contratos (id_contrato, id_productor, id_proveedor, id_servicio) VALUES
