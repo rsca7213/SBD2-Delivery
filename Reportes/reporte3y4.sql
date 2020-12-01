@@ -19,6 +19,10 @@ BEGIN
         INNER JOIN estados e ON ec.id_estado = e.id
         WHERE ((param_sector IS NULL) OR (s.id = param_sector))
         AND ((param_estado IS NULL) OR (e.id = param_estado))
+        AND (SELECT COUNT(*) FROM pedidos ped WHERE ped.estatus = 'en' AND ped.id_proveedor_usuario = prov.id
+        AND ped.id_productor_contrato = prod.id AND ped.id_estado_origen = e.id
+        AND ((param_fecha_inicio IS NULL) OR (param_fecha_inicio < ped.rango_fechas.fecha_inicio))
+        AND ((param_fecha_fin IS NULL) OR (param_fecha_fin > ped.rango_fechas.fecha_fin))) > 0
         GROUP BY s.id, s.nombre, prod.datos_empresa.nombre, prod.id, prov.datos_empresa.nombre, prov.id,
         e.datos_ubicacion.nombre, e.id, param_fecha_inicio, param_fecha_fin
         ORDER BY s.nombre, prod.datos_empresa.nombre, prov.datos_empresa.nombre, e.datos_ubicacion.nombre;
@@ -31,8 +35,8 @@ BEGIN
         (SELECT pr.datos_empresa.logo AS logo FROM proveedores pr WHERE pr.id = p.id) AS logo,
         p.datos_empresa.nombre AS empresa, e.datos_ubicacion.nombre AS estado,
         DECODE(t.tipo, 'mot', 'Moto', 'car', 'Carro', 'bic', 'Bicicleta', 'Camioneta') AS tipo_completo,
-        (SELECT COUNT(*) AS ctd_total FROM transportes tr WHERE tr.id_estado = e.id AND tr.id_proveedor = p.id
-        AND tr.tipo = t.tipo) AS ctd_total,
+        (SELECT COUNT(*) AS ctd_disponible FROM transportes tr WHERE tr.id_estado = e.id AND tr.id_proveedor = p.id
+        AND tr.tipo = t.tipo AND tr.estatus = 'f') AS ctd_disponible,
         (SELECT COUNT(*) AS ctd_reparacion FROM transportes tr WHERE tr.id_estado = e.id AND tr.id_proveedor = p.id
         AND tr.estatus = 'd' AND tr.tipo = t.tipo) AS ctd_reparacion
         FROM transportes t INNER JOIN proveedores p ON p.id = t.id_proveedor
