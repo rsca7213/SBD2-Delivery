@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.12.2.final using JasperReports Library version 6.12.2-75c5e90a222ab406e416cbf590a5397028a52de3  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporte_1" pageWidth="950" pageHeight="1728" whenNoDataType="AllSectionsNoDetail" columnWidth="910" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="49ba09a3-adc5-4066-8927-62e3f581b54a">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Oracle XE"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<queryString language="plsql">
+		<![CDATA[{CALL reporte1($P{ORACLE_REF_CURSOR})}]]>
+	</queryString>
+	<field name="Empresa" class="java.lang.String"/>
+	<field name="Modo" class="java.lang.String"/>
+	<field name="Vigencia" class="java.lang.String"/>
+	<field name="Precio" class="java.lang.String"/>
+	<field name="Logo" class="java.sql.Blob"/>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="72">
+			<frame>
+				<reportElement mode="Opaque" x="-20" y="-20" width="950" height="92" backcolor="#006699" uuid="ddaca624-a6e4-40d2-b7ec-620a55a3d57e"/>
+				<staticText>
+					<reportElement x="10" y="20" width="840" height="43" forecolor="#FFFFFF" uuid="669e453b-dfef-4e22-9aef-12897d8cf805">
+						<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					</reportElement>
+					<textElement>
+						<font size="22" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Reporte de presupuesto de proveedores de servicio de Delivery]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="13"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="53">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="120" height="48" forecolor="#006699" backcolor="#E6E6E6" uuid="aff1e366-357d-405e-a58b-1b62205891dc">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a9df5fbc-dd0f-4208-8da1-3f6d4290efee"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<text><![CDATA[Logo Empresa]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="120" y="0" width="130" height="48" forecolor="#006699" backcolor="#E6E6E6" uuid="58ae2134-0e71-4837-bd75-0417a2682d11">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f35ec09c-8f35-4565-aef9-ab647ac5472a"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Empresa]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="250" y="0" width="280" height="48" forecolor="#006699" backcolor="#E6E6E6" uuid="2c265b61-cc6e-4b6b-bc51-3dd0663ad39d">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f83f4ead-7bab-457a-892f-7eac0c6e1681"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<text><![CDATA[Modo de cálculo de presupuesto (Acuerdo de servicio)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="530" y="0" width="230" height="48" forecolor="#006699" backcolor="#E6E6E6" uuid="25356e34-98db-4463-b07b-14560a21c960">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f83f4ead-7bab-457a-892f-7eac0c6e1681"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha Vigencia]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="760" y="0" width="150" height="48" forecolor="#006699" backcolor="#E6E6E6" uuid="6f9cc5b2-15e2-42dd-8d25-6bc986c06b50">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f83f4ead-7bab-457a-892f-7eac0c6e1681"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Precio segun acuerdo de servicio]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="89">
+			<rectangle>
+				<reportElement key="" x="0" y="-5" width="910" height="80" uuid="29e54061-804e-4110-bd5c-0d41ba5e9eff">
+					<printWhenExpression><![CDATA[$V{REPORT_COUNT} % 2 == 1]]></printWhenExpression>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.0" lineColor="rgba(0, 0, 0, 0.0)"/>
+				</graphicElement>
+			</rectangle>
+			<textField textAdjust="StretchHeight">
+				<reportElement x="130" y="0" width="110" height="66" uuid="437d562c-1bfa-4850-a7c7-4fa022f74334">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a9df5fbc-dd0f-4208-8da1-3f6d4290efee"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14"/>
+					<paragraph lineSpacing="1_1_2" leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Empresa}]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight">
+				<reportElement x="260" y="0" width="260" height="66" uuid="3789ee40-9c46-4462-9064-26a944bd6f29">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a9df5fbc-dd0f-4208-8da1-3f6d4290efee"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14"/>
+					<paragraph lineSpacing="1_1_2" leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Modo}]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight">
+				<reportElement x="540" y="0" width="210" height="66" uuid="57c345e4-96ec-46d0-8aa9-94ddf7a1f3f2">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a9df5fbc-dd0f-4208-8da1-3f6d4290efee"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14"/>
+					<paragraph lineSpacing="1_1_2" leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Vigencia}]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight">
+				<reportElement x="770" y="0" width="130" height="66" uuid="4996460f-869a-49d9-87dc-f61d081bf4b5">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a9df5fbc-dd0f-4208-8da1-3f6d4290efee"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14"/>
+					<paragraph lineSpacing="1_1_2" leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Precio}]]></textFieldExpression>
+			</textField>
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement x="18" y="0" width="84" height="66" uuid="41cc5c44-c714-4b95-b26c-8d389b3ce904">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<imageExpression><![CDATA[$F{Logo}.getBinaryStream()]]></imageExpression>
+			</image>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band height="34">
+			<textField>
+				<reportElement mode="Opaque" x="-20" y="10" width="910" height="13" backcolor="#E6E6E6" uuid="ffc5e51b-cd8b-4091-8ee0-910b6fa34d3f"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement mode="Opaque" x="890" y="10" width="40" height="13" backcolor="#E6E6E6" uuid="5d519064-9cf1-4ee8-b790-7f50fa8aadab"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="0" y="10" width="100" height="13" uuid="0a558131-7561-4039-a4f1-3c70a5d86197"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>
