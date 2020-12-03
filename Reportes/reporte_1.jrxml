@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 6.16.0-48579d909b7943b64690c65c71e07e0b80981928  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporte_1" pageWidth="950" pageHeight="1728" whenNoDataType="AllSectionsNoDetail" columnWidth="910" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="49ba09a3-adc5-4066-8927-62e3f581b54a">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporte_1" pageWidth="950" pageHeight="700" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="910" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="49ba09a3-adc5-4066-8927-62e3f581b54a">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Oracle XE"/>
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
@@ -29,7 +29,7 @@
 			<frame>
 				<reportElement mode="Opaque" x="-20" y="-20" width="950" height="92" backcolor="#006699" uuid="ddaca624-a6e4-40d2-b7ec-620a55a3d57e"/>
 				<staticText>
-					<reportElement x="10" y="20" width="840" height="43" forecolor="#FFFFFF" uuid="669e453b-dfef-4e22-9aef-12897d8cf805">
+					<reportElement x="10" y="25" width="840" height="43" forecolor="#FFFFFF" uuid="669e453b-dfef-4e22-9aef-12897d8cf805">
 						<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					</reportElement>
 					<textElement>

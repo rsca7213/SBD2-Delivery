@@ -21,8 +21,8 @@ BEGIN
     pv.datos_empresa.nombre AS Proveedor, TO_CHAR(c.rango_fechas.fecha_inicio,'DD/MM/YYYY') AS Fehca_Desde,
     TO_CHAR(c.rango_fechas.fecha_fin,'DD/MM/YYYY') AS Fehca_Hasta, e.datos_ubicacion.nombre AS Estado,
     ('$' || CASE WHEN c.descuento>0 THEN s.precio*(c.descuento/100) ELSE s.precio END || ' ' ||
-    CASE WHEN s.frecuencia='d' THEN 'Diario' WHEN s.frecuencia='s' THEN 'Semanal' WHEN s.frecuencia='m' THEN 'Mensual' ELSE 'Anual' END) AS Monto
+    CASE WHEN s.frecuencia='d' THEN 'diario' WHEN s.frecuencia='s' THEN 'semanal' WHEN s.frecuencia='m' THEN 'mensual' ELSE 'anual' END) AS Monto
 	FROM productores pd, contratos c, proveedores pv, servicios s, servicios_contratos sc, estados e, estados_contratos ec
-	WHERE c.id_productor=pd.id AND s.id_proveedor=pv.id AND sc.id_contrato=c.id AND sc.id_productor=pd.id AND sc.id_proveedor=pv.id AND sc.id_servicio=s.id AND ((ec.id_estado=param_estado) OR (ec.id_estado IS NULL)) AND ec.id_estado=e.id AND ec.id_contrato=c.id AND ec.id_productor=pd.id
+	WHERE c.id_productor=pd.id AND s.id_proveedor=pv.id AND sc.id_contrato=c.id AND sc.id_productor=pd.id AND sc.id_proveedor=pv.id AND sc.id_servicio=s.id AND ((ec.id_estado=param_estado) OR (param_estado IS NULL)) AND ec.id_estado=e.id AND ec.id_contrato=c.id AND ec.id_productor=pd.id
 	ORDER BY pd.id, c.rango_fechas.fecha_inicio;
 END;
