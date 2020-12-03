@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.12.2.final using JasperReports Library version 6.12.2-75c5e90a222ab406e416cbf590a5397028a52de3  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporte_2" pageWidth="1080" pageHeight="1728" columnWidth="1040" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e0bb6bf9-e62a-406a-82bf-37ac52e4ccec">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporte_2" pageWidth="1080" pageHeight="1728" whenNoDataType="AllSectionsNoDetail" columnWidth="1040" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e0bb6bf9-e62a-406a-82bf-37ac52e4ccec">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Oracle XE"/>
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
@@ -14,7 +14,7 @@
 	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
 	<parameter name="param_estado" class="java.lang.Integer"/>
 	<queryString language="plsql">
-		<![CDATA[{CALL reporte2($P{ORACLE_REF_CURSOR}, $P{param_estado}}]]>
+		<![CDATA[{CALL reporte2($P{ORACLE_REF_CURSOR}, $P{param_estado})}]]>
 	</queryString>
 	<field name="Logo" class="java.sql.Blob"/>
 	<field name="Fecha_Registro" class="java.lang.String"/>
@@ -196,26 +196,27 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Monto}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement mode="Opaque" x="-20" y="92" width="1040" height="13" backcolor="#E6E6E6" uuid="c6a7271e-b515-435b-ae5f-21a06575bf85"/>
-				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
-			</textField>
-			<textField pattern="EEEEE dd MMMMM yyyy">
-				<reportElement x="-20" y="92" width="100" height="13" uuid="9d6d9e0d-59a7-4e63-83d4-34b81c38d83e"/>
-				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
-			</textField>
-			<textField evaluationTime="Report">
-				<reportElement mode="Opaque" x="1020" y="92" width="40" height="13" backcolor="#E6E6E6" uuid="84f67867-997e-4d17-9ccd-debdb769adee"/>
-				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
-			</textField>
 		</band>
 	</detail>
 	<columnFooter>
 		<band/>
 	</columnFooter>
 	<pageFooter>
-		<band height="8"/>
+		<band height="35">
+			<textField>
+				<reportElement mode="Opaque" x="-20" y="10" width="1040" height="13" backcolor="#E6E6E6" uuid="c6a7271e-b515-435b-ae5f-21a06575bf85"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement mode="Opaque" x="1020" y="10" width="40" height="13" backcolor="#E6E6E6" uuid="84f67867-997e-4d17-9ccd-debdb769adee"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="-20" y="11" width="100" height="13" uuid="9d6d9e0d-59a7-4e63-83d4-34b81c38d83e"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
 	</pageFooter>
 	<summary>
 		<band/>
