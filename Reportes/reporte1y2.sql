@@ -4,8 +4,8 @@ CREATE OR REPLACE PROCEDURE reporte1 (ORACLE_REF_CURSOR OUT SYS_REFCURSOR) IS
 BEGIN
     OPEN ORACLE_REF_CURSOR FOR
     SELECT pv.datos_empresa.logo AS Logo, pv.datos_empresa.nombre AS Empresa,
-   	(s.cantidad || ' envios * ' || CASE WHEN s.frecuencia='d' THEN 'Dia' WHEN s.frecuencia='s' THEN 'Semana' WHEN s.frecuencia='m' THEN 'Mes' ELSE 'Año' END) AS Modo,
-   	(TO_DATE(TO_CHAR(s.rango_fechas.fecha_inicio,'DD/MM/YYYY'),'DD/MM/YYYY') || ' - ' || TO_DATE(TO_CHAR(s.rango_fechas.fecha_fin,'DD/MM/YYYY'),'DD-MM-YYYY')) AS Vigencia,
+   	(s.cantidad || ' envios * ' || CASE WHEN s.frecuencia='d' THEN 'día' WHEN s.frecuencia='s' THEN 'semana' WHEN s.frecuencia='m' THEN 'mes' ELSE 'año' END) AS Modo,
+   	(TO_CHAR(s.rango_fechas.fecha_inicio,'DD/MM/YYYY') || ' - ' || TO_CHAR(s.rango_fechas.fecha_fin,'DD/MM/YYYY')) AS Vigencia,
    	('$ ' || s.precio) AS Precio
 	FROM servicios s, proveedores pv
 	WHERE s.id_proveedor=pv.id
