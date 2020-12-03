@@ -6,6 +6,16 @@ BEGIN
     INSERT INTO sectores (id, nombre) VALUES (id_sector_sec.nextval, 'Vestimenta');
     INSERT INTO sectores (id, nombre) VALUES (id_sector_sec.nextval, 'Tecnologico');
     INSERT INTO sectores (id, nombre) VALUES (id_sector_sec.nextval, 'Botanico');
+    INSERT INTO sectores (id, nombre) VALUES (id_sector_sec.nextval, 'Calzado');
+    INSERT INTO sectores (id, nombre) VALUES (id_sector_sec.nextval, 'Vehiculos');
+    INSERT INTO sectores (id, nombre) VALUES (id_sector_sec.nextval, 'Floral');
+    INSERT INTO sectores (id, nombre) VALUES (id_sector_sec.nextval, 'Cosmetica');
+    INSERT INTO sectores (id, nombre) VALUES (id_sector_sec.nextval, 'Electrodomesticos');
+    INSERT INTO sectores (id, nombre) VALUES (id_sector_sec.nextval, 'Bebidas Alcoholicas');
+    INSERT INTO sectores (id, nombre) VALUES (id_sector_sec.nextval, 'Inmuebles');
+    INSERT INTO sectores (id, nombre) VALUES (id_sector_sec.nextval, 'Herramientas');
+    INSERT INTO sectores (id, nombre) VALUES (id_sector_sec.nextval, 'Utiles Escolares');
+    INSERT INTO sectores (id, nombre) VALUES (id_sector_sec.nextval, 'Importaciones');
     DBMS_OUTPUT.PUT_LINE('Sectores de comercio creados exitosamente.');
 END;
 
@@ -205,6 +215,77 @@ BEGIN
     DBMS_LOB.OPEN(img_file, DBMS_LOB.LOB_READONLY);
     DBMS_LOB.LOADFROMFILE(img_blob, img_file, SYS.DBMS_LOB.GETLENGTH(img_file));
     DBMS_LOB.CLOSE(img_file);
+
+    INSERT INTO proveedores (id, datos_empresa) VALUES
+    (id_proveedor_sec.nextval, datos_empresa(
+        datos_empresa.VALIDAR_NOMBRE('DoorDash'),
+        datos_empresa.VALIDAR_FECHA(TO_DATE('14/09/2020', 'dd/mm/yyyy')),
+        datos_empresa.VALIDAR_CORREO('dash@doordash.co'),
+        datos_empresa.VALIDAR_TELEFONO('+584141738951'),
+        EMPTY_BLOB()
+    )) RETURNING datos_empresa INTO datos_emp;
+    img_blob := datos_emp.logo;
+    img_file := BFILENAME('DIR_LOGOS_EMPRESAS', 'doordash.png');
+    DBMS_LOB.OPEN(img_file, DBMS_LOB.LOB_READONLY);
+    DBMS_LOB.LOADFROMFILE(img_blob, img_file, SYS.DBMS_LOB.GETLENGTH(img_file));
+    DBMS_LOB.CLOSE(img_file);
+
+    INSERT INTO proveedores (id, datos_empresa) VALUES
+    (id_proveedor_sec.nextval, datos_empresa(
+        datos_empresa.VALIDAR_NOMBRE('Postmates'),
+        datos_empresa.VALIDAR_FECHA(TO_DATE('02/11/2020', 'dd/mm/yyyy')),
+        datos_empresa.VALIDAR_CORREO('ayudaes@gmail.com'),
+        datos_empresa.VALIDAR_TELEFONO('+584268547195'),
+        EMPTY_BLOB()
+    )) RETURNING datos_empresa INTO datos_emp;
+    img_blob := datos_emp.logo;
+    img_file := BFILENAME('DIR_LOGOS_EMPRESAS', 'postmates.png');
+    DBMS_LOB.OPEN(img_file, DBMS_LOB.LOB_READONLY);
+    DBMS_LOB.LOADFROMFILE(img_blob, img_file, SYS.DBMS_LOB.GETLENGTH(img_file));
+    DBMS_LOB.CLOSE(img_file);
+
+    INSERT INTO proveedores (id, datos_empresa) VALUES
+    (id_proveedor_sec.nextval, datos_empresa(
+        datos_empresa.VALIDAR_NOMBRE('Caviar Delivery'),
+        datos_empresa.VALIDAR_FECHA(TO_DATE('09/09/2018', 'dd/mm/yyyy')),
+        datos_empresa.VALIDAR_CORREO('caviardeliverycliente@gmail.com'),
+        datos_empresa.VALIDAR_TELEFONO('+584149562648'),
+        EMPTY_BLOB()
+    )) RETURNING datos_empresa INTO datos_emp;
+    img_blob := datos_emp.logo;
+    img_file := BFILENAME('DIR_LOGOS_EMPRESAS', 'caviar.png');
+    DBMS_LOB.OPEN(img_file, DBMS_LOB.LOB_READONLY);
+    DBMS_LOB.LOADFROMFILE(img_blob, img_file, SYS.DBMS_LOB.GETLENGTH(img_file));
+    DBMS_LOB.CLOSE(img_file);
+
+    INSERT INTO proveedores (id, datos_empresa) VALUES
+    (id_proveedor_sec.nextval, datos_empresa(
+        datos_empresa.VALIDAR_NOMBRE('Jumia Delivery'),
+        datos_empresa.VALIDAR_FECHA(TO_DATE('12/12/2018', 'dd/mm/yyyy')),
+        datos_empresa.VALIDAR_CORREO('ayuda@jumia.co.ve'),
+        datos_empresa.VALIDAR_TELEFONO('+582122658974'),
+        EMPTY_BLOB()
+    )) RETURNING datos_empresa INTO datos_emp;
+    img_blob := datos_emp.logo;
+    img_file := BFILENAME('DIR_LOGOS_EMPRESAS', 'jumia.png');
+    DBMS_LOB.OPEN(img_file, DBMS_LOB.LOB_READONLY);
+    DBMS_LOB.LOADFROMFILE(img_blob, img_file, SYS.DBMS_LOB.GETLENGTH(img_file));
+    DBMS_LOB.CLOSE(img_file);
+
+    INSERT INTO proveedores (id, datos_empresa) VALUES
+    (id_proveedor_sec.nextval, datos_empresa(
+        datos_empresa.VALIDAR_NOMBRE('Cylex'),
+        datos_empresa.VALIDAR_FECHA(TO_DATE('28/11/2020', 'dd/mm/yyyy')),
+        datos_empresa.VALIDAR_CORREO('info@cylex.com.ve'),
+        datos_empresa.VALIDAR_TELEFONO('+584147845624'),
+        EMPTY_BLOB()
+    )) RETURNING datos_empresa INTO datos_emp;
+    img_blob := datos_emp.logo;
+    img_file := BFILENAME('DIR_LOGOS_EMPRESAS', 'cylex.png');
+    DBMS_LOB.OPEN(img_file, DBMS_LOB.LOB_READONLY);
+    DBMS_LOB.LOADFROMFILE(img_blob, img_file, SYS.DBMS_LOB.GETLENGTH(img_file));
+    DBMS_LOB.CLOSE(img_file);
+
     DBMS_OUTPUT.PUT_LINE('Empresas proveedoras creadas exitosamente.');
     DBMS_OUTPUT.PUT_LINE('Asignando las zonas del territorio venezolano en donde las empresas proveedoras tienen sucursales...');
     asignar_sucursales_proveedores();
@@ -357,6 +438,77 @@ BEGIN
     DBMS_LOB.OPEN(img_file, DBMS_LOB.LOB_READONLY);
     DBMS_LOB.LOADFROMFILE(img_blob, img_file, SYS.DBMS_LOB.GETLENGTH(img_file));
     DBMS_LOB.CLOSE(img_file);
+
+    INSERT INTO productores (id, datos_empresa, id_sector) VALUES
+    (id_productor_sec.nextval, datos_empresa(
+        datos_empresa.VALIDAR_NOMBRE('Farmacias SAAS'),
+        datos_empresa.VALIDAR_FECHA(TO_DATE('31/12/2016', 'dd/mm/yyyy')),
+        datos_empresa.VALIDAR_CORREO('ayuda@saas.com.ve'),
+        datos_empresa.VALIDAR_TELEFONO('+582128945126'),
+        EMPTY_BLOB()
+    ), 2) RETURNING datos_empresa INTO datos_emp;
+    img_blob := datos_emp.logo;
+    img_file := BFILENAME('DIR_LOGOS_EMPRESAS', 'farmaciasaas.png');
+    DBMS_LOB.OPEN(img_file, DBMS_LOB.LOB_READONLY);
+    DBMS_LOB.LOADFROMFILE(img_blob, img_file, SYS.DBMS_LOB.GETLENGTH(img_file));
+    DBMS_LOB.CLOSE(img_file);
+
+    INSERT INTO productores (id, datos_empresa, id_sector) VALUES
+    (id_productor_sec.nextval, datos_empresa(
+        datos_empresa.VALIDAR_NOMBRE('Farmaplus'),
+        datos_empresa.VALIDAR_FECHA(TO_DATE('23/05/2017', 'dd/mm/yyyy')),
+        datos_empresa.VALIDAR_CORREO('contacto@farmaplus.com.ve'),
+        datos_empresa.VALIDAR_TELEFONO('+582125847854'),
+        EMPTY_BLOB()
+    ), 2) RETURNING datos_empresa INTO datos_emp;
+    img_blob := datos_emp.logo;
+    img_file := BFILENAME('DIR_LOGOS_EMPRESAS', 'farmaplus.png');
+    DBMS_LOB.OPEN(img_file, DBMS_LOB.LOB_READONLY);
+    DBMS_LOB.LOADFROMFILE(img_blob, img_file, SYS.DBMS_LOB.GETLENGTH(img_file));
+    DBMS_LOB.CLOSE(img_file);
+
+    INSERT INTO productores (id, datos_empresa, id_sector) VALUES
+    (id_productor_sec.nextval, datos_empresa(
+        datos_empresa.VALIDAR_NOMBRE('Farmahorro'),
+        datos_empresa.VALIDAR_FECHA(TO_DATE('11/09/2016', 'dd/mm/yyyy')),
+        datos_empresa.VALIDAR_CORREO('ahorra@farmahorro.com.ve'),
+        datos_empresa.VALIDAR_TELEFONO('+582125986451'),
+        EMPTY_BLOB()
+    ), 2) RETURNING datos_empresa INTO datos_emp;
+    img_blob := datos_emp.logo;
+    img_file := BFILENAME('DIR_LOGOS_EMPRESAS', 'farmahorro.png');
+    DBMS_LOB.OPEN(img_file, DBMS_LOB.LOB_READONLY);
+    DBMS_LOB.LOADFROMFILE(img_blob, img_file, SYS.DBMS_LOB.GETLENGTH(img_file));
+    DBMS_LOB.CLOSE(img_file);
+
+    INSERT INTO productores (id, datos_empresa, id_sector) VALUES
+    (id_productor_sec.nextval, datos_empresa(
+        datos_empresa.VALIDAR_NOMBRE('Dominos Pizza'),
+        datos_empresa.VALIDAR_FECHA(TO_DATE('16/07/2020', 'dd/mm/yyyy')),
+        datos_empresa.VALIDAR_CORREO('pizza@dominos.com.ve'),
+        datos_empresa.VALIDAR_TELEFONO('+584147856415'),
+        EMPTY_BLOB()
+    ), 1) RETURNING datos_empresa INTO datos_emp;
+    img_blob := datos_emp.logo;
+    img_file := BFILENAME('DIR_LOGOS_EMPRESAS', 'dominos.png');
+    DBMS_LOB.OPEN(img_file, DBMS_LOB.LOB_READONLY);
+    DBMS_LOB.LOADFROMFILE(img_blob, img_file, SYS.DBMS_LOB.GETLENGTH(img_file));
+    DBMS_LOB.CLOSE(img_file);
+
+    INSERT INTO productores (id, datos_empresa, id_sector) VALUES
+    (id_productor_sec.nextval, datos_empresa(
+        datos_empresa.VALIDAR_NOMBRE('Burger Shack'),
+        datos_empresa.VALIDAR_FECHA(TO_DATE('21/06/2019', 'dd/mm/yyyy')),
+        datos_empresa.VALIDAR_CORREO('ayuda@burgershack.com.ve'),
+        datos_empresa.VALIDAR_TELEFONO('+584168542598'),
+        EMPTY_BLOB()
+    ), 1) RETURNING datos_empresa INTO datos_emp;
+    img_blob := datos_emp.logo;
+    img_file := BFILENAME('DIR_LOGOS_EMPRESAS', 'burgershack.png');
+    DBMS_LOB.OPEN(img_file, DBMS_LOB.LOB_READONLY);
+    DBMS_LOB.LOADFROMFILE(img_blob, img_file, SYS.DBMS_LOB.GETLENGTH(img_file));
+    DBMS_LOB.CLOSE(img_file);
+
     DBMS_OUTPUT.PUT_LINE('Empresas productoras creadas exitosamente.');
     DBMS_OUTPUT.PUT_LINE('Asignando las zonas del territorio venezolano en donde las empresas productoras tienen sucursales...');
     asignar_sucursales_productores();

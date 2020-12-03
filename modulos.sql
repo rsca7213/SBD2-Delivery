@@ -775,7 +775,7 @@ CREATE OR REPLACE PROCEDURE crear_zonas IS
     END;
 
 CREATE OR REPLACE PROCEDURE modulo_ubicacion IS
-    BEGIN
+BEGIN
        DBMS_OUTPUT.PUT_LINE('Iniciando módulo de ubicaciones...');
        DBMS_OUTPUT.PUT_LINE('-------------------------------------------------------------------------------------------');
 
@@ -786,7 +786,7 @@ CREATE OR REPLACE PROCEDURE modulo_ubicacion IS
        DBMS_OUTPUT.PUT_LINE('-------------------------------------------------------------------------------------------');
        DBMS_OUTPUT.PUT_LINE('Módulo de ubicaciones ejecutado exitosamente');
 
-    END;
+END;
 
 CREATE OR REPLACE PROCEDURE crear_sectores IS
 BEGIN
@@ -796,6 +796,16 @@ BEGIN
     INSERT INTO sectores (id, nombre) VALUES (id_sector_sec.nextval, 'Vestimenta');
     INSERT INTO sectores (id, nombre) VALUES (id_sector_sec.nextval, 'Tecnologico');
     INSERT INTO sectores (id, nombre) VALUES (id_sector_sec.nextval, 'Botanico');
+    INSERT INTO sectores (id, nombre) VALUES (id_sector_sec.nextval, 'Calzado');
+    INSERT INTO sectores (id, nombre) VALUES (id_sector_sec.nextval, 'Vehiculos');
+    INSERT INTO sectores (id, nombre) VALUES (id_sector_sec.nextval, 'Floral');
+    INSERT INTO sectores (id, nombre) VALUES (id_sector_sec.nextval, 'Cosmetica');
+    INSERT INTO sectores (id, nombre) VALUES (id_sector_sec.nextval, 'Electrodomesticos');
+    INSERT INTO sectores (id, nombre) VALUES (id_sector_sec.nextval, 'Bebidas Alcoholicas');
+    INSERT INTO sectores (id, nombre) VALUES (id_sector_sec.nextval, 'Inmuebles');
+    INSERT INTO sectores (id, nombre) VALUES (id_sector_sec.nextval, 'Herramientas');
+    INSERT INTO sectores (id, nombre) VALUES (id_sector_sec.nextval, 'Utiles Escolares');
+    INSERT INTO sectores (id, nombre) VALUES (id_sector_sec.nextval, 'Importaciones');
     DBMS_OUTPUT.PUT_LINE('Sectores de comercio creados exitosamente.');
 END;
 
@@ -995,6 +1005,77 @@ BEGIN
     DBMS_LOB.OPEN(img_file, DBMS_LOB.LOB_READONLY);
     DBMS_LOB.LOADFROMFILE(img_blob, img_file, SYS.DBMS_LOB.GETLENGTH(img_file));
     DBMS_LOB.CLOSE(img_file);
+
+    INSERT INTO proveedores (id, datos_empresa) VALUES
+    (id_proveedor_sec.nextval, datos_empresa(
+        datos_empresa.VALIDAR_NOMBRE('DoorDash'),
+        datos_empresa.VALIDAR_FECHA(TO_DATE('14/09/2020', 'dd/mm/yyyy')),
+        datos_empresa.VALIDAR_CORREO('dash@doordash.co'),
+        datos_empresa.VALIDAR_TELEFONO('+584141738951'),
+        EMPTY_BLOB()
+    )) RETURNING datos_empresa INTO datos_emp;
+    img_blob := datos_emp.logo;
+    img_file := BFILENAME('DIR_LOGOS_EMPRESAS', 'doordash.png');
+    DBMS_LOB.OPEN(img_file, DBMS_LOB.LOB_READONLY);
+    DBMS_LOB.LOADFROMFILE(img_blob, img_file, SYS.DBMS_LOB.GETLENGTH(img_file));
+    DBMS_LOB.CLOSE(img_file);
+
+    INSERT INTO proveedores (id, datos_empresa) VALUES
+    (id_proveedor_sec.nextval, datos_empresa(
+        datos_empresa.VALIDAR_NOMBRE('Postmates'),
+        datos_empresa.VALIDAR_FECHA(TO_DATE('02/11/2020', 'dd/mm/yyyy')),
+        datos_empresa.VALIDAR_CORREO('ayudaes@gmail.com'),
+        datos_empresa.VALIDAR_TELEFONO('+584268547195'),
+        EMPTY_BLOB()
+    )) RETURNING datos_empresa INTO datos_emp;
+    img_blob := datos_emp.logo;
+    img_file := BFILENAME('DIR_LOGOS_EMPRESAS', 'postmates.png');
+    DBMS_LOB.OPEN(img_file, DBMS_LOB.LOB_READONLY);
+    DBMS_LOB.LOADFROMFILE(img_blob, img_file, SYS.DBMS_LOB.GETLENGTH(img_file));
+    DBMS_LOB.CLOSE(img_file);
+
+    INSERT INTO proveedores (id, datos_empresa) VALUES
+    (id_proveedor_sec.nextval, datos_empresa(
+        datos_empresa.VALIDAR_NOMBRE('Caviar Delivery'),
+        datos_empresa.VALIDAR_FECHA(TO_DATE('09/09/2018', 'dd/mm/yyyy')),
+        datos_empresa.VALIDAR_CORREO('caviardeliverycliente@gmail.com'),
+        datos_empresa.VALIDAR_TELEFONO('+584149562648'),
+        EMPTY_BLOB()
+    )) RETURNING datos_empresa INTO datos_emp;
+    img_blob := datos_emp.logo;
+    img_file := BFILENAME('DIR_LOGOS_EMPRESAS', 'caviar.png');
+    DBMS_LOB.OPEN(img_file, DBMS_LOB.LOB_READONLY);
+    DBMS_LOB.LOADFROMFILE(img_blob, img_file, SYS.DBMS_LOB.GETLENGTH(img_file));
+    DBMS_LOB.CLOSE(img_file);
+
+    INSERT INTO proveedores (id, datos_empresa) VALUES
+    (id_proveedor_sec.nextval, datos_empresa(
+        datos_empresa.VALIDAR_NOMBRE('Jumia Delivery'),
+        datos_empresa.VALIDAR_FECHA(TO_DATE('12/12/2018', 'dd/mm/yyyy')),
+        datos_empresa.VALIDAR_CORREO('ayuda@jumia.co.ve'),
+        datos_empresa.VALIDAR_TELEFONO('+582122658974'),
+        EMPTY_BLOB()
+    )) RETURNING datos_empresa INTO datos_emp;
+    img_blob := datos_emp.logo;
+    img_file := BFILENAME('DIR_LOGOS_EMPRESAS', 'jumia.png');
+    DBMS_LOB.OPEN(img_file, DBMS_LOB.LOB_READONLY);
+    DBMS_LOB.LOADFROMFILE(img_blob, img_file, SYS.DBMS_LOB.GETLENGTH(img_file));
+    DBMS_LOB.CLOSE(img_file);
+
+    INSERT INTO proveedores (id, datos_empresa) VALUES
+    (id_proveedor_sec.nextval, datos_empresa(
+        datos_empresa.VALIDAR_NOMBRE('Cylex'),
+        datos_empresa.VALIDAR_FECHA(TO_DATE('28/11/2020', 'dd/mm/yyyy')),
+        datos_empresa.VALIDAR_CORREO('info@cylex.com.ve'),
+        datos_empresa.VALIDAR_TELEFONO('+584147845624'),
+        EMPTY_BLOB()
+    )) RETURNING datos_empresa INTO datos_emp;
+    img_blob := datos_emp.logo;
+    img_file := BFILENAME('DIR_LOGOS_EMPRESAS', 'cylex.png');
+    DBMS_LOB.OPEN(img_file, DBMS_LOB.LOB_READONLY);
+    DBMS_LOB.LOADFROMFILE(img_blob, img_file, SYS.DBMS_LOB.GETLENGTH(img_file));
+    DBMS_LOB.CLOSE(img_file);
+
     DBMS_OUTPUT.PUT_LINE('Empresas proveedoras creadas exitosamente.');
     DBMS_OUTPUT.PUT_LINE('Asignando las zonas del territorio venezolano en donde las empresas proveedoras tienen sucursales...');
     asignar_sucursales_proveedores();
@@ -1147,6 +1228,77 @@ BEGIN
     DBMS_LOB.OPEN(img_file, DBMS_LOB.LOB_READONLY);
     DBMS_LOB.LOADFROMFILE(img_blob, img_file, SYS.DBMS_LOB.GETLENGTH(img_file));
     DBMS_LOB.CLOSE(img_file);
+
+    INSERT INTO productores (id, datos_empresa, id_sector) VALUES
+    (id_productor_sec.nextval, datos_empresa(
+        datos_empresa.VALIDAR_NOMBRE('Farmacias SAAS'),
+        datos_empresa.VALIDAR_FECHA(TO_DATE('31/12/2016', 'dd/mm/yyyy')),
+        datos_empresa.VALIDAR_CORREO('ayuda@saas.com.ve'),
+        datos_empresa.VALIDAR_TELEFONO('+582128945126'),
+        EMPTY_BLOB()
+    ), 2) RETURNING datos_empresa INTO datos_emp;
+    img_blob := datos_emp.logo;
+    img_file := BFILENAME('DIR_LOGOS_EMPRESAS', 'farmaciasaas.png');
+    DBMS_LOB.OPEN(img_file, DBMS_LOB.LOB_READONLY);
+    DBMS_LOB.LOADFROMFILE(img_blob, img_file, SYS.DBMS_LOB.GETLENGTH(img_file));
+    DBMS_LOB.CLOSE(img_file);
+
+    INSERT INTO productores (id, datos_empresa, id_sector) VALUES
+    (id_productor_sec.nextval, datos_empresa(
+        datos_empresa.VALIDAR_NOMBRE('Farmaplus'),
+        datos_empresa.VALIDAR_FECHA(TO_DATE('23/05/2017', 'dd/mm/yyyy')),
+        datos_empresa.VALIDAR_CORREO('contacto@farmaplus.com.ve'),
+        datos_empresa.VALIDAR_TELEFONO('+582125847854'),
+        EMPTY_BLOB()
+    ), 2) RETURNING datos_empresa INTO datos_emp;
+    img_blob := datos_emp.logo;
+    img_file := BFILENAME('DIR_LOGOS_EMPRESAS', 'farmaplus.png');
+    DBMS_LOB.OPEN(img_file, DBMS_LOB.LOB_READONLY);
+    DBMS_LOB.LOADFROMFILE(img_blob, img_file, SYS.DBMS_LOB.GETLENGTH(img_file));
+    DBMS_LOB.CLOSE(img_file);
+
+    INSERT INTO productores (id, datos_empresa, id_sector) VALUES
+    (id_productor_sec.nextval, datos_empresa(
+        datos_empresa.VALIDAR_NOMBRE('Farmahorro'),
+        datos_empresa.VALIDAR_FECHA(TO_DATE('11/09/2016', 'dd/mm/yyyy')),
+        datos_empresa.VALIDAR_CORREO('ahorra@farmahorro.com.ve'),
+        datos_empresa.VALIDAR_TELEFONO('+582125986451'),
+        EMPTY_BLOB()
+    ), 2) RETURNING datos_empresa INTO datos_emp;
+    img_blob := datos_emp.logo;
+    img_file := BFILENAME('DIR_LOGOS_EMPRESAS', 'farmahorro.png');
+    DBMS_LOB.OPEN(img_file, DBMS_LOB.LOB_READONLY);
+    DBMS_LOB.LOADFROMFILE(img_blob, img_file, SYS.DBMS_LOB.GETLENGTH(img_file));
+    DBMS_LOB.CLOSE(img_file);
+
+    INSERT INTO productores (id, datos_empresa, id_sector) VALUES
+    (id_productor_sec.nextval, datos_empresa(
+        datos_empresa.VALIDAR_NOMBRE('Dominos Pizza'),
+        datos_empresa.VALIDAR_FECHA(TO_DATE('16/07/2020', 'dd/mm/yyyy')),
+        datos_empresa.VALIDAR_CORREO('pizza@dominos.com.ve'),
+        datos_empresa.VALIDAR_TELEFONO('+584147856415'),
+        EMPTY_BLOB()
+    ), 1) RETURNING datos_empresa INTO datos_emp;
+    img_blob := datos_emp.logo;
+    img_file := BFILENAME('DIR_LOGOS_EMPRESAS', 'dominos.png');
+    DBMS_LOB.OPEN(img_file, DBMS_LOB.LOB_READONLY);
+    DBMS_LOB.LOADFROMFILE(img_blob, img_file, SYS.DBMS_LOB.GETLENGTH(img_file));
+    DBMS_LOB.CLOSE(img_file);
+
+    INSERT INTO productores (id, datos_empresa, id_sector) VALUES
+    (id_productor_sec.nextval, datos_empresa(
+        datos_empresa.VALIDAR_NOMBRE('Burger Shack'),
+        datos_empresa.VALIDAR_FECHA(TO_DATE('21/06/2019', 'dd/mm/yyyy')),
+        datos_empresa.VALIDAR_CORREO('ayuda@burgershack.com.ve'),
+        datos_empresa.VALIDAR_TELEFONO('+584168542598'),
+        EMPTY_BLOB()
+    ), 1) RETURNING datos_empresa INTO datos_emp;
+    img_blob := datos_emp.logo;
+    img_file := BFILENAME('DIR_LOGOS_EMPRESAS', 'burgershack.png');
+    DBMS_LOB.OPEN(img_file, DBMS_LOB.LOB_READONLY);
+    DBMS_LOB.LOADFROMFILE(img_blob, img_file, SYS.DBMS_LOB.GETLENGTH(img_file));
+    DBMS_LOB.CLOSE(img_file);
+
     DBMS_OUTPUT.PUT_LINE('Empresas productoras creadas exitosamente.');
     DBMS_OUTPUT.PUT_LINE('Asignando las zonas del territorio venezolano en donde las empresas productoras tienen sucursales...');
     asignar_sucursales_productores();
@@ -1183,27 +1335,33 @@ BEGIN
                 SELECT MAX(s.rango_fechas.fecha_fin) INTO ult_serv FROM servicios s WHERE s.id_proveedor=prov.id;
                 SELECT ult_serv+TRUNC(DBMS_RANDOM.VALUE(1,123)) INTO fecha FROM dual;
             END IF;
-            /*se define de manera aleatoria la cantidad de pedidos del servicio*/
-            SELECT ROUND(DBMS_RANDOM.VALUE(10, 30)) INTO cant_env FROM dual;
             IF aux=1 THEN
+                /*se define de manera aleatoria la cantidad de pedidos del servicio*/
+                SELECT ROUND(DBMS_RANDOM.VALUE(10, 30)) INTO cant_env FROM dual;
                 /*frecuencia del servicio: diaria*/
                 INSERT INTO servicios (id, id_proveedor, rango_fechas, cantidad, frecuencia, precio) VALUES
                 (id_servicio_sec.nextval,prov.id,
                  rango_fechas.VALIDAR_FECHAS(fecha,add_months(fecha,duracion)),
                  cant_env,'d',prec_uni*cant_env);
             ELSIF aux=2 THEN
+                /*se define de manera aleatoria la cantidad de pedidos del servicio*/
+                SELECT ROUND(DBMS_RANDOM.VALUE(70, 210)) INTO cant_env FROM dual;
                 /*frecuencia del servicio: semanal*/
                 INSERT INTO servicios (id, id_proveedor, rango_fechas, cantidad, frecuencia, precio) VALUES
                 (id_servicio_sec.nextval,prov.id,
                  rango_fechas.VALIDAR_FECHAS(fecha,add_months(fecha,duracion)),
                  cant_env,'s',prec_uni*cant_env);
             ELSIF aux=3 THEN
+                /*se define de manera aleatoria la cantidad de pedidos del servicio*/
+                SELECT ROUND(DBMS_RANDOM.VALUE(300, 900)) INTO cant_env FROM dual;
                 /*frecuencia del servicio: mensual*/
                 INSERT INTO servicios (id, id_proveedor, rango_fechas, cantidad, frecuencia, precio) VALUES
                 (id_servicio_sec.nextval,prov.id,
                  rango_fechas.VALIDAR_FECHAS(fecha,add_months(fecha,duracion)),
                  cant_env,'m',prec_uni*cant_env);
             ELSE
+                /*se define de manera aleatoria la cantidad de pedidos del servicio*/
+                SELECT ROUND(DBMS_RANDOM.VALUE(3650, 10950)) INTO cant_env FROM dual;
                 /*frecuencia del servicio: anual*/
                 INSERT INTO servicios (id, id_proveedor, rango_fechas, cantidad, frecuencia, precio) VALUES
                 (id_servicio_sec.nextval,prov.id,
@@ -1259,7 +1417,7 @@ BEGIN
         descu:=0;
         /*se cuentan todos los servicios del proveedor*/
         SELECT COUNT(*) INTO total_servs FROM servicios s
-        WHERE s.id_proveedor=id_prov AND s.rango_fechas.fecha_fin>fecha AND s.rango_fechas.fecha_inicio<fecha;
+        WHERE s.id_proveedor=id_prov AND s.rango_fechas.fecha_fin>fecha AND s.rango_fechas.fecha_inicio<fecha AND s.rango_fechas.fecha_fin>=add_months(fecha,duracion);
         /*se cuentan todos los estados donde el proveedor y el productor tienen sucursales en comun*/
         SELECT COUNT(DISTINCT zpd.id_estado) INTO total_ests FROM zonas_productores zpd, zonas_proveedores zpv
         WHERE zpd.id_productor=id_prod AND zpv.id_proveedor=id_prov AND zpd.id_estado=zpv.id_estado;
@@ -1274,7 +1432,7 @@ BEGIN
             /*se selecciona una cantidad aleatoria de servicios para el contrato*/
             SELECT ROUND(DBMS_RANDOM.VALUE(1,total_servs)) INTO cant_servs FROM dual;
             /*se guarda en un array de manera aleatoria los id de los servicios del proveedor*/
-            SELECT s.id BULK COLLECT INTO id_servicios FROM servicios s WHERE s.id_proveedor=id_prov AND s.rango_fechas.fecha_fin>fecha AND s.rango_fechas.fecha_inicio<fecha ORDER BY DBMS_RANDOM.VALUE();
+            SELECT s.id BULK COLLECT INTO id_servicios FROM servicios s WHERE s.id_proveedor=id_prov AND s.rango_fechas.fecha_fin>fecha AND s.rango_fechas.fecha_inicio<fecha AND s.rango_fechas.fecha_fin>=add_months(fecha,duracion) ORDER BY DBMS_RANDOM.VALUE();
             /*se insertan n cantidad de servicios para el contrato*/
             FOR i IN 1..cant_servs LOOP
                 INSERT INTO servicios_contratos (id_contrato, id_productor, id_proveedor, id_servicio) VALUES
@@ -1335,7 +1493,7 @@ BEGIN
     DBMS_OUTPUT.PUT_LINE('El módulo de empresas, servicios y contratos se ha ejecutado satisfactoriamente.');
 END;
 
-    /*
+/*
     Trigger que se ejecuta cada vez que se crea un producto, se encarga de asignarle una cantidad n
     aleatoria de productores a cada pedido creado en la tabla productos_productor
 */
@@ -1484,7 +1642,7 @@ BEGIN
     DBMS_OUTPUT.PUT_LINE('El módulo de productos se ha ejecutado satisfactoriamente.');
 END;
 
-    /* Cada vez que se registre un usuario en un proveedor, este registra entre 1 a 5 zonas de delivery
+/* Cada vez que se registre un usuario en un proveedor, este registra entre 1 a 5 zonas de delivery
    en el estado del proveedor (aleatoriamente se calcula cuantas)
  */
 CREATE OR REPLACE TRIGGER asignar_zonas_usuario AFTER INSERT ON usuarios FOR EACH ROW
@@ -1698,7 +1856,7 @@ BEGIN
     DBMS_OUTPUT.PUT_LINE('El módulo de usuarios se ha ejecutado satisfactoriamente.');
 END;
 
-    --Modulo de transportes
+--Modulo de transportes
 
 CREATE OR REPLACE PROCEDURE crear_transportes IS
     transportes_a_insertar NUMBER;
@@ -1824,7 +1982,7 @@ CREATE OR REPLACE PROCEDURE crear_transportes IS
 
 
 CREATE OR REPLACE PROCEDURE modulo_transportes IS
-    BEGIN
+BEGIN
        DBMS_OUTPUT.PUT_LINE('Iniciando módulo de transportes...');
        DBMS_OUTPUT.PUT_LINE('-------------------------------------------------------------------------------------------');
 
@@ -1834,7 +1992,7 @@ CREATE OR REPLACE PROCEDURE modulo_transportes IS
        DBMS_OUTPUT.PUT_LINE('-------------------------------------------------------------------------------------------');
        DBMS_OUTPUT.PUT_LINE('Módulo de transportes ejecutado satisfactoriamente');
 
-    END;
+END;
 
 /* Modulo de pedidos */
 
@@ -2392,6 +2550,4 @@ CREATE OR REPLACE PROCEDURE modulo_pedidos IS
        DBMS_OUTPUT.PUT_LINE('Se ha finalizado la ejecución del módulo de pedidos');
 
     END;
-
-
 

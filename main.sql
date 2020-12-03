@@ -5,6 +5,8 @@ CALL modulo_usuarios();
 CALL modulo_transportes();
 CALL modulo_pedidos();
 
+CALL inserts_ejemplos();
+
 SELECT COUNT(*) FROM estados;
 SELECT COUNT(*) FROM municipios;
 SELECT COUNT(*) FROM zonas;
@@ -24,3 +26,4 @@ SELECT COUNT(*) FROM productos;
 SELECT COUNT(*) FROM productos_productor;
 SELECT COUNT(*) FROM pedidos;
 SELECT COUNT(*) FROM productos_pedidos;
+
