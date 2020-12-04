@@ -26,6 +26,3 @@ SELECT COUNT(*) FROM productos;
 SELECT COUNT(*) FROM productos_productor;
 SELECT COUNT(*) FROM pedidos;
 SELECT COUNT(*) FROM productos_pedidos;
-
-
-SELECT p.datos_empresa.nombre, p.datos_empresa.logo FROM productores p;
