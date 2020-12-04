@@ -26,3 +26,8 @@ BEGIN
 	WHERE c.id_productor=pd.id AND s.id_proveedor=pv.id AND sc.id_contrato=c.id AND sc.id_productor=pd.id AND sc.id_proveedor=pv.id AND sc.id_servicio=s.id AND ((ec.id_estado=param_estado) OR (param_estado IS NULL)) AND ec.id_estado=e.id AND ec.id_contrato=c.id AND ec.id_productor=pd.id
 	ORDER BY pd.id, c.rango_fechas.fecha_inicio;
 END;
+    
+CREATE OR REPLACE FUNCTION a (param IN INTEGER) RETURN INTEGER IS
+BEGIN
+    RETURN param;
+END;
