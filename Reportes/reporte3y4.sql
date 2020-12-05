@@ -35,13 +35,18 @@ BEGIN
         (SELECT pr.datos_empresa.logo AS logo FROM proveedores pr WHERE pr.id = p.id) AS logo,
         p.datos_empresa.nombre AS empresa, e.datos_ubicacion.nombre AS estado,
         DECODE(t.tipo, 'mot', 'Moto', 'car', 'Carro', 'bic', 'Bicicleta', 'Camioneta') AS tipo_completo,
+        DECODE((SELECT COUNT(*) AS ctd_disponible FROM transportes tr WHERE tr.id_estado = e.id AND tr.id_proveedor = p.id
+        AND tr.tipo = t.tipo AND tr.estatus = 'f'), 1, '1 unidad',
         (SELECT COUNT(*) AS ctd_disponible FROM transportes tr WHERE tr.id_estado = e.id AND tr.id_proveedor = p.id
-        AND tr.tipo = t.tipo AND tr.estatus = 'f') AS ctd_disponible,
+        AND tr.tipo = t.tipo AND tr.estatus = 'f') || ' unidades') AS ctd_disponible,
+        DECODE((SELECT COUNT(*) AS ctd_reparacion FROM transportes tr WHERE tr.id_estado = e.id AND tr.id_proveedor = p.id
+        AND tr.estatus = 'd' AND tr.tipo = t.tipo), 1, '1 unidad',
         (SELECT COUNT(*) AS ctd_reparacion FROM transportes tr WHERE tr.id_estado = e.id AND tr.id_proveedor = p.id
-        AND tr.estatus = 'd' AND tr.tipo = t.tipo) AS ctd_reparacion
+        AND tr.estatus = 'd' AND tr.tipo = t.tipo) || ' unidades') AS ctd_reparacion
         FROM transportes t INNER JOIN proveedores p ON p.id = t.id_proveedor
         INNER JOIN estados e ON e.id = t.id_estado
         WHERE (param_estado IS NULL) OR (t.id_estado = param_estado)
         GROUP BY p.id, e.id, t.tipo, p.datos_empresa.nombre, e.datos_ubicacion.nombre
         ORDER BY p.datos_empresa.nombre, e.datos_ubicacion.nombre, t.tipo;
 END;
+
