@@ -21,8 +21,8 @@ BEGIN
         AND ((param_estado IS NULL) OR (e.id = param_estado))
         AND (SELECT COUNT(*) FROM pedidos ped WHERE ped.estatus = 'en' AND ped.id_proveedor_usuario = prov.id
         AND ped.id_productor_contrato = prod.id AND ped.id_estado_origen = e.id
-        AND ((param_fecha_inicio IS NULL) OR (param_fecha_inicio < ped.rango_fechas.fecha_inicio))
-        AND ((param_fecha_fin IS NULL) OR (param_fecha_fin > ped.rango_fechas.fecha_fin))) > 0
+        AND ((param_fecha_inicio IS NULL) OR (TO_DATE(param_fecha_inicio) <= TRUNC(CAST(ped.rango_fechas.fecha_inicio AS DATE))))
+        AND ((param_fecha_fin IS NULL) OR (TO_DATE(param_fecha_fin) >= TRUNC(CAST(ped.rango_fechas.fecha_fin AS DATE))))) > 0
         GROUP BY s.id, s.nombre, prod.datos_empresa.nombre, prod.id, prov.datos_empresa.nombre, prov.id,
         e.datos_ubicacion.nombre, e.id, param_fecha_inicio, param_fecha_fin
         ORDER BY s.nombre, prod.datos_empresa.nombre, prov.datos_empresa.nombre, e.datos_ubicacion.nombre;

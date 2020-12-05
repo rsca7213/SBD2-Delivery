@@ -775,7 +775,7 @@ CREATE OR REPLACE PROCEDURE crear_zonas IS
     END;
 
 CREATE OR REPLACE PROCEDURE modulo_ubicacion IS
-BEGIN
+    BEGIN
        DBMS_OUTPUT.PUT_LINE('Iniciando módulo de ubicaciones...');
        DBMS_OUTPUT.PUT_LINE('-------------------------------------------------------------------------------------------');
 
@@ -786,7 +786,7 @@ BEGIN
        DBMS_OUTPUT.PUT_LINE('-------------------------------------------------------------------------------------------');
        DBMS_OUTPUT.PUT_LINE('Módulo de ubicaciones ejecutado exitosamente');
 
-END;
+    END;
 
 CREATE OR REPLACE PROCEDURE crear_sectores IS
 BEGIN
@@ -1316,7 +1316,7 @@ fecha TIMESTAMP;
 BEGIN
     DBMS_OUTPUT.PUT_LINE('Insertando servicios de proveedores...');
     /*se toman todos los proveedores registrados en el sistema*/
-    FOR prov IN (SELECT p.id AS id, p.datos_empresa.nombre AS nombre FROM proveedores p) LOOP
+    FOR prov IN (SELECT p.id AS id, p.datos_empresa.nombre AS nombre, p.datos_empresa.fecha_registro AS registro FROM proveedores p) LOOP
         /*cantidad aleatoria entre 1 y 5 de servicios a crear*/
         SELECT ROUND(DBMS_RANDOM.VALUE(1,5)) INTO cant_serv FROM dual;
         DBMS_OUTPUT.PUT_LINE('Insertando ' || cant_serv || ' servicios para el proveedor ' || prov.nombre);
@@ -1330,7 +1330,7 @@ BEGIN
             SELECT ROUND(DBMS_RANDOM.VALUE(1, 12)) INTO duracion FROM dual;
             /*se define de manera aleatoria una fecha de inicio del servicio*/
             IF serv=1 THEN
-                SELECT TO_DATE('2020-10-13','YYYY-MM-DD')+TRUNC(DBMS_RANDOM.VALUE(1,123)) INTO fecha FROM dual;
+                SELECT prov.registro+TRUNC(DBMS_RANDOM.VALUE(1,123)) INTO fecha FROM dual;
             ELSE
                 SELECT MAX(s.rango_fechas.fecha_fin) INTO ult_serv FROM servicios s WHERE s.id_proveedor=prov.id;
                 SELECT ult_serv+TRUNC(DBMS_RANDOM.VALUE(1,123)) INTO fecha FROM dual;
@@ -1377,6 +1377,8 @@ CREATE OR REPLACE PROCEDURE crear_contratos IS
 num_contrato NUMBER;
 descu NUMBER;
 fecha TIMESTAMP;
+prov_registro DATE;
+prod_registro DATE;
 duracion NUMBER;
 mayor NUMBER;
 menor NUMBER;
@@ -1411,8 +1413,16 @@ BEGIN
         SELECT id INTO id_prov FROM proveedores WHERE id=random;
         /*se define de manera aleatoria la vigencia del contrato*/
         SELECT ROUND(DBMS_RANDOM.VALUE(1, 12)) INTO duracion FROM dual;
+        /*se toma la fecha de registro del proveedor*/
+        SELECT pv.datos_empresa.fecha_registro INTO prov_registro FROM proveedores pv WHERE pv.id=id_prov;
+        /*se toma la fecha de registro del productor*/
+        SELECT pd.datos_empresa.fecha_registro INTO prod_registro FROM productores pd WHERE pd.id=id_prod;
         /*se define de manera aleatoria una fecha de inicio del contrato*/
-        SELECT TO_DATE('2020-10-13','YYYY-MM-DD')+TRUNC(DBMS_RANDOM.VALUE(1,123)) INTO fecha FROM dual;
+        IF prov_registro>prod_registro THEN
+            SELECT prov_registro+TRUNC(DBMS_RANDOM.VALUE(1,123)) INTO fecha FROM dual;
+        ELSE
+            SELECT prod_registro+TRUNC(DBMS_RANDOM.VALUE(1,123)) INTO fecha FROM dual;
+        END IF;
         /*se inicia un descuento del 0%*/
         descu:=0;
         /*se cuentan todos los servicios del proveedor*/
@@ -1982,7 +1992,7 @@ CREATE OR REPLACE PROCEDURE crear_transportes IS
 
 
 CREATE OR REPLACE PROCEDURE modulo_transportes IS
-BEGIN
+    BEGIN
        DBMS_OUTPUT.PUT_LINE('Iniciando módulo de transportes...');
        DBMS_OUTPUT.PUT_LINE('-------------------------------------------------------------------------------------------');
 
@@ -1992,7 +2002,7 @@ BEGIN
        DBMS_OUTPUT.PUT_LINE('-------------------------------------------------------------------------------------------');
        DBMS_OUTPUT.PUT_LINE('Módulo de transportes ejecutado satisfactoriamente');
 
-END;
+    END;
 
 /* Modulo de pedidos */
 
@@ -2550,4 +2560,6 @@ CREATE OR REPLACE PROCEDURE modulo_pedidos IS
        DBMS_OUTPUT.PUT_LINE('Se ha finalizado la ejecución del módulo de pedidos');
 
     END;
+
+
 
