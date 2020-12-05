@@ -24,7 +24,7 @@ BEGIN
         WHERE (((param_estado IS null) AND (param_fecha is null)) AND (u.cedula = zu.CEDULA_USUARIO AND zu.ID_ESTADO IS NOT NULL AND prov.id = u.ID_PROVEEDOR AND e.ID = zu.ID_ESTADO AND zu.ID_PROVEEDOR_USUARIO = u.ID_PROVEEDOR))
                OR (((param_estado=zu.ID_ESTADO) AND (param_fecha is null) ) AND (u.cedula = zu.CEDULA_USUARIO AND prov.id = u.ID_PROVEEDOR AND e.ID = zu.ID_ESTADO AND zu.ID_PROVEEDOR_USUARIO = u.ID_PROVEEDOR))
                OR (((param_estado IS null) AND (u.FECHA_REGISTRO = param_fecha)) AND (u.cedula = zu.CEDULA_USUARIO AND zu.ID_ESTADO IS NOT NULL AND prov.id = u.ID_PROVEEDOR AND e.ID = zu.ID_ESTADO AND zu.ID_PROVEEDOR_USUARIO = u.ID_PROVEEDOR))
-               OR (((param_estado=zu.ID_ESTADO) AND (u.FECHA_REGISTRO = param_fecha) ) AND (u.cedula = zu.CEDULA_USUARIO AND prov.id = u.ID_PROVEEDOR AND e.ID = zu.ID_ESTADO AND zu.ID_PROVEEDOR_USUARIO = u.ID_PROVEEDOR))
+               OR (((param_estado=zu.ID_ESTADO) AND (TO_DATE(u.FECHA_REGISTRO) = TO_DATE(param_fecha)) ) AND (u.cedula = zu.CEDULA_USUARIO AND prov.id = u.ID_PROVEEDOR AND e.ID = zu.ID_ESTADO AND zu.ID_PROVEEDOR_USUARIO = u.ID_PROVEEDOR))
         GROUP BY u.CEDULA, u.PRIMER_NOMBRE, u.SEGUNDO_NOMBRE, u.PRIMER_APELLIDO, u.SEGUNDO_APELLIDO, u.EMAIL, u.ID_PROVEEDOR, prov.DATOS_EMPRESA.NOMBRE,
                  prov.id, e.DATOS_UBICACION.NOMBRE, zu.CEDULA_USUARIO, zu.ID_PROVEEDOR_USUARIO, zu.ID_ESTADO, u.FECHA_REGISTRO
         ORDER BY u.CEDULA, u.PRIMER_NOMBRE, u.PRIMER_APELLIDO, prov.DATOS_EMPRESA.NOMBRE;
