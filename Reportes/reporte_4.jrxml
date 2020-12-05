@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 6.16.0-48579d909b7943b64690c65c71e07e0b80981928  -->
+<!-- Created with Jaspersoft Studio version 6.12.2.final using JasperReports Library version 6.12.2-75c5e90a222ab406e416cbf590a5397028a52de3  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporte_3" pageWidth="842" pageHeight="700" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Empty" uuid="3a200706-8202-4903-99e7-449cc932e990">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Oracle XE"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="ORACLEbd2"/>
 	<style name="stripping" mode="Opaque" backcolor="#FAFAFA"/>
 	<parameter name="param_estado" class="java.lang.Integer"/>
 	<queryString language="plsql">
@@ -29,10 +29,10 @@
 	<field name="TIPO_COMPLETO" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.label" value="TIPO_COMPLETO"/>
 	</field>
-	<field name="CTD_DISPONIBLE" class="java.math.BigDecimal">
+	<field name="CTD_DISPONIBLE" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.label" value="CTD_DISPONIBLE"/>
 	</field>
-	<field name="CTD_REPARACION" class="java.math.BigDecimal">
+	<field name="CTD_REPARACION" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.label" value="CTD_REPARACION"/>
 	</field>
 	<background>
