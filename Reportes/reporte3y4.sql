@@ -9,8 +9,8 @@ BEGIN
         e.datos_ubicacion.nombre AS estado,
         (SELECT COUNT(*) FROM pedidos ped WHERE ped.estatus = 'en' AND ped.id_proveedor_usuario = prov.id
         AND ped.id_productor_contrato = prod.id AND ped.id_estado_origen = e.id
-        AND ((param_fecha_inicio IS NULL) OR (param_fecha_inicio < ped.rango_fechas.fecha_inicio))
-        AND ((param_fecha_fin IS NULL) OR (param_fecha_fin > ped.rango_fechas.fecha_fin))) AS ctd_envios
+        AND ((param_fecha_inicio IS NULL) OR (TO_DATE(param_fecha_inicio) <= TRUNC(CAST(ped.rango_fechas.fecha_inicio AS DATE))))
+        AND ((param_fecha_fin IS NULL) OR (TO_DATE(param_fecha_fin) >= TRUNC(CAST(ped.rango_fechas.fecha_fin AS DATE))))) AS ctd_envios
         FROM productores prod INNER JOIN sectores s ON s.id = prod.id_sector
         INNER JOIN contratos cont ON cont.id_productor = prod.id
         INNER JOIN servicios_contratos sc ON cont.id = sc.id_contrato AND cont.id_productor = sc.id_productor
