@@ -29,10 +29,10 @@
 	<field name="TIPO_COMPLETO" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.label" value="TIPO_COMPLETO"/>
 	</field>
-	<field name="CTD_DISPONIBLE" class="java.math.BigDecimal">
+	<field name="CTD_DISPONIBLE" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.label" value="CTD_DISPONIBLE"/>
 	</field>
-	<field name="CTD_REPARACION" class="java.math.BigDecimal">
+	<field name="CTD_REPARACION" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.label" value="CTD_REPARACION"/>
 	</field>
 	<background>
