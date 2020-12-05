@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.12.2.final using JasperReports Library version 6.12.2-75c5e90a222ab406e416cbf590a5397028a52de3  -->
+<!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 6.16.0-48579d909b7943b64690c65c71e07e0b80981928  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporte_5" pageWidth="842" pageHeight="700" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Empty" uuid="3a200706-8202-4903-99e7-449cc932e990">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="ORACLEbd2"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Oracle XE"/>
 	<style name="stripping" mode="Opaque" backcolor="#FAFAFA"/>
 	<parameter name="param_estado" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[null]]></defaultValueExpression>
@@ -43,9 +43,9 @@
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a9df5fbc-dd0f-4208-8da1-3f6d4290efee"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 				</reportElement>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
+				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="14" isBold="true"/>
-					<paragraph leftIndent="3"/>
+					<paragraph leftIndent="7"/>
 				</textElement>
 				<text><![CDATA[Estado]]></text>
 			</staticText>
@@ -63,9 +63,9 @@
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f83f4ead-7bab-457a-892f-7eac0c6e1681"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 				</reportElement>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
+				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="14" isBold="true"/>
-					<paragraph leftIndent="3"/>
+					<paragraph leftIndent="7"/>
 				</textElement>
 				<text><![CDATA[Nombre de Proveedor de Servicio]]></text>
 			</staticText>
@@ -83,9 +83,11 @@
 			<staticText>
 				<reportElement mode="Opaque" x="510" y="0" width="160" height="48" forecolor="#006699" backcolor="#E6E6E6" uuid="fc9abc3b-73b1-4f5b-bc13-d61f2bd34a07">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f83f4ead-7bab-457a-892f-7eac0c6e1681"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 				</reportElement>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
+				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="14" isBold="true"/>
+					<paragraph leftIndent="7"/>
 				</textElement>
 				<text><![CDATA[Municipio]]></text>
 			</staticText>
@@ -94,16 +96,16 @@
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f83f4ead-7bab-457a-892f-7eac0c6e1681"/>
 					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
 				</reportElement>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
+				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="14" isBold="true"/>
-					<paragraph rightIndent="0"/>
+					<paragraph rightIndent="7"/>
 				</textElement>
 				<text><![CDATA[Cantidad de Envios Recibidos]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="85">
+		<band height="81">
 			<rectangle>
 				<reportElement key="" style="stripping" x="-10" y="0" width="818" height="80" uuid="9d82d99b-4bf9-421a-be04-aab96e7ed3ca">
 					<printWhenExpression><![CDATA[$V{REPORT_COUNT} % 2 == 1]]></printWhenExpression>
@@ -113,7 +115,7 @@
 				</graphicElement>
 			</rectangle>
 			<image hAlign="Center" vAlign="Middle">
-				<reportElement x="106" y="9" width="87" height="66" uuid="9426c24d-6181-4b2c-bb85-f3dd3687bef6">
+				<reportElement x="109" y="16" width="83" height="55" uuid="9426c24d-6181-4b2c-bb85-f3dd3687bef6">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<imageExpression><![CDATA[$F{Empresa}.getBinaryStream()]]></imageExpression>
@@ -133,9 +135,11 @@
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 				</reportElement>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
+				<textElement verticalAlignment="Middle">
 					<font size="14"/>
+					<paragraph leftIndent="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Estado}]]></textFieldExpression>
 			</textField>
@@ -146,9 +150,11 @@
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 				</reportElement>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
+				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="14"/>
+					<paragraph leftIndent="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Nombre Proveedor de Servicio}]]></textFieldExpression>
 			</textField>
@@ -159,9 +165,11 @@
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="14"/>
+					<paragraph rightIndent="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Cantidad de Envios Recibidos}]]></textFieldExpression>
 			</textField>
@@ -172,14 +180,16 @@
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 				</reportElement>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
+				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="14"/>
+					<paragraph leftIndent="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Municipio}]]></textFieldExpression>
 			</textField>
 			<image hAlign="Center" vAlign="Middle">
-				<reportElement x="398" y="10" width="84" height="66" uuid="57fc1865-07cd-4998-bdfd-2e96ddb1757a">
+				<reportElement x="399" y="12" width="82" height="60" uuid="57fc1865-07cd-4998-bdfd-2e96ddb1757a">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<imageExpression><![CDATA[$F{Logo Proveedor de Servicio}.getBinaryStream()]]></imageExpression>
