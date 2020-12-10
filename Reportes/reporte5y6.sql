@@ -4,14 +4,14 @@ CREATE OR REPLACE PROCEDURE reporte5 (ORACLE_REF_CURSOR OUT SYS_REFCURSOR, param
 BEGIN
     OPEN ORACLE_REF_CURSOR FOR
         SELECT * FROM (SELECT e.datos_ubicacion.nombre Estado,(SELECT produ.datos_empresa.logo AS logo FROM productores produ WHERE produ.id = prod.id) Empresa,prov.datos_empresa.nombre "Nombre Proveedor de Servicio", (SELECT prove.datos_empresa.logo AS logo FROM proveedores prove WHERE prove.id = prov.id) "Logo Proveedor de Servicio",
-        mun.datos_ubicacion.nombre Municipio,
+        mun.datos_ubicacion.nombre Municipio, (SELECT COUNT(*) FROM pedidos pped where pped.ID_PROVEEDOR_USUARIO = ped.ID_PROVEEDOR_USUARIO and pped.ID_PRODUCTOR_CONTRATO = ped.ID_PRODUCTOR_CONTRATO AND pped.id_municipio_destino = ped.ID_MUNICIPIO_DESTINO) ordenCant,
         CASE (SELECT COUNT(*) FROM pedidos pped where pped.ID_PROVEEDOR_USUARIO = ped.ID_PROVEEDOR_USUARIO and pped.ID_PRODUCTOR_CONTRATO = ped.ID_PRODUCTOR_CONTRATO AND pped.id_municipio_destino = ped.ID_MUNICIPIO_DESTINO)
             WHEN 1 THEN  (SELECT COUNT(*) FROM pedidos pped where pped.ID_PROVEEDOR_USUARIO = ped.ID_PROVEEDOR_USUARIO and pped.ID_PRODUCTOR_CONTRATO = ped.ID_PRODUCTOR_CONTRATO AND pped.id_municipio_destino = ped.ID_MUNICIPIO_DESTINO) || ' unidad'
             ELSE (SELECT COUNT(*) FROM pedidos pped where pped.ID_PROVEEDOR_USUARIO = ped.ID_PROVEEDOR_USUARIO and pped.ID_PRODUCTOR_CONTRATO = ped.ID_PRODUCTOR_CONTRATO AND pped.id_municipio_destino = ped.ID_MUNICIPIO_DESTINO) || ' unidades' END "Cantidad de Envios Recibidos"
         FROM pedidos ped, estados e, zonas z, proveedores prov, productores prod, municipios mun
         WHERE (param_estado IS NULL AND (ped.id_estado_destino = e.id AND ped.id_zona_destino = z.id AND prov.id = ped.ID_PROVEEDOR_USUARIO AND prod.id = ped.ID_PRODUCTOR_CONTRATO AND mun.id=z.ID_MUNICIPIO) ) OR (param_estado = ped.ID_ESTADO_DESTINO AND (ped.id_estado_destino = e.id AND ped.id_zona_destino = z.id AND prov.id = ped.ID_PROVEEDOR_USUARIO AND prod.id = ped.ID_PRODUCTOR_CONTRATO AND mun.id=z.ID_MUNICIPIO) )
         GROUP BY mun.id,prov.datos_empresa.nombre, prod.datos_empresa.nombre, ped.ID_PROVEEDOR_USUARIO, ped.ID_PRODUCTOR_CONTRATO, e.datos_ubicacion.nombre, mun.datos_ubicacion.nombre, ped.ID_MUNICIPIO_DESTINO, prod.id, prov.id
-        ORDER BY "Cantidad de Envios Recibidos" desc,mun.id, ped.ID_PROVEEDOR_USUARIO, ped.ID_PRODUCTOR_CONTRATO) WHERE rownum <=5;
+        ORDER BY ordenCant desc,mun.id, ped.ID_PROVEEDOR_USUARIO, ped.ID_PRODUCTOR_CONTRATO) WHERE rownum <=5;
 END;
 
 CREATE OR REPLACE PROCEDURE reporte6 (ORACLE_REF_CURSOR OUT SYS_REFCURSOR, param_estado IN INTEGER, param_fecha IN DATE) IS
