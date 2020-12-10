@@ -2392,7 +2392,7 @@ CREATE OR REPLACE PROCEDURE crear_pedidos IS
             END IF;
 
 
-            EXIT WHEN cantidad_pedidos_creados = 100;
+            EXIT WHEN cantidad_pedidos_creados = 300;
 
         END LOOP;
 
@@ -2407,8 +2407,8 @@ BEGIN
         (SELECT * FROM transportes t WHERE t.estatus = 'd' AND t.id != ignorar_id_transporte
         AND t.id_proveedor != ignorar_id_prov_transporte)
     LOOP
-        -- probabilidad del 30% de que se repare el transporte (se asigna el estatus a "funcional"
-        IF TRUNC(DBMS_RANDOM.VALUE(1,101),0) >= 70 THEN
+        -- probabilidad del 3% de que se repare el transporte (se asigna el estatus a "funcional"
+        IF TRUNC(DBMS_RANDOM.VALUE(1,101),0) = 100 THEN
             UPDATE transportes t SET estatus = 'f' WHERE t.id = transporte.id AND t.id_proveedor = transporte.id_proveedor;
             SELECT DECODE(t.tipo, 'bic', 'bicicleta', 'mot', 'moto', 'car', 'carro', 'camioneta') INTO tipo_tranporte FROM
             transportes t WHERE t.id = transporte.id AND t.id_proveedor = transporte.id_proveedor;
@@ -2520,7 +2520,7 @@ BEGIN
             DBMS_OUTPUT.PUT_LINE('El pedido está en transito a la ubicación destino del pedido, simulando acción...');
             /* probabilidad del 50% de que se entregue el pedido (se cambia el estatus del pedido a "entregado" se asigna una
                satisfaccion aleatoria y se asigna la ubicacion del transporte a la ubicacion destino del pedido,
-               luego, hay una probabilidad del 10% de que el transporte se dañe (en ese caso se cambia el estatus del
+               luego, hay una probabilidad del 30% de que el transporte se dañe (en ese caso se cambia el estatus del
                transporte a "dañado") y para finalizar se llama al procedimiento verificar_transportes para reparar
                transportes dañados, especificando que ignore el transporte que se acaba de utilizar con los parametros */
             IF TRUNC(DBMS_RANDOM.VALUE(1,101), 0) >= 50 THEN
@@ -2528,7 +2528,7 @@ BEGIN
                 UPDATE pedidos SET estatus = 'en', satisfaccion = TRUNC(DBMS_RANDOM.VALUE(1,6),0) WHERE tracking = pedido.tracking;
                 UPDATE transportes SET id_zona = pedido.id_zona_destino, id_municipio = pedido.id_municipio_destino, id_estado = pedido.id_estado_destino
                 WHERE id = pedido.id_transporte AND id_proveedor = pedido.id_proveedor_transporte;
-                IF TRUNC(DBMS_RANDOM.VALUE(1,101),0) >= 10 THEN
+                IF TRUNC(DBMS_RANDOM.VALUE(1,101),0) >= 30 THEN
                     DBMS_OUTPUT.PUT_LINE('El transporte se encuentra funcional luego de entregar el pedido.');
                 ELSE
                     UPDATE transportes SET estatus = 'd' WHERE id = pedido.id_transporte AND id_proveedor = pedido.id_proveedor_transporte;

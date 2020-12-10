@@ -28,6 +28,8 @@ BEGIN
         ORDER BY s.nombre, prod.datos_empresa.nombre, prov.datos_empresa.nombre, e.datos_ubicacion.nombre;
 END;
 
+    SELECT * FROM usuarios;
+
 CREATE OR REPLACE PROCEDURE reporte4 (ORACLE_REF_CURSOR OUT SYS_REFCURSOR, param_estado IN INTEGER) IS
 BEGIN
     OPEN ORACLE_REF_CURSOR FOR
