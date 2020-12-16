@@ -10,7 +10,7 @@ BEGIN
         pe.tracking AS tracking, u.email AS correo,
         NVL(TO_CHAR(param_fecha_inicio, 'dd/mm/yyyy'), 'Sin fecha') AS fecha_inicio,
         NVL(TO_CHAR(param_fecha_fin, 'dd/mm/yyyy'), 'Sin fecha') AS fecha_fin,
-        (SELECT CONCAT(SUM(prpe.cantidad), ' unidades') AS ctd FROM productos_pedidos prpe WHERE prpe.tracking_pedido = pe.tracking) AS cantidad
+        (SELECT CONCAT(SUM(prpe.cantidad), DECODE(SUM(prpe.cantidad), 1, ' unidad', ' unidades')) AS ctd FROM productos_pedidos prpe WHERE prpe.tracking_pedido = pe.tracking) AS cantidad
         FROM pedidos pe
         INNER JOIN usuarios u ON u.cedula = pe.cedula_usuario AND u.id_proveedor = pe.id_proveedor_usuario
         INNER JOIN proveedores pr ON pr.id = u.id_proveedor
@@ -26,4 +26,24 @@ BEGIN
         GROUP BY e.datos_ubicacion.nombre, pr.datos_empresa.nombre, zu.direccion, pe.tracking, u.email,
         pe.referencia_direccion, pr.id, param_fecha_inicio, param_fecha_fin
         ORDER BY e.datos_ubicacion.nombre, pr.datos_empresa.nombre, pe.tracking, u.email;
+END;
+
+-- REPORTE 8
+CREATE OR REPLACE PROCEDURE reporte8 (ORACLE_REF_CURSOR OUT SYS_REFCURSOR, param_tracking IN INTEGER) IS
+BEGIN
+    OPEN ORACLE_REF_CURSOR FOR
+        SELECT pe.tracking AS tracking, TO_CHAR(pe.rango_fechas.fecha_inicio, 'dd/mm/yyyy HH12:MI AM') AS fecha_inicio,
+        TO_CHAR(pe.rango_fechas.fecha_fin, 'dd/mm/yyyy HH12:MI AM') AS fecha_fin,
+        (SELECT CONCAT(SUM(prpe.cantidad), DECODE(SUM(prpe.cantidad), 1, ' unidad', ' unidades')) AS ctd FROM productos_pedidos prpe WHERE prpe.tracking_pedido = pe.tracking) AS cantidad,
+        u.email AS correo, z.datos_ubicacion.latitud AS latitud, z.datos_ubicacion.longitud AS longitud,
+        EXTRACT(HOUR FROM pe.rango_fechas.fecha_fin - pe.rango_fechas.fecha_inicio) || ':' ||
+        CASE WHEN EXTRACT(MINUTE FROM pe.rango_fechas.fecha_fin - pe.rango_fechas.fecha_inicio) < 10 THEN '0' ||
+        TO_CHAR(EXTRACT(MINUTE FROM pe.rango_fechas.fecha_fin - pe.rango_fechas.fecha_inicio))
+        ELSE TO_CHAR(EXTRACT(MINUTE FROM pe.rango_fechas.fecha_fin - pe.rango_fechas.fecha_inicio)) END || ' h' AS tiempo
+        FROM pedidos pe
+        INNER JOIN usuarios u ON u.cedula = pe.cedula_usuario AND u.id_proveedor = pe.id_proveedor_usuario
+        INNER JOIN transportes t ON t.id = pe.id_transporte AND t.id_proveedor = pe.id_proveedor_transporte
+        INNER JOIN zonas z ON t.id_zona = z.id
+        WHERE ((param_tracking IS NULL) OR (pe.tracking = param_tracking))
+        AND pe.estatus != 'en';
 END;
