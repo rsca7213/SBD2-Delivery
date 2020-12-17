@@ -28,7 +28,7 @@ BEGIN
         ORDER BY e.datos_ubicacion.nombre, pr.datos_empresa.nombre, pe.tracking, u.email;
 END;
 
--- REPORTE 8
+-- REPORTE 8S
 CREATE OR REPLACE PROCEDURE reporte8 (ORACLE_REF_CURSOR OUT SYS_REFCURSOR, param_tracking IN INTEGER) IS
 BEGIN
     OPEN ORACLE_REF_CURSOR FOR

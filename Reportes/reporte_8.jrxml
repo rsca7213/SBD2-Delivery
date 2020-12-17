@@ -7,6 +7,7 @@
 	<property name="ireport.jasperserver.user" value="jasperadmin"/>
 	<property name="ireport.jasperserver.report.resource" value="/reports/reporte_6_files/main_jrxml"/>
 	<property name="ireport.jasperserver.reportUnit" value="/reports/reporte_6"/>
+	<property name="net.sf.jasperreports.components.map.key" value="AIzaSyCzhdUyYMHQyq6pUgdBL9IKB8IWPaKqHg4"/>
 	<style name="stripping" mode="Opaque" backcolor="#FAFAFA"/>
 	<parameter name="param_tracking" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[null]]></defaultValueExpression>
@@ -152,10 +153,10 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="81">
+		<band height="161">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<rectangle>
-				<reportElement key="" style="stripping" x="-10" y="0" width="1060" height="80" uuid="9d82d99b-4bf9-421a-be04-aab96e7ed3ca">
+				<reportElement key="" style="stripping" x="-10" y="0" width="1060" height="160" uuid="9d82d99b-4bf9-421a-be04-aab96e7ed3ca">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<printWhenExpression><![CDATA[$V{REPORT_COUNT} % 2 == 1]]></printWhenExpression>
 				</reportElement>
@@ -164,7 +165,7 @@
 				</graphicElement>
 			</rectangle>
 			<line>
-				<reportElement x="-10" y="80" width="1060" height="1" forecolor="#EDEDED" uuid="08f0660a-307e-49ed-8757-ee6bd0d35d2a">
+				<reportElement x="-10" y="160" width="1060" height="1" forecolor="#EDEDED" uuid="08f0660a-307e-49ed-8757-ee6bd0d35d2a">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 			</line>
@@ -172,10 +173,10 @@
 				<reportElement x="-10" y="0" width="1" height="81" forecolor="#EDEDED" uuid="a79b0416-64ad-4fb0-9644-bd0a84134c11"/>
 			</line>
 			<line>
-				<reportElement x="1050" y="0" width="1" height="81" forecolor="#EDEDED" uuid="a2c0c0ff-03ce-427c-90d1-de6a74cd775f"/>
+				<reportElement x="1050" y="0" width="1" height="161" forecolor="#EDEDED" uuid="a2c0c0ff-03ce-427c-90d1-de6a74cd775f"/>
 			</line>
 			<textField>
-				<reportElement x="-9" y="7" width="86" height="66" uuid="7cd3cfed-3e71-4d09-827d-5e9fb028c7de">
+				<reportElement x="-10" y="50" width="86" height="66" uuid="7cd3cfed-3e71-4d09-827d-5e9fb028c7de">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="808c2f16-9f46-434d-ae77-c9ed7ebed200"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
@@ -189,7 +190,7 @@
 				<textFieldExpression><![CDATA[$F{TRACKING}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="230" y="7" width="153" height="66" uuid="b3e31e05-1539-42f6-bdcc-bde1b84df409">
+				<reportElement x="229" y="50" width="153" height="66" uuid="b3e31e05-1539-42f6-bdcc-bde1b84df409">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="808c2f16-9f46-434d-ae77-c9ed7ebed200"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
@@ -203,7 +204,7 @@
 				<textFieldExpression><![CDATA[$F{FECHA_FIN}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="77" y="7" width="153" height="66" uuid="960b7812-7b4d-497c-96d4-f390534df41f">
+				<reportElement x="76" y="50" width="153" height="66" uuid="960b7812-7b4d-497c-96d4-f390534df41f">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="808c2f16-9f46-434d-ae77-c9ed7ebed200"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
@@ -217,7 +218,7 @@
 				<textFieldExpression><![CDATA[$F{FECHA_INICIO}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="383" y="7" width="153" height="66" uuid="601b882d-d25b-4d55-ae4e-a94a4db112dc">
+				<reportElement x="382" y="50" width="153" height="66" uuid="601b882d-d25b-4d55-ae4e-a94a4db112dc">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="808c2f16-9f46-434d-ae77-c9ed7ebed200"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
@@ -231,7 +232,7 @@
 				<textFieldExpression><![CDATA[$F{CANTIDAD}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="536" y="7" width="204" height="66" uuid="24a2ac24-01e8-4413-8562-75fcf3cf4c0e">
+				<reportElement x="535" y="50" width="204" height="66" uuid="24a2ac24-01e8-4413-8562-75fcf3cf4c0e">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="808c2f16-9f46-434d-ae77-c9ed7ebed200"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
@@ -245,7 +246,7 @@
 				<textFieldExpression><![CDATA[$F{CORREO}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="740" y="7" width="130" height="66" uuid="ec1f935d-7803-472a-8d8f-ef5bbad56a75">
+				<reportElement x="739" y="50" width="130" height="66" uuid="ec1f935d-7803-472a-8d8f-ef5bbad56a75">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="808c2f16-9f46-434d-ae77-c9ed7ebed200"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
@@ -258,20 +259,10 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{TIEMPO}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="870" y="7" width="180" height="66" uuid="8c72bca6-2e68-4c3b-96a1-85c9c16b26ce">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="808c2f16-9f46-434d-ae77-c9ed7ebed200"/>
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
-					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
-				</reportElement>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="14"/>
-					<paragraph leftIndent="0" rightIndent="0"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{LATITUD} + " / " + $F{LONGITUD}]]></textFieldExpression>
-			</textField>
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement x="870" y="9" width="180" height="141" uuid="2692e23c-2ab2-4ced-9302-f404ce7ce09e"/>
+				<imageExpression><![CDATA["https://open.mapquestapi.com/staticmap/v5/map?key=tjMnfzuWrOepxtGGnjY6qTgT9tOwhuby&locations=" + $F{LATITUD}.toString() + "," + $F{LONGITUD}.toString() + "&size=@2x&zoom=16&type=map&defaultMarker=marker-start"]]></imageExpression>
+			</image>
 		</band>
 	</detail>
 	<columnFooter>
