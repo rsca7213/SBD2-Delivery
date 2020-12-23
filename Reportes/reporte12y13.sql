@@ -3,16 +3,23 @@
 CREATE OR REPLACE PROCEDURE reporte12 (ORACLE_REF_CURSOR OUT SYS_REFCURSOR, param_zona_origen IN INTEGER, param_zona_destino IN INTEGER) IS
 BEGIN
     OPEN ORACLE_REF_CURSOR FOR
-        SELECT prov.DATOS_EMPRESA.nombre as nombre, (SELECT prove.datos_empresa.logo AS logo FROM proveedores prove WHERE prove.id = prov.id) AS logo, (SELECT z.DATOS_UBICACION.NOMBRE FROM zonas z WHERE z.id=ped.ID_ZONA_ORIGEN) AS zonaOrigen,
-            (SELECT z.DATOS_UBICACION.NOMBRE FROM zonas z WHERE z.id=ped.ID_ZONA_DESTINO) AS zonaDestino,SUM((EXTRACT( HOUR FROM ped.RANGO_FECHAS.FECHA_FIN - ped.RANGO_FECHAS.FECHA_INICIO))*60+(EXTRACT( MINUTE FROM ped.RANGO_FECHAS.FECHA_FIN - ped.RANGO_FECHAS.FECHA_INICIO)))/COUNT(ped.TRACKING) tiempo,
-            SUM((EXTRACT( HOUR FROM ped.RANGO_FECHAS.FECHA_FIN - ped.RANGO_FECHAS.FECHA_INICIO))*60+(EXTRACT( MINUTE FROM ped.RANGO_FECHAS.FECHA_FIN - ped.RANGO_FECHAS.FECHA_INICIO)))/COUNT(ped.TRACKING) || ' min' tiempoEstimado, DECODE(t.tipo,'car','Carro','bic','Bicicleta','mot','Moto','cam','Camioneta') AS tipoTransporte
-        FROM proveedores prov, pedidos ped, transportes t
-        WHERE prov.id = ped.ID_PROVEEDOR_USUARIO AND ped.ID_TRANSPORTE = t.ID AND t.ID_PROVEEDOR = prov.ID AND ((param_zona_origen IS NULL) OR (ped.ID_ZONA_ORIGEN = param_zona_origen)) AND ((param_zona_destino IS NULL) OR (ped.ID_ZONA_DESTINO = param_zona_destino))
-        GROUP BY prov.DATOS_EMPRESA.NOMBRE,prov.id, t.tipo, ped.ID_ZONA_ORIGEN, ped.ID_ZONA_DESTINO
+        SELECT prov.DATOS_EMPRESA.nombre as nombre, (SELECT prove.datos_empresa.logo AS logo FROM proveedores prove WHERE prove.id = prov.id) AS logo, zTO.DATOS_UBICACION.NOMBRE AS zonaOrigen,
+        zTD.DATOS_UBICACION.NOMBRE AS zonaDestino,
+            CASE t.tipo WHEN 'bic' THEN ROUND((ABS(zTO.DATOS_UBICACION.LATITUD - zTD.DATOS_UBICACION.LATITUD) + ABS(zTO.DATOS_UBICACION.LONGITUD - zTD.DATOS_UBICACION.LONGITUD)) * 300 +5)
+                    WHEN 'mot' THEN ROUND((ABS(zTO.DATOS_UBICACION.LATITUD - zTD.DATOS_UBICACION.LATITUD) + ABS(zTO.DATOS_UBICACION.LONGITUD - zTD.DATOS_UBICACION.LONGITUD)) * 300 *0.5 +5) ELSE
+                        ROUND((ABS(zTO.DATOS_UBICACION.LATITUD - zTD.DATOS_UBICACION.LATITUD) + ABS(zTO.DATOS_UBICACION.LONGITUD - zTD.DATOS_UBICACION.LONGITUD)) * 300 *0.7 +5) END AS tiempo,
+            CASE t.tipo WHEN 'bic' THEN ROUND((ABS(zTO.DATOS_UBICACION.LATITUD - zTD.DATOS_UBICACION.LATITUD) + ABS(zTO.DATOS_UBICACION.LONGITUD - zTD.DATOS_UBICACION.LONGITUD)) * 300 +5)
+                    WHEN 'mot' THEN ROUND((ABS(zTO.DATOS_UBICACION.LATITUD - zTD.DATOS_UBICACION.LATITUD) + ABS(zTO.DATOS_UBICACION.LONGITUD - zTD.DATOS_UBICACION.LONGITUD)) * 300 *0.5 +5) ELSE
+                        ROUND((ABS(zTO.DATOS_UBICACION.LATITUD - zTD.DATOS_UBICACION.LATITUD) + ABS(zTO.DATOS_UBICACION.LONGITUD - zTD.DATOS_UBICACION.LONGITUD)) * 300 *0.7 +5) END || ' min' tiempoEstimado, DECODE(t.tipo,'car','Carro','bic','Bicicleta','mot','Moto','cam','Camioneta') AS tipoTransporte
+        FROM proveedores prov, transportes t, zonas zTO, zonas zTD, ZONAS_PROVEEDORES zp
+        WHERE prov.id=t.ID_PROVEEDOR AND prov.id = zp.ID_PROVEEDOR AND ((param_zona_origen IS NULL) OR (zTO.id = param_zona_origen)) AND ((param_zona_destino IS NULL) OR (zTD.id = param_zona_destino))
+            AND t.ID_ESTADO = zTO.ID_ESTADO AND zTO.ID_ESTADO = zTD.ID_ESTADO AND zp.ID_ESTADO = zTO.ID_ESTADO
+            AND t.tipo !=
+            CASE
+                WHEN zTO.ID_MUNICIPIO != zTD.ID_MUNICIPIO THEN 'bic' ELSE 'na' END
+        GROUP BY prov.DATOS_EMPRESA.NOMBRE, prov.ID, zTO.DATOS_UBICACION.NOMBRE, zTD.DATOS_UBICACION.NOMBRE, t.tipo, zTO.ID_ESTADO, zTO.ID, zTD.ID, zTO.DATOS_UBICACION.LATITUD, zTD.DATOS_UBICACION.LATITUD, zTO.DATOS_UBICACION.LONGITUD, zTD.DATOS_UBICACION.LONGITUD
         ORDER BY prov.DATOS_EMPRESA.NOMBRE, tiempo;
 END;
-
-SELECT satisfaccion FROM pedidos;
 
 
 -- reporte 13

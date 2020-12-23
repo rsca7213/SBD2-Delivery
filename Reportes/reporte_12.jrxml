@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 6.16.0-48579d909b7943b64690c65c71e07e0b80981928  -->
+<!-- Created with Jaspersoft Studio version 6.12.2.final using JasperReports Library version 6.12.2-75c5e90a222ab406e416cbf590a5397028a52de3  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporte_12" pageWidth="842" pageHeight="700" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Empty" uuid="3a200706-8202-4903-99e7-449cc932e990">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="ORACLEbd2"/>
@@ -8,8 +8,12 @@
 	<property name="ireport.jasperserver.report.resource" value="/reports/reporte_12_files/main_jrxml"/>
 	<property name="ireport.jasperserver.reportUnit" value="/reports/reporte_12"/>
 	<style name="stripping" mode="Opaque" backcolor="#FAFAFA"/>
-	<parameter name="param_zona_origen" class="java.lang.Integer"/>
-	<parameter name="param_zona_destino" class="java.lang.Integer"/>
+	<parameter name="param_zona_origen" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[null]]></defaultValueExpression>
+	</parameter>
+	<parameter name="param_zona_destino" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[null]]></defaultValueExpression>
+	</parameter>
 	<queryString language="plsql">
 		<![CDATA[{CALL reporte12($P{ORACLE_REF_CURSOR}, $P{param_zona_origen},$P{param_zona_destino})}]]>
 	</queryString>
