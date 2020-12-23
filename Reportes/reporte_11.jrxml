@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.12.2.final using JasperReports Library version 6.12.2-75c5e90a222ab406e416cbf590a5397028a52de3  -->
+<!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 6.16.0-48579d909b7943b64690c65c71e07e0b80981928  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporte_11" pageWidth="920" pageHeight="700" columnWidth="880" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="088a473a-6ffb-4e27-8991-efbad4e57eca">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Oracle XE"/>
+	<property name="ireport.jasperserver.url" value="http://localhost:8080/jasperserver/"/>
+	<property name="ireport.jasperserver.user" value="jasperadmin"/>
+	<property name="ireport.jasperserver.report.resource" value="/reports/reporte_11_files/main_jrxml"/>
+	<property name="ireport.jasperserver.reportUnit" value="/reports/reporte_11"/>
 	<parameter name="param_fecha_inicio" class="java.sql.Date"/>
 	<parameter name="param_fecha_fin" class="java.sql.Date"/>
 	<parameter name="param_estado" class="java.lang.Integer"/>
@@ -63,29 +67,31 @@
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f83f4ead-7bab-457a-892f-7eac0c6e1681"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 				</reportElement>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
+				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="14" isBold="true"/>
-					<paragraph leftIndent="3"/>
+					<paragraph leftIndent="7"/>
 				</textElement>
 				<text><![CDATA[Nombre de proveedor de servicio]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="530" y="0" width="190" height="48" forecolor="#006699" backcolor="#E6E6E6" uuid="68c1e017-fef1-4741-b08d-4b6fff4e5d10">
+				<reportElement mode="Opaque" x="530" y="0" width="190" height="43" forecolor="#006699" backcolor="#E6E6E6" uuid="68c1e017-fef1-4741-b08d-4b6fff4e5d10">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f83f4ead-7bab-457a-892f-7eac0c6e1681"/>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="14" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Logo proveedor de servicio]]></text>
+				<text><![CDATA[Logo proveedor de 
+servicio]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="720" y="0" width="160" height="48" forecolor="#006699" backcolor="#E6E6E6" uuid="b8a6898d-e89a-48a2-83a1-52e2ab9124cd">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f83f4ead-7bab-457a-892f-7eac0c6e1681"/>
 					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 				</reportElement>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
+				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="14" isBold="true"/>
-					<paragraph rightIndent="7"/>
+					<paragraph leftIndent="7" rightIndent="0"/>
 				</textElement>
 				<text><![CDATA[Estado]]></text>
 			</staticText>
@@ -134,7 +140,7 @@
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a9df5fbc-dd0f-4208-8da1-3f6d4290efee"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 				</reportElement>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
+				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="14"/>
 					<paragraph lineSpacing="1_1_2" leftIndent="7"/>
 				</textElement>
@@ -151,7 +157,7 @@
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a9df5fbc-dd0f-4208-8da1-3f6d4290efee"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 				</reportElement>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
+				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="14"/>
 					<paragraph lineSpacing="1_1_2" leftIndent="7"/>
 				</textElement>

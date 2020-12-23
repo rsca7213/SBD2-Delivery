@@ -12,7 +12,7 @@ BEGIN
         ORDER BY prov.DATOS_EMPRESA.NOMBRE, tiempo;
 END;
 
-
+SELECT satisfaccion FROM pedidos;
 
 
 -- reporte 13
@@ -21,7 +21,7 @@ CREATE OR REPLACE PROCEDURE reporte13 (ORACLE_REF_CURSOR OUT SYS_REFCURSOR, para
 BEGIN
     OPEN ORACLE_REF_CURSOR FOR
         SELECT NVL(TO_CHAR(param_fecha_inicio, 'DD/MM/YYYY'), 'Sin fecha') AS fecha_inicio, NVL(TO_CHAR(param_fecha_fin, 'DD/MM/YYYY'), 'Sin fecha') AS fecha_fin,prov.DATOS_EMPRESA.NOMBRE as nombre, (SELECT prove.datos_empresa.logo AS logo FROM proveedores prove WHERE prove.id = prov.id)  AS logo,
-            ROUND(SUM(ped.satisfaccion)/COUNT(ped.tracking)) || ' estrellas' AS satisfaccion
+            ROUND(SUM(ped.satisfaccion)/COUNT(ped.tracking), 2) || ' estrellas' AS satisfaccion
         FROM proveedores prov, pedidos ped
         WHERE (prov.id = ped.ID_PROVEEDOR_USUARIO AND ped.SATISFACCION IS NOT NULL) AND ((param_fecha_inicio IS NULL) OR (TO_DATE(param_fecha_inicio) <= TRUNC(CAST(ped.rango_fechas.fecha_inicio AS DATE))))
             AND ((param_fecha_fin IS NULL) OR (TO_DATE(param_fecha_fin) >= TRUNC(CAST(ped.rango_fechas.fecha_fin AS DATE))))

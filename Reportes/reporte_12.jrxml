@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.12.2.final using JasperReports Library version 6.12.2-75c5e90a222ab406e416cbf590a5397028a52de3  -->
+<!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 6.16.0-48579d909b7943b64690c65c71e07e0b80981928  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporte_12" pageWidth="842" pageHeight="700" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Empty" uuid="3a200706-8202-4903-99e7-449cc932e990">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="ORACLEbd2"/>
+	<property name="ireport.jasperserver.url" value="http://localhost:8080/jasperserver/"/>
+	<property name="ireport.jasperserver.user" value="jasperadmin"/>
+	<property name="ireport.jasperserver.report.resource" value="/reports/reporte_12_files/main_jrxml"/>
+	<property name="ireport.jasperserver.reportUnit" value="/reports/reporte_12"/>
 	<style name="stripping" mode="Opaque" backcolor="#FAFAFA"/>
 	<parameter name="param_zona_origen" class="java.lang.Integer"/>
 	<parameter name="param_zona_destino" class="java.lang.Integer"/>
@@ -51,25 +55,27 @@
 					<font size="14" isBold="true"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
-				<text><![CDATA[Logo de proveedor de servicio]]></text>
+				<text><![CDATA[Logo de proveedor 
+de servicio]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="140" y="1" width="150" height="48" forecolor="#006699" backcolor="#E6E6E6" uuid="0dfb5f18-96ee-4fbc-900b-1885fcf7978d">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f35ec09c-8f35-4565-aef9-ab647ac5472a"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 				</reportElement>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
+				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="14" isBold="true"/>
+					<paragraph leftIndent="7"/>
 				</textElement>
 				<text><![CDATA[Zona de origen]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="290" y="0" width="150" height="48" forecolor="#006699" backcolor="#E6E6E6" uuid="cccc3a6a-3b5f-408f-8f8c-4f914b9731dc">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f83f4ead-7bab-457a-892f-7eac0c6e1681"/>
-					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 				</reportElement>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
+				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="14" isBold="true"/>
-					<paragraph leftIndent="3"/>
+					<paragraph leftIndent="7"/>
 				</textElement>
 				<text><![CDATA[Zona de destino]]></text>
 			</staticText>
@@ -108,11 +114,10 @@
 			<textField textAdjust="StretchHeight">
 				<reportElement x="290" y="10" width="150" height="66" uuid="74ead9f6-3e4b-4bc9-b3df-98de40f42499">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a9df5fbc-dd0f-4208-8da1-3f6d4290efee"/>
-					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 				</reportElement>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
+				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="14"/>
-					<paragraph leftIndent="3"/>
+					<paragraph leftIndent="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{zonaDestino}]]></textFieldExpression>
 			</textField>
@@ -121,9 +126,9 @@
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a9df5fbc-dd0f-4208-8da1-3f6d4290efee"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 				</reportElement>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
+				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="14"/>
-					<paragraph leftIndent="3"/>
+					<paragraph leftIndent="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{zonaOrigen}]]></textFieldExpression>
 			</textField>

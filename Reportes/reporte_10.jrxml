@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.12.2.final using JasperReports Library version 6.12.2-75c5e90a222ab406e416cbf590a5397028a52de3  -->
+<!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 6.16.0-48579d909b7943b64690c65c71e07e0b80981928  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporte_10" language="groovy" pageWidth="1050" pageHeight="700" whenNoDataType="AllSectionsNoDetail" columnWidth="1010" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="303241a5-0bca-4686-8c1e-53d07109be14">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Oracle XE"/>
+	<property name="ireport.jasperserver.url" value="http://localhost:8080/jasperserver/"/>
+	<property name="ireport.jasperserver.user" value="jasperadmin"/>
+	<property name="ireport.jasperserver.report.resource" value="/reports/reporte_10_files/main_jrxml"/>
+	<property name="ireport.jasperserver.reportUnit" value="/reports/reporte_10"/>
 	<parameter name="param_proveedor" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[$P{param_proveedor}]]></defaultValueExpression>
 	</parameter>
@@ -75,9 +79,11 @@
 			<staticText>
 				<reportElement mode="Opaque" x="530" y="0" width="190" height="48" forecolor="#006699" backcolor="#E6E6E6" uuid="4497a6b7-761a-4315-b02c-7bccbf3e7c21">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f83f4ead-7bab-457a-892f-7eac0c6e1681"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 				</reportElement>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
+				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="14" isBold="true"/>
+					<paragraph leftIndent="7"/>
 				</textElement>
 				<text><![CDATA[Nombre de proveedor de servicio]]></text>
 			</staticText>
@@ -97,7 +103,7 @@
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f83f4ead-7bab-457a-892f-7eac0c6e1681"/>
 					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
 				</reportElement>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
+				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="14" isBold="true"/>
 					<paragraph rightIndent="7"/>
 				</textElement>
@@ -148,7 +154,7 @@
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a9df5fbc-dd0f-4208-8da1-3f6d4290efee"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 				</reportElement>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
+				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="14"/>
 					<paragraph lineSpacing="1_1_2" leftIndent="7"/>
 				</textElement>
@@ -170,10 +176,11 @@
 				<reportElement x="880" y="2" width="130" height="66" uuid="6399f375-3b3d-4b4d-8b21-27abb0e0ed7b">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a9df5fbc-dd0f-4208-8da1-3f6d4290efee"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
 				</reportElement>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
+				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="14"/>
-					<paragraph lineSpacing="1_1_2" leftIndent="7"/>
+					<paragraph lineSpacing="1_1_2" leftIndent="0" rightIndent="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{ingreso}]]></textFieldExpression>
 			</textField>
