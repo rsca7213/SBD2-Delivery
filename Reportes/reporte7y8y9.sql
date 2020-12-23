@@ -53,7 +53,7 @@ CREATE OR REPLACE PROCEDURE reporte9 (ORACLE_REF_CURSOR OUT SYS_REFCURSOR, param
 param_estado IN INTEGER, param_zona IN INTEGER) IS
 BEGIN
     OPEN ORACLE_REF_CURSOR FOR
-        SELECT NVL(TO_CHAR(param_fecha_inicio, 'dd/mm/yyyy'), 'Sin fecha') AS fecha_inicio,
+        SELECT * FROM (SELECT NVL(TO_CHAR(param_fecha_inicio, 'dd/mm/yyyy'), 'Sin fecha') AS fecha_inicio,
         NVL(TO_CHAR(param_fecha_fin, 'dd/mm/yyyy'), 'Sin fecha') AS fecha_fin,
         e.datos_ubicacion.nombre AS estado, z.datos_ubicacion.nombre AS zona,
         s.nombre AS sector, SUM(prpe.cantidad) AS cantidad
@@ -71,5 +71,6 @@ BEGIN
         AND ((param_fecha_inicio IS NULL) OR (TO_DATE(param_fecha_inicio) <= TRUNC(CAST(pe.rango_fechas.fecha_inicio AS DATE))))
         AND ((param_fecha_fin IS NULL) OR (TO_DATE(param_fecha_fin) >= TRUNC(CAST(pe.rango_fechas.fecha_fin AS DATE))))
         GROUP BY param_fecha_inicio, param_fecha_fin, e.datos_ubicacion.nombre, z.datos_ubicacion.nombre, s.nombre
-        ORDER BY e.datos_ubicacion.nombre, z.datos_ubicacion.nombre, s.nombre;
+        ORDER BY cantidad desc,e.datos_ubicacion.nombre, z.datos_ubicacion.nombre, s.nombre)
+        WHERE ROWNUM < 11;
 END;
