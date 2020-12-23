@@ -7,6 +7,7 @@
 	<property name="ireport.jasperserver.user" value="jasperadmin"/>
 	<property name="ireport.jasperserver.report.resource" value="/reports/reporte_11_files/main_jrxml"/>
 	<property name="ireport.jasperserver.reportUnit" value="/reports/reporte_11"/>
+	<style name="stripping" mode="Opaque" backcolor="#FAFAFA"/>
 	<parameter name="param_fecha_inicio" class="java.sql.Date"/>
 	<parameter name="param_fecha_fin" class="java.sql.Date"/>
 	<parameter name="param_estado" class="java.lang.Integer"/>
@@ -26,8 +27,8 @@
 			<frame>
 				<reportElement mode="Opaque" x="-20" y="-20" width="920" height="92" backcolor="#006699" uuid="6490b3b6-e9d3-4b68-b945-17505acf7c8f"/>
 				<staticText>
-					<reportElement x="0" y="20" width="900" height="43" forecolor="#FFFFFF" uuid="c898c057-b60b-4557-b6c0-0cc20c05d3bc"/>
-					<textElement textAlignment="Center">
+					<reportElement x="21" y="20" width="879" height="43" forecolor="#FFFFFF" uuid="c898c057-b60b-4557-b6c0-0cc20c05d3bc"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font size="22" isBold="true"/>
 					</textElement>
 					<text><![CDATA[TOP 3 de proveedores de servicios más utilizados ]]></text>
@@ -41,7 +42,7 @@
 	<columnHeader>
 		<band height="48">
 			<staticText>
-				<reportElement mode="Opaque" x="0" y="0" width="140" height="48" forecolor="#006699" backcolor="#E6E6E6" uuid="bb1b8f61-b47c-4cfc-a3e0-05c83a8b4309">
+				<reportElement mode="Opaque" x="0" y="0" width="140" height="43" forecolor="#006699" backcolor="#E6E6E6" uuid="bb1b8f61-b47c-4cfc-a3e0-05c83a8b4309">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a9df5fbc-dd0f-4208-8da1-3f6d4290efee"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 				</reportElement>
@@ -52,7 +53,7 @@
 				<text><![CDATA[Fecha de inicio]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="140" y="0" width="170" height="48" forecolor="#006699" backcolor="#E6E6E6" uuid="62d3da77-a64a-404e-a35f-a5a71f05da6b">
+				<reportElement mode="Opaque" x="140" y="0" width="170" height="43" forecolor="#006699" backcolor="#E6E6E6" uuid="62d3da77-a64a-404e-a35f-a5a71f05da6b">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f35ec09c-8f35-4565-aef9-ab647ac5472a"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 				</reportElement>
@@ -63,7 +64,7 @@
 				<text><![CDATA[Fecha de fin]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="310" y="0" width="220" height="48" forecolor="#006699" backcolor="#E6E6E6" uuid="3148cf49-501b-4473-919a-88b0115a969a">
+				<reportElement mode="Opaque" x="310" y="0" width="220" height="43" forecolor="#006699" backcolor="#E6E6E6" uuid="3148cf49-501b-4473-919a-88b0115a969a">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f83f4ead-7bab-457a-892f-7eac0c6e1681"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 				</reportElement>
@@ -84,7 +85,7 @@
 servicio]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="720" y="0" width="160" height="48" forecolor="#006699" backcolor="#E6E6E6" uuid="b8a6898d-e89a-48a2-83a1-52e2ab9124cd">
+				<reportElement mode="Opaque" x="720" y="0" width="160" height="43" forecolor="#006699" backcolor="#E6E6E6" uuid="b8a6898d-e89a-48a2-83a1-52e2ab9124cd">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f83f4ead-7bab-457a-892f-7eac0c6e1681"/>
 					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
@@ -100,7 +101,7 @@ servicio]]></text>
 	<detail>
 		<band height="76">
 			<rectangle>
-				<reportElement key="" x="0" y="-5" width="880" height="80" uuid="ac1c4f5a-3ada-4d2d-b39d-64278c8247cc">
+				<reportElement key="" style="stripping" x="0" y="-5" width="880" height="80" uuid="ac1c4f5a-3ada-4d2d-b39d-64278c8247cc">
 					<printWhenExpression><![CDATA[$V{REPORT_COUNT} % 2 == 1]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
@@ -108,7 +109,7 @@ servicio]]></text>
 				</graphicElement>
 			</rectangle>
 			<line>
-				<reportElement x="1010" y="-5" width="1" height="81" forecolor="#EDEDED" uuid="f42f4474-3c86-418c-a3ee-d189eb3186ba"/>
+				<reportElement x="879" y="-5" width="1" height="81" forecolor="#EDEDED" uuid="f42f4474-3c86-418c-a3ee-d189eb3186ba"/>
 			</line>
 			<line>
 				<reportElement x="0" y="-5" width="1" height="81" forecolor="#EDEDED" uuid="e7f7c13e-4e18-406f-a4ac-90cbbebe0def"/>
@@ -163,6 +164,9 @@ servicio]]></text>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{estado}]]></textFieldExpression>
 			</textField>
+			<line>
+				<reportElement x="0" y="75" width="880" height="1" forecolor="#EDEDED" uuid="1960f6b3-dbc9-43c2-8cf8-bea7fbf65f47"/>
+			</line>
 		</band>
 	</detail>
 	<columnFooter>
@@ -171,12 +175,12 @@ servicio]]></text>
 	<pageFooter>
 		<band height="19">
 			<textField>
-				<reportElement mode="Opaque" x="1" y="0" width="879" height="13" backcolor="#E6E6E6" uuid="9cca458c-4b58-4256-bd38-7aa429f778b2"/>
+				<reportElement mode="Opaque" x="0" y="6" width="879" height="13" backcolor="#E6E6E6" uuid="9cca458c-4b58-4256-bd38-7aa429f778b2"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 			<textField pattern="EEEEE dd MMMMM yyyy">
-				<reportElement x="0" y="0" width="180" height="13" uuid="d7bcf9b3-96a8-4a44-8767-77680eb99e03"/>
+				<reportElement x="0" y="6" width="180" height="13" uuid="d7bcf9b3-96a8-4a44-8767-77680eb99e03"/>
 				<textFieldExpression><![CDATA[new SimpleDateFormat("d/M/y").format(new Date())]]></textFieldExpression>
 			</textField>
 		</band>

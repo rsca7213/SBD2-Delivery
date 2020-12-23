@@ -7,6 +7,7 @@
 	<property name="ireport.jasperserver.user" value="jasperadmin"/>
 	<property name="ireport.jasperserver.report.resource" value="/reports/reporte_10_files/main_jrxml"/>
 	<property name="ireport.jasperserver.reportUnit" value="/reports/reporte_10"/>
+	<style name="stripping" mode="Opaque" backcolor="#FAFAFA"/>
 	<parameter name="param_proveedor" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[$P{param_proveedor}]]></defaultValueExpression>
 	</parameter>
@@ -29,8 +30,8 @@
 			<frame>
 				<reportElement mode="Opaque" x="-20" y="-20" width="1050" height="92" backcolor="#006699" uuid="20a2d55e-4cf5-45cb-b234-0ee3474a0bd0"/>
 				<staticText>
-					<reportElement x="0" y="20" width="842" height="43" forecolor="#FFFFFF" uuid="089ab3fb-eeef-4114-9af7-d20158390eff"/>
-					<textElement textAlignment="Center">
+					<reportElement x="30" y="20" width="812" height="43" forecolor="#FFFFFF" uuid="089ab3fb-eeef-4114-9af7-d20158390eff"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font size="22" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Ingresos por comercio y proveedor de servicios Delivery]]></text>
@@ -113,8 +114,11 @@
 	</columnHeader>
 	<detail>
 		<band height="76">
+			<line>
+				<reportElement x="0" y="75" width="1011" height="1" forecolor="#EDEDED" uuid="d2415785-4a27-4f59-a204-2f03c93bd02f"/>
+			</line>
 			<rectangle>
-				<reportElement key="" x="0" y="-5" width="1010" height="80" uuid="ad484aaa-0aaf-4496-8cec-0e791aa86df3">
+				<reportElement key="" style="stripping" x="0" y="-5" width="1010" height="80" uuid="ad484aaa-0aaf-4496-8cec-0e791aa86df3">
 					<printWhenExpression><![CDATA[$V{REPORT_COUNT} % 2 == 1]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
@@ -190,14 +194,14 @@
 		<band/>
 	</columnFooter>
 	<pageFooter>
-		<band height="17">
+		<band height="23">
 			<textField>
-				<reportElement mode="Opaque" x="0" y="0" width="1010" height="13" backcolor="#E6E6E6" uuid="8efa1e12-91cd-469d-9cd3-c7e0398f738c"/>
+				<reportElement mode="Opaque" x="0" y="10" width="1010" height="13" backcolor="#E6E6E6" uuid="8efa1e12-91cd-469d-9cd3-c7e0398f738c"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 			<textField pattern="EEEEE dd MMMMM yyyy">
-				<reportElement x="10" y="0" width="100" height="13" uuid="3c21daeb-8edf-46ad-bcb6-2f02fcac32bb"/>
+				<reportElement x="10" y="10" width="100" height="13" uuid="3c21daeb-8edf-46ad-bcb6-2f02fcac32bb"/>
 				<textFieldExpression><![CDATA[new SimpleDateFormat("d/M/y").format(new Date())]]></textFieldExpression>
 			</textField>
 		</band>

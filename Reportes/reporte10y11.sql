@@ -56,7 +56,7 @@ BEGIN
             WHERE ((TO_DATE(param_fecha_inicio) <= TRUNC(CAST(p.rango_fechas.fecha_inicio AS DATE))) OR param_fecha_inicio IS NULL) AND
                   ((TO_DATE(param_fecha_fin) >= TRUNC(CAST(p.rango_fechas.fecha_fin AS DATE))) OR param_fecha_fin IS NULL)
                   AND (param_estado=e.id OR param_estado IS NULL) AND pv.id=p.id_proveedor_usuario AND e.id=p.id_estado_origen
-            GROUP BY pv.id, p.id_proveedor_usuario, e.id, p.id_estado_origen, pv.datos_empresa.nombre, e.datos_ubicacion.nombre
+            GROUP BY pv.id, p.id_proveedor_usuario, e.id, p.id_estado_origen, pv.datos_empresa.nombre, e.datos_ubicacion.nombre, param_fecha_fin, param_fecha_inicio
             ORDER BY cant_peds desc)
         WHERE rownum <=3;
 END;
