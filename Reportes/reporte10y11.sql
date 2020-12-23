@@ -1,6 +1,6 @@
 -- REPORTE 10
 
-CREATE OR REPLACE PROCEDURE reporte10 (ORACLE_REF_CURSOR OUT SYS_REFCURSOR, param_proveedor IN NUMBER, param_fecha_inicio IN DATE, param_fecha_fin IN DATE) IS
+CREATE OR REPLACE PROCEDURE reporte10 (ORACLE_REF_CURSOR OUT SYS_REFCURSOR, param_proveedor IN INTEGER, param_fecha_inicio IN DATE, param_fecha_fin IN DATE) IS
 BEGIN
     OPEN ORACLE_REF_CURSOR FOR
         SELECT NVL(TO_CHAR(param_fecha_inicio, 'DD/MM/YYYY'), 'Sin fecha') AS fecha_inicio,
@@ -40,7 +40,7 @@ END;
 
 -- REPORTE 11
 
-CREATE OR REPLACE PROCEDURE reporte11 (ORACLE_REF_CURSOR OUT SYS_REFCURSOR, param_fecha_inicio IN DATE, param_fecha_fin IN DATE, param_estado IN NUMBER) IS
+CREATE OR REPLACE PROCEDURE reporte11 (ORACLE_REF_CURSOR OUT SYS_REFCURSOR, param_fecha_inicio IN DATE, param_fecha_fin IN DATE, param_estado IN INTEGER) IS
 BEGIN
     OPEN ORACLE_REF_CURSOR FOR
         SELECT * FROM
