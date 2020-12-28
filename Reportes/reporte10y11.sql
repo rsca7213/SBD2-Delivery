@@ -9,25 +9,25 @@ BEGIN
                pv.datos_empresa.nombre AS proveedor,
                (SELECT prov.datos_empresa.logo AS prov_logo FROM proveedores prov WHERE prov.id = pv.id) AS prov_logo,
                CASE WHEN param_fecha_inicio BETWEEN TRUNC(CAST(c.rango_fechas.fecha_inicio AS DATE)) AND TRUNC(CAST(c.rango_fechas.fecha_fin AS DATE)) AND param_fecha_fin BETWEEN TRUNC(CAST(c.rango_fechas.fecha_inicio AS DATE)) AND TRUNC(CAST(c.rango_fechas.fecha_fin AS DATE)) THEN
-                    (CASE WHEN s.frecuencia='d' THEN '$' || TO_CHAR((s.precio-s.precio*c.descuento/100)*ROUND(MONTHS_BETWEEN(param_fecha_fin,param_fecha_inicio),2)*30)
-                    WHEN s.frecuencia='s' THEN '$' || TO_CHAR((s.precio-s.precio*c.descuento/100)*ROUND(MONTHS_BETWEEN(param_fecha_fin,param_fecha_inicio),2)*4)
-                    WHEN s.frecuencia='m' THEN '$' || TO_CHAR((s.precio-s.precio*c.descuento/100)*ROUND(MONTHS_BETWEEN(param_fecha_fin,param_fecha_inicio),2))
-                    ELSE '$' || TO_CHAR((s.precio-s.precio*c.descuento/100)*(ROUND(MONTHS_BETWEEN(param_fecha_fin,param_fecha_inicio),2))/12) END)
+                    (CASE WHEN s.frecuencia='d' THEN '$' || TO_CHAR(ROUND((s.precio-s.precio*c.descuento/100)*MONTHS_BETWEEN(param_fecha_fin,param_fecha_inicio)*30, 2))
+                    WHEN s.frecuencia='s' THEN '$' || TO_CHAR(ROUND((s.precio-s.precio*c.descuento/100)*MONTHS_BETWEEN(param_fecha_fin,param_fecha_inicio)*4, 2))
+                    WHEN s.frecuencia='m' THEN '$' || TO_CHAR(ROUND((s.precio-s.precio*c.descuento/100)*MONTHS_BETWEEN(param_fecha_fin,param_fecha_inicio), 2))
+                    ELSE '$' || TO_CHAR(ROUND((s.precio-s.precio*c.descuento/100)*MONTHS_BETWEEN(param_fecha_fin,param_fecha_inicio)/12, 2)) END)
                 WHEN (param_fecha_inicio BETWEEN TRUNC(CAST(c.rango_fechas.fecha_inicio AS DATE)) AND TRUNC(CAST(c.rango_fechas.fecha_fin AS DATE)) AND param_fecha_fin IS NULL) OR (param_fecha_inicio BETWEEN TRUNC(CAST(c.rango_fechas.fecha_inicio AS DATE)) AND TRUNC(CAST(c.rango_fechas.fecha_fin AS DATE)) AND param_fecha_fin NOT BETWEEN TRUNC(CAST(c.rango_fechas.fecha_inicio AS DATE)) AND TRUNC(CAST(c.rango_fechas.fecha_fin AS DATE))) THEN
-                    (CASE WHEN s.frecuencia='d' THEN '$' || TO_CHAR((s.precio-s.precio*c.descuento/100)*ROUND(MONTHS_BETWEEN(c.rango_fechas.fecha_fin,param_fecha_inicio),2)*30)
-                    WHEN s.frecuencia='s' THEN '$' || TO_CHAR((s.precio-s.precio*c.descuento/100)*ROUND(MONTHS_BETWEEN(c.rango_fechas.fecha_fin,param_fecha_inicio),2)*4)
-                    WHEN s.frecuencia='m' THEN '$' || TO_CHAR((s.precio-s.precio*c.descuento/100)*ROUND(MONTHS_BETWEEN(c.rango_fechas.fecha_fin,param_fecha_inicio),2))
-                    ELSE '$' || TO_CHAR((s.precio-s.precio*c.descuento/100)*(ROUND(MONTHS_BETWEEN(c.rango_fechas.fecha_fin,param_fecha_inicio),2))/12) END)
+                    (CASE WHEN s.frecuencia='d' THEN '$' || TO_CHAR(ROUND((s.precio-s.precio*c.descuento/100)*MONTHS_BETWEEN(c.rango_fechas.fecha_fin,param_fecha_inicio)*30, 2))
+                    WHEN s.frecuencia='s' THEN '$' || TO_CHAR(ROUND((s.precio-s.precio*c.descuento/100)*MONTHS_BETWEEN(c.rango_fechas.fecha_fin,param_fecha_inicio)*4, 2))
+                    WHEN s.frecuencia='m' THEN '$' || TO_CHAR(ROUND((s.precio-s.precio*c.descuento/100)*MONTHS_BETWEEN(c.rango_fechas.fecha_fin,param_fecha_inicio), 2))
+                    ELSE '$' || TO_CHAR(ROUND((s.precio-s.precio*c.descuento/100)*MONTHS_BETWEEN(c.rango_fechas.fecha_fin,param_fecha_inicio)/12, 2)) END)
                 WHEN (param_fecha_inicio IS NULL AND param_fecha_fin BETWEEN TRUNC(CAST(c.rango_fechas.fecha_inicio AS DATE)) AND TRUNC(CAST(c.rango_fechas.fecha_fin AS DATE))) OR (param_fecha_inicio NOT BETWEEN TRUNC(CAST(c.rango_fechas.fecha_inicio AS DATE)) AND TRUNC(CAST(c.rango_fechas.fecha_fin AS DATE)) AND param_fecha_fin BETWEEN TRUNC(CAST(c.rango_fechas.fecha_inicio AS DATE)) AND TRUNC(CAST(c.rango_fechas.fecha_fin AS DATE))) THEN
-                    (CASE WHEN s.frecuencia='d' THEN '$' || TO_CHAR((s.precio-s.precio*c.descuento/100)*ROUND(MONTHS_BETWEEN(param_fecha_fin,c.rango_fechas.fecha_inicio),2)*30)
-                    WHEN s.frecuencia='s' THEN '$' || TO_CHAR((s.precio-s.precio*c.descuento/100)*ROUND(MONTHS_BETWEEN(param_fecha_fin,c.rango_fechas.fecha_inicio),2)*4)
-                    WHEN s.frecuencia='m' THEN '$' || TO_CHAR((s.precio-s.precio*c.descuento/100)*ROUND(MONTHS_BETWEEN(param_fecha_fin,c.rango_fechas.fecha_inicio),2))
-                    ELSE '$' || TO_CHAR((s.precio-s.precio*c.descuento/100)*(ROUND(MONTHS_BETWEEN(param_fecha_fin,c.rango_fechas.fecha_inicio),2))/12) END)
+                    (CASE WHEN s.frecuencia='d' THEN '$' || TO_CHAR(ROUND((s.precio-s.precio*c.descuento/100)*MONTHS_BETWEEN(param_fecha_fin,c.rango_fechas.fecha_inicio)*30, 2))
+                    WHEN s.frecuencia='s' THEN '$' || TO_CHAR(ROUND((s.precio-s.precio*c.descuento/100)*MONTHS_BETWEEN(param_fecha_fin,c.rango_fechas.fecha_inicio)*4, 2))
+                    WHEN s.frecuencia='m' THEN '$' || TO_CHAR(ROUND((s.precio-s.precio*c.descuento/100)*MONTHS_BETWEEN(param_fecha_fin,c.rango_fechas.fecha_inicio), 2))
+                    ELSE '$' || TO_CHAR(ROUND((s.precio-s.precio*c.descuento/100)*MONTHS_BETWEEN(param_fecha_fin,c.rango_fechas.fecha_inicio)/12, 2)) END)
                 ELSE
-                    (CASE WHEN s.frecuencia='d' THEN '$' || TO_CHAR((s.precio-s.precio*c.descuento/100)*ROUND(MONTHS_BETWEEN(c.rango_fechas.fecha_fin,c.rango_fechas.fecha_inicio),2)*30)
-                    WHEN s.frecuencia='s' THEN '$' || TO_CHAR((s.precio-s.precio*c.descuento/100)*ROUND(MONTHS_BETWEEN(c.rango_fechas.fecha_fin,c.rango_fechas.fecha_inicio),2)*4)
-                    WHEN s.frecuencia='m' THEN '$' || TO_CHAR((s.precio-s.precio*c.descuento/100)*ROUND(MONTHS_BETWEEN(c.rango_fechas.fecha_fin,c.rango_fechas.fecha_inicio),2))
-                    ELSE '$' || TO_CHAR((s.precio-s.precio*c.descuento/100)*(ROUND(MONTHS_BETWEEN(c.rango_fechas.fecha_fin,c.rango_fechas.fecha_inicio),2))/12) END)
+                    (CASE WHEN s.frecuencia='d' THEN '$' || TO_CHAR(ROUND((s.precio-s.precio*c.descuento/100)*MONTHS_BETWEEN(c.rango_fechas.fecha_fin,c.rango_fechas.fecha_inicio)*30, 2))
+                    WHEN s.frecuencia='s' THEN '$' || TO_CHAR(ROUND((s.precio-s.precio*c.descuento/100)*MONTHS_BETWEEN(c.rango_fechas.fecha_fin,c.rango_fechas.fecha_inicio)*4, 2))
+                    WHEN s.frecuencia='m' THEN '$' || TO_CHAR(ROUND((s.precio-s.precio*c.descuento/100)*MONTHS_BETWEEN(c.rango_fechas.fecha_fin,c.rango_fechas.fecha_inicio), 2))
+                    ELSE '$' || TO_CHAR(ROUND((s.precio-s.precio*c.descuento/100)*MONTHS_BETWEEN(c.rango_fechas.fecha_fin,c.rango_fechas.fecha_inicio)/12, 2)) END)
                 END AS ingreso
         FROM productores pd, proveedores pv, servicios s, contratos c, servicios_contratos sc
         WHERE
@@ -56,7 +56,7 @@ BEGIN
             WHERE ((TO_DATE(param_fecha_inicio) <= TRUNC(CAST(p.rango_fechas.fecha_inicio AS DATE))) OR param_fecha_inicio IS NULL) AND
                   ((TO_DATE(param_fecha_fin) >= TRUNC(CAST(p.rango_fechas.fecha_fin AS DATE))) OR param_fecha_fin IS NULL)
                   AND (param_estado=e.id OR param_estado IS NULL) AND pv.id=p.id_proveedor_usuario AND e.id=p.id_estado_origen
-            GROUP BY pv.id, p.id_proveedor_usuario, e.id, p.id_estado_origen, pv.datos_empresa.nombre, e.datos_ubicacion.nombre, param_fecha_fin, param_fecha_inicio
+            GROUP BY pv.id, p.id_proveedor_usuario, e.id, p.id_estado_origen, pv.datos_empresa.nombre, e.datos_ubicacion.nombre, param_fecha_inicio, param_fecha_fin
             ORDER BY cant_peds desc)
         WHERE rownum <=3;
 END;
