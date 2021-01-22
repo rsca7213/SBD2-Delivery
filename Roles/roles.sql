@@ -40,6 +40,10 @@ GRANT ALL ON pedidos TO administrador;
 GRANT ALL ON productos_pedidos TO administrador;
 
 --Asignacion de privilegios para el gerente_productor
+
+--DDL
+GRANT CREATE SESSION TO gerente_productor;
+
 --DML
 GRANT SELECT ON estados TO gerente_productor;
 GRANT SELECT ON municipios TO gerente_productor;
@@ -59,6 +63,10 @@ GRANT SELECT ON pedidos TO gerente_productor;
 GRANT SELECT ON productos_pedidos TO gerente_productor;
 
 --Asignacion de privilegios para el gerente proveedor
+
+--DDL
+GRANT CREATE SESSION TO gerente_proveedor;
+
 --DML
 GRANT SELECT ON estados TO gerente_proveedor;
 GRANT SELECT ON municipios TO gerente_proveedor;
@@ -81,6 +89,9 @@ GRANT SELECT ON pedidos TO gerente_proveedor;
 GRANT SELECT ON productos_pedidos TO gerente_proveedor;
 
 --Asignacion de privilegios para el transportista
+--DDL
+GRANT CREATE SESSION TO transportista;
+
 --DML
 GRANT SELECT ON estados TO transportista;
 GRANT SELECT ON municipios TO transportista;
@@ -93,6 +104,9 @@ GRANT SELECT ON pedidos TO transportista;
 GRANT SELECT ON productos_pedidos TO transportista;
 
 --Asignacion de privilegios para el usuario
+--DDL
+GRANT CREATE SESSION TO usuario;
+
 --DML
 GRANT SELECT ON estados TO usuario;
 GRANT SELECT ON municipios TO usuario;
