@@ -66,6 +66,8 @@ GRANT ALL ON productos TO gerente_productor;
 GRANT ALL ON productos_productor TO gerente_productor;
 GRANT SELECT ON pedidos TO gerente_productor;
 GRANT SELECT ON productos_pedidos TO gerente_productor;
+GRANT ALL ON datos_empresa TO gerente_productor;
+GRANT CREATE TYPE TO gerente_productor;
 
 --Asignacion de privilegios para el gerente proveedor
 
@@ -92,6 +94,9 @@ GRANT SELECT ON productos TO gerente_proveedor;
 GRANT SELECT ON productos_productor TO gerente_proveedor;
 GRANT SELECT ON pedidos TO gerente_proveedor;
 GRANT SELECT ON productos_pedidos TO gerente_proveedor;
+GRANT ALL ON datos_empresa TO gerente_proveedor;
+GRANT ALL ON rango_fechas TO gerente_proveedor;
+GRANT CREATE TYPE TO gerente_proveedor;
 
 --Asignacion de privilegios para el transportista
 --DDL

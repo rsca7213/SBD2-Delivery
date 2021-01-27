@@ -43,9 +43,9 @@ DELETE FROM zonas_proveedores WHERE id_estado = 1 AND id_municipio = 1 AND id_zo
 
 -- Tabla Zonas_Productores
 SELECT * FROM zonas_productores;
-INSERT INTO zonas_productores (id_estado, id_municipio, id_zona, id_productor) VALUES (1, 1, 1, 1);
-UPDATE zonas_productores SET id_productor = 2 WHERE id_estado = 1 AND id_municipio = 1 AND id_zona = 1 AND id_productor = 1;
-DELETE FROM zonas_productores WHERE id_estado = 1 AND id_municipio = 1 AND id_zona = 1 AND id_productor = 2;
+INSERT INTO zonas_productores (id_estado, id_municipio, id_zona, id_productor) VALUES (1, 1, 1, 2);
+UPDATE zonas_productores SET id_productor = 3 WHERE id_estado = 1 AND id_municipio = 1 AND id_zona = 1 AND id_productor = 2;
+DELETE FROM zonas_productores WHERE id_estado = 1 AND id_municipio = 1 AND id_zona = 1 AND id_productor = 3;
 
 -- Tabla Servicios
 SELECT * FROM servicios;
@@ -65,8 +65,8 @@ DELETE FROM contratos WHERE id = 500;
 SELECT * FROM servicios_contratos;
 INSERT INTO servicios_contratos (id_contrato, id_productor, id_servicio, id_proveedor) VALUES
 (1, 10, 1, 1);
-UPDATE servicios_contratos SET id_proveedor = 2 WHERE id_contrato = 1 AND id_productor = 10 AND id_servicio = 1 AND id_proveedor = 1;
-DELETE FROM servicios_contratos WHERE id_contrato = 1 AND id_productor = 10 AND id_servicio = 1 AND id_proveedor = 2;
+UPDATE servicios_contratos SET id_proveedor = 1 WHERE id_contrato = 1 AND id_productor = 10 AND id_servicio = 1 AND id_proveedor = 1;
+DELETE FROM servicios_contratos WHERE id_contrato = 1 AND id_productor = 10 AND id_servicio = 1 AND id_proveedor = 1;
 
 -- Tabla Estados_Contratos
 SELECT * FROM estados_contratos;
@@ -94,9 +94,9 @@ ALTER TRIGGER asignar_zonas_usuario ENABLE;
 -- Tabla Zonas_Usuarios
 SELECT * FROM zonas_usuarios;
 INSERT INTO zonas_usuarios (cedula_usuario, id_proveedor_usuario, id_estado, id_municipio, id_zona, direccion) VALUES
-(20000000, 6, 1, 1, 1, 'prueba');
-UPDATE zonas_usuarios SET direccion = 'prueba2' WHERE cedula_usuario = 20000000 AND id_proveedor_usuario = 1 AND id_estado = 1 AND id_municipio = 1 AND id_zona = 1;
-DELETE FROM zonas_usuarios WHERE cedula_usuario = 20000000 AND id_proveedor_usuario = 1 AND id_estado = 1 AND id_municipio = 1 AND id_zona = 1;
+(20000000, 4, 1, 1, 1, 'prueba');
+UPDATE zonas_usuarios SET direccion = 'prueba2' WHERE cedula_usuario = 20000000 AND id_proveedor_usuario = 13 AND id_estado = 1 AND id_municipio = 1 AND id_zona = 1;
+DELETE FROM zonas_usuarios WHERE cedula_usuario = 20000000 AND id_proveedor_usuario = 4 AND id_estado = 1 AND id_municipio = 1 AND id_zona = 1;
 
 ALTER TRIGGER asignar_productores_producto DISABLE;
 -- Tabla Productos
